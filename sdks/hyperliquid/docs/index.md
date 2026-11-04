@@ -25,6 +25,8 @@ import sdk from './.vitepress/generated.json';
 
 The example prints the BTC mid price. Save it as `prices.mjs` and run `node prices.mjs`. See the [Quickstart](/getting-started) for module formats and example output.
 
+<!--@include: @/.vitepress/shared/getting-started/environments.md-->
+
 ## Clients
 
 | Client | Purpose |

@@ -33,6 +33,8 @@ BTCUSDT last price: 65000.00
 
 `getTickers()` returns tickers in `result.list`. The example checks `retCode === 0` before reading the first price.
 
+<!--@include: @/.vitepress/shared/getting-started/environments.md-->
+
 ## Module formats
 
 The `.mjs` extension enables ES modules. In a CommonJS `.cjs` file, use `const { RestClientV5 } = require('bybit-api')` and keep the async `main()` function. TypeScript projects can use the same imports.

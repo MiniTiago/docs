@@ -33,6 +33,8 @@ BTCUSDT last price: 65000.00
 
 `getSymbolPriceTicker()` returns one ticker or an array. The example handles both shapes and prints the price string.
 
+<!--@include: @/.vitepress/shared/getting-started/environments.md-->
+
 ## Module formats
 
 The `.mjs` extension enables ES modules. In a CommonJS `.cjs` file, use `const { MainClient } = require('binance')` and keep the async `main()` function. TypeScript projects can use the same imports.

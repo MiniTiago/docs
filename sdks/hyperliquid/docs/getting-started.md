@@ -39,6 +39,8 @@ The request uses Mainnet by default and returns prices as strings.
 
 For import errors, failed requests or a missing BTC price, see [Troubleshooting](/guides/troubleshooting).
 
+<!--@include: @/.vitepress/shared/getting-started/environments.md-->
+
 ## Module formats
 
 The `.mjs` extension enables ES modules. For CommonJS, use a `.cjs` file with `const { RestClient } = require('@siebly/hyperliquid-api')` and keep the async `main()` function. TypeScript projects can use the same imports and the included type definitions.

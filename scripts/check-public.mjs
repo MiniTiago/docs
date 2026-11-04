@@ -3,6 +3,7 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { ids } from './context.mjs';
 import { searchConsoleFile } from '../shared/site-services.mjs';
+import { checkStarter, environmentFiles } from './environments.mjs';
 
 export async function checkPublic(directory) {
   const entries = await readdir(directory, { recursive: true });
@@ -18,6 +19,14 @@ export async function checkPublic(directory) {
     const filename = path.join(directory, relative);
     const stat = await lstat(filename);
     if (stat.isDirectory()) continue;
+    if (stat.isFile() && path.extname(relative) === '.gz') {
+      const match = /^(hyperliquid|bybit|binance)\/starters\/(bun|deno|vite|next|expo)\.tar\.gz$/.exec(parts.join('/'));
+      if (!match || stat.size > 131072) throw new Error(`Unexpected public archive: ${relative}`);
+      const sdk = (await import(`../sdks/${match[1]}/sdk.config.mjs`)).default;
+      await checkStarter(filename, await environmentFiles(match[1], sdk, match[2]));
+      files++;
+      continue;
+    }
     if (!stat.isFile() || (relative !== '.nojekyll' && !allowedExtensions.has(path.extname(relative)))) throw new Error(`Unexpected public artifact: ${relative}`);
     if (['.html', '.js', '.json', '.css', '.xml', '.txt', '.svg'].includes(path.extname(relative))) {
       const content = await readFile(filename, 'utf8');

@@ -11,6 +11,13 @@ export default function siteConfig(data, docs) {
       { text: 'Introduction', link: '/' }, { text: 'Quickstart', link: '/getting-started' }, { text: 'Clients', link: '/clients' },
       { text: 'Runtime compatibility', link: '/compatibility' },
     ] },
+    { text: 'Environments', items: [
+      { text: 'Bun', link: '/environments/bun' },
+      { text: 'Deno', link: '/environments/deno' },
+      { text: 'Vite and browser', link: '/environments/vite' },
+      { text: 'Next.js server', link: '/environments/next' },
+      { text: 'React Native and Expo', link: '/environments/expo' },
+    ] },
     { text: 'Guides', items: [
       { text: 'Market data', link: '/guides/market-data' },
       { text: 'WebSocket subscriptions', link: '/guides/websockets' },

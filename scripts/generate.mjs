@@ -5,6 +5,7 @@ import { context, root, catalogue } from './context.mjs';
 import { compilerConfig } from './compiler.mjs';
 import { generateCompatibility } from '../compatibility/report.mjs';
 import { copySharedContent, validateIncludes } from './shared-content.mjs';
+import { generateEnvironments } from './environments.mjs';
 const ctx = await context(process.env.SDK_ID);
 const { sdk, sdkRoot, projectRoot } = ctx;
 await rm(projectRoot, { recursive: true, force: true });
@@ -14,6 +15,7 @@ await copySharedContent(root, ctx.docs);
 await cp(path.join(ctx.content, 'examples'), path.join(projectRoot, 'examples'), { recursive: true });
 await cp(path.join(root, 'shared/public'), path.join(ctx.docs, 'public'), { recursive: true });
 await generateCompatibility(ctx, root);
+await generateEnvironments(ctx);
 
 const pkg = JSON.parse(await readFile(path.join(sdkRoot, 'package.json'), 'utf8'));
 if (pkg.name !== sdk.packageName) throw new Error(`Expected ${sdk.packageName}, received ${pkg.name}`);

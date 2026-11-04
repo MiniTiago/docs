@@ -25,6 +25,8 @@ This request reads the BTCUSDT Spot price and requires no API key.
 
 The example prints the BTCUSDT price. See the [Quickstart](/getting-started) to run it.
 
+<!--@include: @/.vitepress/shared/getting-started/environments.md-->
+
 ## Choose a client
 
 <!--@include: ./clients.md#client-list-->
