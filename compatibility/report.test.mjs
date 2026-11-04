@@ -3,44 +3,73 @@ import assert from 'node:assert/strict';
 import { mkdir, mkdtemp, readFile, writeFile, rm } from 'node:fs/promises';
 import path from 'node:path';
 import { root } from '../scripts/context.mjs';
-import { displayedTarget, resultVersionForPage, generateCompatibility } from './report.mjs';
+import { matchingReport, displayedTarget, generateCompatibility } from './report.mjs';
 import { suiteVersion, completeRuntimeResult, runtimeChecks } from './config.mjs';
 import {completeBrowserResult} from './browser.mjs';
 import {completeNativeResult,matchingNativeReport} from './native.mjs';
-const report={schemaVersion:1,suiteVersion,traffic:'live-mainnet',source:'npm',packageName:'example',packageVersion:'1.0.0',packageAvailable:true,targets:{bun:{status:'failed',checks:[]},node:{status:'passed',checks:[]}}};
-test('results for another release cannot become a current green badge',()=>assert.equal(displayedTarget(report,'node','example','1.0.1').status,'not-run'));
-test('an explicit comparison retains its tested version without certifying the docs version',()=>{
+const report={checkedAt:'2026-11-04T00:00:00Z',platform:'test',schemaVersion:1,suiteVersion,traffic:'live-mainnet',source:'npm',packageName:'example',packageVersion:'1.0.0',packageAvailable:true,targets:{bun:{status:'failed',checks:[]},node:{status:'passed',checks:[]}}};
+test('recorded results are selected by SDK identity without a documentation version association',()=>{
+  assert.equal(matchingReport(report,'example'),true);
+  assert.equal(displayedTarget(report,'node','example').status,'passed');
   const comparison={...report,selection:{kind:'explicit',requestedVersion:'latest',documentationVersion:'1.0.1'}};
-  assert.equal(resultVersionForPage(comparison,'example','1.0.1'),'1.0.0');
-  assert.equal(displayedTarget(comparison,'node','example','1.0.1').status,'not-run');
-  assert.equal(resultVersionForPage(comparison,'example','1.0.2'),'1.0.2');
-  assert.equal(resultVersionForPage(report,'example','1.0.1'),'1.0.1');
-  assert.equal(resultVersionForPage({...comparison,source:'local'},'example','1.0.1'),'1.0.1');
+  assert.equal(displayedTarget(comparison,'node','example').status,'passed');
+  assert.equal(displayedTarget(comparison,'node','another-package').status,'not-run');
 });
-test('generated comparison labels both versions without certifying another release',async()=>{
+test('generated pages retain recorded results and tested versions across patch, minor and major updates',async()=>{
   await mkdir(path.join(root,'tmp'),{recursive:true});
   const work=await mkdtemp(path.join(root,'tmp/report-test-'));
   try {
     await mkdir(path.join(work,'compatibility/results'),{recursive:true});
-    const comparison={...report,checkedAt:'2026-11-04T00:00:00Z',platform:'test',selection:{kind:'explicit',requestedVersion:'latest',documentationVersion:'1.0.1'},targets:{bun:{status:'passed',runtimeVersion:'1.4.4',checks:[]}}};
+    const comparison={...report,selection:{kind:'explicit',requestedVersion:'latest',documentationVersion:'1.0.1'},targets:{
+      bun:{status:'passed',runtimeVersion:'1.4.4',checkedAt:'2026-11-03T12:00:00Z',checks:[]},
+      node:{status:'failed',checks:[]}, next:{status:'build-only',checks:[]}, deno:{status:'not-run',checks:[]},
+    }};
     await writeFile(path.join(work,'compatibility/results/bybit.json'),JSON.stringify(comparison));
     const ctx={id:'bybit',sdk:{name:'Example'},pkg:{name:'example',version:'1.0.1'},docs:work};
+    for(const version of ['1.0.1','1.0.2','1.1.0','2.0.0']) {
+      ctx.pkg.version=version;
+      await generateCompatibility(ctx,work);
+      const page=await readFile(path.join(work,'compatibility.md'),'utf8');
+      assert.match(page,/Tested SDK: `example@1\.0\.0`/);
+      assert.ok(page.includes(`Test metadata: SDK 1.0.0; API reference source ${version}.`));
+      assert.match(page,/Last run: \*\*2026-11-04/);
+      assert.match(page,/Checked 2026-11-03/);
+      assert.match(page,/1\.4\.4 \| Live checks passed/);
+      for(const label of ['Checks failed','Build only','Not verified'])assert.ok(page.includes(label));
+      assert.doesNotMatch(page,/No recorded live exchange results|npm install example@1\.0\.0/);
+    }
+    delete comparison.selection;
+    await writeFile(path.join(work,'compatibility/results/bybit.json'),JSON.stringify(comparison));
     await generateCompatibility(ctx,work);
-    const page=await readFile(path.join(work,'compatibility.md'),'utf8');
-    assert.match(page,/Tested SDK: `example@1\.0\.0`/);
-    assert.match(page,/Test metadata: SDK 1\.0\.0; API reference source 1\.0\.1/);
-    ctx.pkg.version='1.0.2';
-    await generateCompatibility(ctx,work);
-    const newer=await readFile(path.join(work,'compatibility.md'),'utf8');
-    assert.match(newer,/No matching live exchange results/);
-    assert.doesNotMatch(newer,/Live checks passed|npm install example@1\.0\.0/);
+    assert.match(await readFile(path.join(work,'compatibility.md'),'utf8'),/Tested SDK: `example@1\.0\.0`/);
   } finally { await rm(work,{recursive:true,force:true}); }
 });
-test('a failed check is displayed instead of being promoted to supported',()=>assert.equal(displayedTarget(report,'bun','example','1.0.0').status,'failed'));
-test('registry failure invalidates previously green cells',()=>assert.equal(displayedTarget({...report,packageAvailable:false},'node','example','1.0.0').status,'not-run'));
+test('missing and malformed evidence stays unverified',async()=>{
+  for(const value of [undefined,null,{}, {...report,packageVersion:null}, {...report,packageVersion:'unknown'}, {...report,checkedAt:'invalid'}, {...report,targets:null}, {...report,targets:[]}]) {
+    assert.equal(matchingReport(value,'example'),false);
+    assert.equal(displayedTarget(value,'node','example').status,'not-run');
+  }
+  for(const target of [null,{status:'passed',checks:null},{status:'passed',checks:[null]},{status:'passed',checks:[],checkedAt:'invalid'},{status:'unknown',checks:[]}]) {
+    assert.equal(displayedTarget({...report,targets:{node:target}},'node','example').status,'not-run');
+  }
+  const work=await mkdtemp(path.join(root,'tmp/report-malformed-test-'));
+  try {
+    await mkdir(path.join(work,'compatibility/results'),{recursive:true});
+    const ctx={id:'bybit',sdk:{name:'Example'},pkg:{name:'example',version:'2.0.0'},docs:work};
+    for(const content of [undefined,'{invalid','null',JSON.stringify({...report,packageName:'another-package'})]) {
+      if(content!==undefined)await writeFile(path.join(work,'compatibility/results/bybit.json'),content);
+      await generateCompatibility(ctx,work);
+      const page=await readFile(path.join(work,'compatibility.md'),'utf8');
+      assert.match(page,/No recorded live exchange results/);
+      assert.doesNotMatch(page,/Live checks passed|Tested SDK:/);
+    }
+  }finally{await rm(work,{recursive:true,force:true});}
+});
+test('a failed check is displayed instead of being promoted to supported',()=>assert.equal(displayedTarget(report,'bun','example').status,'failed'));
+test('registry failure invalidates previously green cells',()=>assert.equal(displayedTarget({...report,packageAvailable:false},'node','example').status,'not-run'));
 test('local source or obsolete suites cannot certify a released package',()=>{
-  assert.equal(displayedTarget({...report,source:'local'},'node','example','1.0.0').status,'not-run');
-  assert.equal(displayedTarget({...report,suiteVersion:'old'},'node','example','1.0.0').status,'not-run');
+  assert.equal(displayedTarget({...report,source:'local'},'node','example').status,'not-run');
+  assert.equal(displayedTarget({...report,suiteVersion:'old'},'node','example').status,'not-run');
 });
 test('live reports require the full exchange check set',()=>{
   const checks=['import','rest','websocket','cleanup'].map(id=>({id,status:'passed'}));
@@ -52,8 +81,8 @@ test('live reports require the full exchange check set',()=>{
   assert.equal(completeNativeResult({...native,hermes:false}),false);
 });
 test('simulated results cannot be presented as live',()=>{
-  assert.equal(displayedTarget({...report,traffic:undefined},'node','example','1.0.0').status,'not-run');
-  assert.equal(displayedTarget({...report,suiteVersion:'1'},'node','example','1.0.0').status,'not-run');
+  assert.equal(displayedTarget({...report,traffic:undefined},'node','example').status,'not-run');
+  assert.equal(displayedTarget({...report,suiteVersion:'1'},'node','example').status,'not-run');
 });
 
 test('native completion requires the expected platform, Hermes and every live check',()=>{
@@ -101,7 +130,7 @@ test('configured iOS can supply the shared Metro recipe without an Android resul
   try {
     await mkdir(path.join(work,'compatibility/results'),{recursive:true});
     const fixture={...report,checkedAt:'2026-11-04T14:00:00Z',platform:'darwin/arm64',targets:{'react-native-ios-configured':{status:'passed',checks:[],consumerDependencies:{events:'3.3.0'}}}};
-    const ctx={id:'bybit',sdk:{name:'Example'},pkg:{name:'example',version:'1.0.0'},docs:work};
+    const ctx={id:'bybit',sdk:{name:'Example'},pkg:{name:'example',version:'2.0.0'},docs:work};
     await writeFile(path.join(work,'compatibility/results/bybit.json'),JSON.stringify(fixture));
     await generateCompatibility(ctx,work);
     const ios=await readFile(path.join(work,'compatibility.md'),'utf8');

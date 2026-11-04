@@ -2,15 +2,20 @@ import {readFile,writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {suiteVersion,targets,labels,names} from './config.mjs';
 import {root as projectRoot} from '../scripts/context.mjs';
-export function matchingReport(report,packageName,packageVersion) {
-  return report?.schemaVersion===1 && report.suiteVersion===suiteVersion && report.traffic==='live-mainnet' && report.source==='npm' && report.packageName===packageName && report.packageVersion===packageVersion;
+const recordedDate=value=>typeof value==='string' && /^\d{4}-\d{2}-\d{2}T/.test(value) && Number.isFinite(Date.parse(value));
+export function matchingReport(report,packageName) {
+  return report?.schemaVersion===1 && report.suiteVersion===suiteVersion && report.traffic==='live-mainnet' && report.source==='npm' && report.packageName===packageName
+    && typeof report.packageVersion==='string' && /^\d+\.\d+\.\d+(?:-[\w.-]+)?$/.test(report.packageVersion)
+    && report.packageAvailable===true && recordedDate(report.checkedAt) && report.targets!==null && typeof report.targets==='object' && !Array.isArray(report.targets);
 }
-export function displayedTarget(report,target,name,version) {
-  if(!matchingReport(report,name,version)||!report.packageAvailable)return {status:'not-run',checks:[],reason:'No live exchange result for this package version.'};
-  return report.targets[target]||{status:'not-run',checks:[],reason:'This environment has not been checked against the live exchange.'};
-}
-export function resultVersionForPage(report,name,version) {
-  return report?.selection?.kind==='explicit' && report.selection.documentationVersion===version && matchingReport(report,name,report.packageVersion)?report.packageVersion:version;
+export function displayedTarget(report,target,name) {
+  const unavailable={status:'not-run',checks:[],reason:'No recorded live exchange result is available.'};
+  if(!matchingReport(report,name))return unavailable;
+  const result=report.targets[target];
+  if(!result || !['passed','failed','build-only','not-run'].includes(result.status) || !Array.isArray(result.checks)
+    || result.checks.some(check=>!check || typeof check.id!=='string' || !['passed','failed','not-run'].includes(check.status))
+    || (result.checkedAt!==undefined && !recordedDate(result.checkedAt)))return unavailable;
+  return result;
 }
 const sharedInclude=name=>`<!--@include: @/.vitepress/shared/compatibility/${name}.md-->`;
 // Edit common scope and version guidance in shared/content/compatibility/.
@@ -20,19 +25,19 @@ const safe=value=>String(value??'').replaceAll('|','\\|').replaceAll('<','&lt;')
 const detail=value=>safe(String(value||'').split('\n')[0].replace(/\/(Users|Volumes)\/[^\s:]*/g,'[consumer]'));
 export async function generateCompatibility(ctx,root) {
   let report;
-  try{report=JSON.parse(await readFile(path.join(root,'compatibility/results',ctx.id+'.json')));}catch(error){if(error.code!=='ENOENT')throw error;}
-  const version=resultVersionForPage(report,ctx.pkg.name,ctx.pkg.version);
-  const current=matchingReport(report,ctx.pkg.name,version);
-  const visible=targets.filter(t=>t.endsWith('-configured')&&t.startsWith('react-native')?ctx.id!=='hyperliquid':t==='vite'?displayedTarget(report,t,ctx.pkg.name,version).status!=='not-run':t==='browser-configured'?ctx.id!=='hyperliquid':t==='browser-bundle'?displayedTarget(report,t,ctx.pkg.name,version).status!=='not-run':true);
-  const setupTarget=['react-native-configured','react-native-ios-configured'].find(t=>{const c=displayedTarget(report,t,ctx.pkg.name,version);return c.status==='passed'&&c.consumerDependencies;});
+  try{report=JSON.parse(await readFile(path.join(root,'compatibility/results',ctx.id+'.json')));}catch(error){if(error.code!=='ENOENT' && !(error instanceof SyntaxError))throw error;}
+  const hasReport=matchingReport(report,ctx.pkg.name);
+  const version=hasReport?report.packageVersion:undefined;
+  const visible=targets.filter(t=>t.endsWith('-configured')&&t.startsWith('react-native')?ctx.id!=='hyperliquid':t==='vite'?displayedTarget(report,t,ctx.pkg.name).status!=='not-run':t==='browser-configured'?ctx.id!=='hyperliquid':t==='browser-bundle'?displayedTarget(report,t,ctx.pkg.name).status!=='not-run':true);
+  const setupTarget=['react-native-configured','react-native-ios-configured'].find(t=>{const c=displayedTarget(report,t,ctx.pkg.name);return c.status==='passed'&&c.consumerDependencies;});
   const lines=['---',`title: "${ctx.sdk.name} SDK runtime compatibility"`,`description: "Live exchange REST and WebSocket checks for ${ctx.sdk.name} across JavaScript runtimes."`,'---','','# Runtime compatibility','',
     `Setup and recorded public REST and WebSocket checks for the ${ctx.sdk.name} SDK. Install commands use the latest SDK release; test results identify the version checked.`, '',
-    '| Environment | Tested version | Result |','| --- | --- | --- |',...visible.map(t=>{const c=displayedTarget(report,t,ctx.pkg.name,version);return `| [${labels[t]}](#${t}) | ${safe(c.runtimeVersion||'Not checked')} | ${statusLabel[c.status]||'Not verified'} |`;}),''];
-  if(current)lines.push(`Tested SDK: \`${ctx.pkg.name}@${version}\`. Last run: **${report.checkedAt.slice(0,10)}** on **${safe(report.platform)}**. Each environment lists its check date.`,'',
+    '| Environment | Tested version | Result |','| --- | --- | --- |',...visible.map(t=>{const c=displayedTarget(report,t,ctx.pkg.name);return `| [${labels[t]}](#${t}) | ${safe(c.runtimeVersion||'Not checked')} | ${statusLabel[c.status]||'Not verified'} |`;}),''];
+  if(hasReport)lines.push(`Tested SDK: \`${ctx.pkg.name}@${version}\`. Last run: **${report.checkedAt.slice(0,10)}** on **${safe(report.platform)}**. Each environment lists its check date.`,'',
     sharedInclude('tested-version'),'');
-  else lines.push('No matching live exchange results are available for this SDK version.','');
+  else lines.push('No recorded live exchange results are available for this SDK.','');
   for(const t of visible){
-    const c=displayedTarget(report,t,ctx.pkg.name,version);
+    const c=displayedTarget(report,t,ctx.pkg.name);
     lines.push(`## ${labels[t]} {#${t}}`,'',`**${statusLabel[c.status]||'Not verified'}.** ${safe(c.reason)}`,'');
     if(c.checkedAt)lines.push(`Checked ${c.checkedAt.slice(0,10)}.`,'');
     if(c.checks?.length)lines.push('| Check | Result |','| --- | --- |',...c.checks.map(ch=>`| ${safe(names[ch.id]||ch.id)} | ${ch.status==='passed'?'Passed':ch.status==='failed'?'Failed':'Not run'} |`),'');
@@ -63,7 +68,7 @@ export async function generateCompatibility(ctx,root) {
     if(t==='next')lines.push('Checked in a Node.js Route Handler. Client Components and Edge execution are untested.','');
   }
   lines.push(sharedInclude('live-check-scope'),'',sharedInclude('browser-scope'),'',sharedInclude('android-scope'),'',sharedInclude('ios-scope'),'',
-    ...(current&&version!==ctx.pkg.version?[`Test metadata: SDK ${version}; API reference source ${ctx.pkg.version}.`,'']:[]),
+    ...(hasReport&&version!==ctx.pkg.version?[`Test metadata: SDK ${version}; API reference source ${ctx.pkg.version}.`,'']:[]),
     '[Quickstart](/getting-started) · [Production usage](/guides/production) · [Troubleshooting](/guides/troubleshooting)','');
   await writeFile(path.join(ctx.docs,'compatibility.md'),lines.join('\n'));
 }
