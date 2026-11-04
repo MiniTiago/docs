@@ -11,18 +11,18 @@ Public prices and order books do not require API keys. These examples use BTCUSD
 
 <<< @/../examples/first-call.ts
 
-`getTickers()` returns a response envelope. Check `retCode === 0` before reading `result.list`. The `category` selects the market; these examples use `spot`. A symbol such as `BTCUSDT` may also exist in a derivatives category.
+Check `retCode === 0` before reading `result.list`. Set `category` to select the market; `BTCUSDT` can exist in both Spot and derivatives.
 
 ## Read an order book
 
 <<< @/../examples/order-book.ts
 
-The first bid and ask entries contain a price and quantity. An empty side yields `undefined` in this example. Preserve decimal strings when exact quantities matter.
+Each bid and ask contains a price and quantity as decimal strings. The example returns `undefined` for an empty side.
 
-This REST response is a snapshot. For ongoing changes, use [WebSocket subscriptions](/guides/websockets) and implement the exchange's sequencing rules before maintaining a local order book.
+For a live order book, use [WebSocket updates](/guides/websockets) and apply Bybit's snapshot and delta rules.
 
 ## Choose the correct instrument
 
-Check the product, environment and symbol together. Instruments and trading filters can change; query the exchange's instrument information rather than embedding a permanent list in your application.
+Query instrument information for the selected `category` and environment to get current symbols and trading filters.
 
 [API reference](/reference) · [Exchange documentation](https://bybit-exchange.github.io/docs/v5/intro)

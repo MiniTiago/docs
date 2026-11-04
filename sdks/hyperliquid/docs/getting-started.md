@@ -1,6 +1,6 @@
 ---
 title: Get started with the Hyperliquid JavaScript SDK
-description: Install @siebly/hyperliquid-api and read Hyperliquid mid prices with a typed Node.js client. Start with a public request that needs no wallet.
+description: Install @siebly/hyperliquid-api and read the BTC mid price in Node.js without a wallet or private key.
 ---
 
 # Quickstart
@@ -15,7 +15,7 @@ Install `@siebly/hyperliquid-api` and retrieve the BTC mid price. This public re
 
 ## Make a request
 
-Save the following code as `prices.mjs` in the project where you installed the package.
+Save this as `prices.mjs` in the project where the package is installed.
 
 <<< @/../examples/first-call.ts
 
@@ -25,7 +25,7 @@ Run the script:
 node prices.mjs
 ```
 
-## Verify the result
+## Example output {#verify-the-result}
 
 `getAllMids()` returns a map of coin names to price strings. The script prints the `BTC` entry, for example:
 
@@ -33,17 +33,15 @@ node prices.mjs
 BTC mid price: 65000.5
 ```
 
-This is illustrative output; the price changes with the market. The request uses Mainnet by default. Prices remain strings in the response, so convert them only when your application needs another representation.
+The request uses Mainnet by default and returns prices as strings.
 
 [getAllMids reference](/api/classes/RestClient#getallmids) · [Error handling](/guides/errors)
 
-If the script fails, check the [installation and import steps](/guides/troubleshooting#installation-and-imports), or use the error's status and code to [diagnose the request](/guides/troubleshooting#request-failures). If BTC is absent, [check the market name and network](/guides/troubleshooting#a-mid-price-is-missing).
+For import errors, failed requests or a missing BTC price, see [Troubleshooting](/guides/troubleshooting).
 
 ## Module formats
 
-The package provides ES module and CommonJS entry points. These guides use ES module imports. The `.mjs` extension lets the Quickstart run without changing your project's module setting.
-
-In a CommonJS `.cjs` file, replace the import with `const { RestClient } = require('@siebly/hyperliquid-api')`. Keep asynchronous calls inside `main()` as shown above. TypeScript projects can use the same imports with the package's included type definitions.
+The `.mjs` extension enables ES modules. For CommonJS, use a `.cjs` file with `const { RestClient } = require('@siebly/hyperliquid-api')` and keep the async `main()` function. TypeScript projects can use the same imports and the included type definitions.
 
 ## Choose a client
 

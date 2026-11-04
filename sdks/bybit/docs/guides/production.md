@@ -9,17 +9,17 @@ description: "Handle Bybit retries, uncertain order outcomes, stream recovery an
 
 ## Resolve uncertain order outcomes
 
-A timeout can occur after an exchange has accepted an order. For order submissions, track your `orderLinkId`. After an uncertain result, query `getActiveOrders()` with the appropriate category and order identifier, then consult order history or executions as needed. A missing result in one query is not proof that the original order never existed.
+Bybit may accept an order before a request times out. Query `getActiveOrders()` with its category and `orderLinkId` or order ID before resubmitting. If the order is absent, check order history and executions; a filled order may no longer be active.
 
-Persist the identifiers needed for reconciliation before submitting an order. Distinguish a transport acknowledgement, an accepted order and a fill in your application state.
+Save order identifiers before submission. Track acknowledgement, acceptance and fills separately.
 
 ## Recover streaming state
 
-Listen for `reconnect`, `reconnected` and `exception`. The client manages reconnection and remembered subscriptions, but your application must decide when its local state is current again. After a gap, reconcile orders and positions with REST before acting on cached state.
+The client reconnects and restores subscriptions. Listen for `reconnect`, `reconnected` and `exception`, and reconcile orders and positions after a connection gap.
 
 Bybit V5 channels have different snapshot and delta semantics. Follow the documentation for each topic instead of treating every update as a complete replacement.
 
-Record the last update time and mark stale feeds explicitly. Avoid placing new orders based solely on a reconnected event.
+Track feed freshness and finish recovery before using affected data for new orders.
 
 <!--@include: @/.vitepress/shared/production/operations.md-->
 

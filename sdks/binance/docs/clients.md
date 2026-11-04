@@ -5,8 +5,9 @@ description: "Choose a REST or WebSocket client for your Binance integration."
 
 # Clients
 
-Choose the client for your transport and market. A REST call returns a promise; streaming data arrives through WebSocket event listeners.
+Binance has separate REST clients for Spot, futures and Portfolio Margin. WebSocket clients handle streaming updates and request-response operations.
 
+<!-- #region client-list -->
 | Client | Purpose |
 | --- | --- |
 | `MainClient` | Spot and related account endpoints over HTTP. |
@@ -15,20 +16,21 @@ Choose the client for your transport and market. A REST call returns a promise; 
 | `PortfolioClient` | Portfolio Margin endpoints. |
 | `WebsocketClient` | Market and account streams, with raw `message` events and optional formatted events. |
 | `WebsocketAPIClient` | Supported awaitable operations over Binance WebSocket APIs. |
+<!-- #endregion client-list -->
 
 ## REST requests
 
 <<< @/../examples/first-call.ts
 
-`MainClient.getSymbolPriceTicker()` returns the response data directly. Its TypeScript return type permits either one ticker or an array, so the example narrows the result before accessing `price`. These examples use Binance Spot.
+`getSymbolPriceTicker()` returns response data directly. Its return type allows one ticker or an array; the example handles both before reading `price`.
 
 ## WebSocket subscriptions
 
-Use `WebsocketClient` for ongoing updates. Register event listeners before subscribing and close the connections when the application shuts down. See [WebSocket subscriptions](/guides/websockets) for a runnable example.
+Register listeners before subscribing with `WebsocketClient`. The [subscription example](/guides/websockets) shows message handling and shutdown.
 
 ## WebSocket API requests
 
-`WebsocketAPIClient` provides awaitable operations for the exchange's supported WebSocket API methods. Consult its [generated reference](/api/classes/WebsocketAPIClient) for available methods; do not assume that it exposes every REST operation.
+`WebsocketAPIClient` returns promises for supported Binance WebSocket API operations. Its [method list](/api/classes/WebsocketAPIClient) differs from the REST clients.
 
 ## Full reference
 

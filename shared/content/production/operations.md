@@ -1,9 +1,9 @@
-## Observe failures without exposing credentials
+## Logging {#observe-failures-without-exposing-credentials}
 
-Record operation names, response codes, request duration, retry counts and reconnect events. Log selected fields rather than complete request or error objects. See [Error handling](/guides/errors) for this SDK's response shapes.
+Record operation names, response codes, duration, retries and reconnects. Select fields using the SDK's [error format](/guides/errors); whole request and error objects can contain credentials.
 
 ## Shut down cleanly
 
-Stop accepting new work, settle or reconcile outstanding requests, call `WebsocketClient.closeAll()`, and clear application timers. The [stream example](/guides/websockets) shows signal handlers and a bounded run.
+Stop new work, settle or reconcile outstanding requests, call `WebsocketClient.closeAll()` and clear application timers. The [stream example](/guides/websockets) includes shutdown handlers.
 
 <!--@include: ./upgrading.md-->

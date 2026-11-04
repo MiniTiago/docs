@@ -1,6 +1,6 @@
 ---
 title: Hyperliquid SDK authentication and account addresses
-description: Read Hyperliquid account state without a private key and configure a private key or custom signer for signed actions. Understand API wallets and account addresses.
+description: Query Hyperliquid accounts by address and configure private keys, API wallets, vaults or custom signers for signed actions.
 ---
 
 # Authentication
@@ -13,23 +13,23 @@ Set `accountAddress` to query an account without configuring a signer. This exam
 
 <<< @/../examples/account-state.ts
 
-Set `HYPERLIQUID_ACCOUNT_ADDRESS` to the account you want to query before running the example. `assetPositions` contains the account's perpetual positions. For unified accounts or portfolio margin, see [`getSpotBalances()`](/api/classes/RestClient#getspotbalances) for balances across spot and perps.
+Set `HYPERLIQUID_ACCOUNT_ADDRESS` before running the example. Perpetual positions are in `assetPositions`. For unified accounts or portfolio margin, [`getSpotBalances()`](/api/classes/RestClient#getspotbalances) returns balances across Spot and perps.
 
-You can also pass a `user` address to an account method. Address resolution checks the request's `user` first, then `vaultAddress`, then `accountAddress`. If none is set, the SDK attempts to resolve the account from the configured signer.
+Account methods resolve addresses in this order: request `user`, `vaultAddress`, `accountAddress`, then the configured signer.
 
 [getPerpAccountSummary](/api/classes/RestClient#getperpaccountsummary) · [AccountRequest](/api/interfaces/AccountRequest)
 
 ## Configure a private key
 
-On a server, pass `privateKey` and the account being managed to `RestClient`. This example configures a Testnet client; it does not submit an action.
+Pass `privateKey` and the managed account address to `RestClient`. This example configures Testnet.
 
 <<< @/../examples/authenticated-client.ts
 
-Keep the key in a server-side environment variable. Do not include it in source files or environment variables exposed to browser bundles.
+Keep the private key in a server-side environment variable, outside source files and browser bundles.
 
 ## API wallets and vaults
 
-An API wallet signs actions for an account. Its signing address can differ from the account address whose balances and positions you want to read. Set `accountAddress` to that account, rather than the API wallet's address.
+An API wallet signs for another account. Set `accountAddress` to the managed account so queries return its balances and positions.
 
 `vaultAddress` selects a vault or subaccount for supported actions and takes precedence over `accountAddress` for account queries. The signer must be authorized for the requested action. See the [Hyperliquid tutorial](https://siebly.io/sdk/hyperliquid/javascript/tutorial) for the account and API wallet setup workflow.
 

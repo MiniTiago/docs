@@ -5,22 +5,22 @@ description: "Configure Binance credentials and select the matching environment.
 
 # Authentication
 
-Public market data does not need credentials. Private account queries and trading endpoints require API credentials with the appropriate permissions.
+Public market data needs no credentials. Account queries and trading require an API key with the relevant permissions.
 
 ## Configure credentials
 
-Set the environment variables shown below using credentials for the selected test environment. This example creates a client; it does not submit an order.
+Set the environment variables below to configure a Spot Testnet client.
 
 <<< @/../examples/authenticated-client.ts
 
-Keep credentials in your server environment or secret manager. Do not embed them in browser bundles or commit them with examples.
+Store credentials in server-side environment variables or a secret manager, outside source files and browser bundles.
 
 ## Match the environment and account
 
-Check the API product, live versus test environment, key permissions and any IP allowlist. A key for one environment is not automatically valid in another. Start with a read-only account endpoint before adding trading permissions.
+Use keys for the selected Binance product and environment. Check key permissions and IP restrictions if an account request fails.
 
 ## Signing and timestamps
 
-The SDK signs private requests using the credentials you supply. Keep the host clock synchronized. Signature or timestamp errors should be investigated before retrying a state-changing request.
+The SDK signs private requests. Keep the host clock synchronized, since signed requests include a timestamp.
 
 [Configuration](/guides/configuration) · [Troubleshooting](/guides/troubleshooting) · [Exchange authentication documentation](https://developers.binance.com/docs/binance-spot-api-docs)

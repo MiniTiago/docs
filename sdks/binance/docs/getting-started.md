@@ -11,8 +11,6 @@ Read a Spot price with `MainClient`. No account credentials are required.
 
 <!--@include: ./.vitepress/snippets/installation.md-->
 
-Use a maintained Node.js release for these examples. The installed package includes TypeScript definitions.
-
 <!--@include: @/.vitepress/shared/getting-started/runtime-compatibility.md-->
 
 ## Make a request
@@ -27,21 +25,17 @@ Run it with:
 node prices.mjs
 ```
 
-## Verify the result
-
-Illustrative output:
+## Example output {#verify-the-result}
 
 ```text
 BTCUSDT last price: 65000.00
 ```
 
-The actual value changes with the market. `MainClient.getSymbolPriceTicker()` returns the response data directly. Its TypeScript return type permits either one ticker or an array, so the example narrows the result before accessing `price`. These examples use Binance Spot.
+`getSymbolPriceTicker()` returns one ticker or an array. The example handles both shapes and prints the price string.
 
 ## Module formats
 
-The examples use ES module imports. The `.mjs` extension enables ES modules without changing your project's package settings. For a CommonJS `.cjs` file, replace the import with `const { MainClient } = require('binance')` and keep the async `main()` function.
-
-TypeScript projects can use the same imports. Compile them with your project's TypeScript configuration.
+The `.mjs` extension enables ES modules. In a CommonJS `.cjs` file, use `const { MainClient } = require('binance')` and keep the async `main()` function. TypeScript projects can use the same imports.
 
 ## Next steps
 

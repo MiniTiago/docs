@@ -11,18 +11,18 @@ Public prices and order books do not require API keys. These examples use BTCUSD
 
 <<< @/../examples/first-call.ts
 
-`MainClient.getSymbolPriceTicker()` returns the response data directly. Its TypeScript return type permits either one ticker or an array, so the example narrows the result before accessing `price`. These examples use Binance Spot.
+`getSymbolPriceTicker()` returns one ticker or an array, with prices as strings. The example handles both response shapes.
 
 ## Read an order book
 
 <<< @/../examples/order-book.ts
 
-The first bid and ask entries contain a price and quantity. An empty side yields `undefined` in this example. Preserve decimal strings when exact quantities matter.
+Each bid and ask contains a price and quantity as decimal strings. The example returns `undefined` for an empty side.
 
-This REST response is a snapshot. For ongoing changes, use [WebSocket subscriptions](/guides/websockets) and implement the exchange's sequencing rules before maintaining a local order book.
+For a live order book, combine this snapshot with [WebSocket depth updates](/guides/websockets) using Binance's update-ID rules.
 
 ## Choose the correct instrument
 
-Check the product, environment and symbol together. Instruments and trading filters can change; query the exchange's instrument information rather than embedding a permanent list in your application.
+Query exchange information for the selected product and environment to get current symbols and trading filters.
 
 [API reference](/reference) · [Exchange documentation](https://developers.binance.com/docs/binance-spot-api-docs)

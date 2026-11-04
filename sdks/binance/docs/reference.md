@@ -5,7 +5,7 @@ description: "Public client methods, parameters and response types for binance."
 
 # API reference
 
-Browse the public exports of `binance`. JavaScript and TypeScript use the same client methods and parameter objects.
+Client methods, parameters and response types exported by `binance`. The same API works in JavaScript and TypeScript.
 
 ## Clients
 
@@ -25,6 +25,6 @@ Browse the public exports of `binance`. JavaScript and TypeScript use the same c
 | Subscribe to ticker updates | [`subscribeSpotSymbol24hrTicker()`](/api/classes/WebsocketClient#subscribespotsymbol24hrticker) |
 | Close streaming connections | [`closeAll()`](/api/classes/WebsocketClient#closeall) |
 
-Use **Search** or press **⌘K / Ctrl+K** to find methods and types within this SDK. The SDK menu switches to another package's documentation.
+Search methods and types with **⌘K / Ctrl+K**.
 
 [All exports](/api/) · [Binance tutorial](https://siebly.io/sdk/binance/javascript/tutorial) · [Upstream API documentation](https://developers.binance.com/docs/binance-spot-api-docs)

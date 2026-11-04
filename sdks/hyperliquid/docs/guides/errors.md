@@ -1,6 +1,6 @@
 ---
 title: Hyperliquid SDK error handling
-description: Handle HyperliquidApiError, WebSocket failures and per-order rejections. Inspect request status and distinguish connection recovery from retrying an action.
+description: Handle Hyperliquid HTTP and WebSocket errors, inspect status and response fields, and check individual order results.
 ---
 
 # Error handling
@@ -13,8 +13,6 @@ Handle rejected request promises with `try` / `catch`. Streaming clients also re
 | A WebSocket request failure | Catch the request promise; observe connection events as well. |
 | A subscription or connection failure | Catch `subscribe()` failures and listen for `exception`. |
 | An individual rejected order | Inspect each entry in the successful action response. |
-
-For symptom-based fixes, use [Troubleshooting](/guides/troubleshooting). For retry decisions and uncertain outcomes, use [Production usage](/guides/production#timeouts-and-retries).
 
 ## HTTP requests
 
@@ -30,7 +28,7 @@ For symptom-based fixes, use [Troubleshooting](/guides/troubleshooting). For ret
 | `response` | Response body, when available. |
 | `cause` | Original error, when available. |
 
-Configuration and local input errors can use other error types, so retain a fallback for an unknown error. The SDK does not automatically retry HTTP requests.
+Configuration and input errors can use other types, so keep a fallback in the error handler. HTTP requests are not retried automatically.
 
 [HyperliquidApiError reference](/api/classes/HyperliquidApiError)
 
@@ -38,9 +36,9 @@ Configuration and local input errors can use other error types, so retain a fall
 
 `HyperliquidWebSocketError` represents transport and protocol failures, including connection errors, request timeouts and error responses to WebSocket POST requests. An Exchange action response with `status: 'err'` instead rejects with `HyperliquidApiError`. Catch both types when using `WebsocketAPIClient`, and register an `exception` listener for connection and protocol events.
 
-For subscriptions, handle both a rejected `subscribe()` promise and subsequent `exception` events. A resolved subscription promise confirms local sending, not the server's acceptance. The [subscription example](/guides/websockets#subscribe-to-mid-prices) shows both handlers and connection cleanup.
+Handle rejected `subscribe()` promises and subsequent `exception` events. The server acknowledges subscriptions through `response`. The [subscription example](/guides/websockets#subscribe-to-mid-prices) shows the handlers.
 
-Reconnection restores cached subscriptions. It does not replay failed requests or establish that a previously submitted action was rejected. Check the relevant account or order state before deciding whether to resubmit an action after a timeout or disconnect.
+Reconnection restores subscriptions without replaying requests. After a timeout or disconnect during an action, [check its outcome before resubmitting](/guides/production#check-an-order-after-a-timeout).
 
 [HyperliquidWebSocketError reference](/api/classes/HyperliquidWebSocketError) · [WebsocketExceptionEvent](/api/interfaces/WebsocketExceptionEvent)
 
@@ -48,4 +46,4 @@ Reconnection restores cached subscriptions. It does not replay failed requests o
 
 A successful request can contain rejected individual orders. Inspect each entry in `response.data.statuses` returned by `submitOrder()`: an entry can be `resting`, `filled` or `error`.
 
-Do not treat a fulfilled promise as confirmation that every order was accepted. See [`submitOrder()`](/api/classes/RestClient#submitorder) and [`OrderResponseData`](/api/interfaces/OrderResponseData) for the complete response type.
+[`submitOrder()`](/api/classes/RestClient#submitorder) · [`OrderResponseData`](/api/interfaces/OrderResponseData)

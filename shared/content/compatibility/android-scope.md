@@ -1,1 +1,1 @@
-The Android check builds with Metro, then runs direct exchange requests and subscriptions in Expo Go on an Android 15 ARM64 emulator with Hermes. A build failure prevents runtime verification. Background lifecycle and standalone release builds are not covered.
+Android checks use Metro and Expo Go on an Android 15 ARM64 emulator with Hermes. Runtime checks follow a successful build. Physical devices, background lifecycle and standalone release builds are untested.

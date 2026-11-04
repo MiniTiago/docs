@@ -7,9 +7,9 @@ description: "Interpret Bybit API responses, HTTP failures and transport errors.
 
 ## API errors in successful HTTP responses
 
-By default, a Bybit response with a nonzero `retCode` is returned to the caller. A resolved promise alone does not establish success. Check `retCode` before reading `result`, as the Quickstart does.
+By default, REST requests resolve even when Bybit returns a nonzero `retCode`. Check `retCode === 0` before reading `result`.
 
-You can enable `throwExceptions: true` in the first constructor argument to reject these responses. This changes control flow; retain a `catch` handler and do not assume every thrown value is an `Error` instance.
+Set `throwExceptions: true` in the first constructor argument to reject those responses instead. Handle them in `catch`; thrown values may not be `Error` instances.
 
 ## HTTP and transport failures
 
@@ -19,7 +19,7 @@ HTTP failures reject the request. With the default exception parsing, an HTTP er
 
 ## Log useful fields
 
-Log the operation name, market category, symbol, HTTP status and exchange error code. Avoid logging the complete error or `requestOptions`: the Bybit parser includes client options, which may contain credentials. Keep API keys, signatures and account data out of routine logs.
+Log the operation, category, symbol, HTTP status and exchange error code. Whole errors and `requestOptions` can include credentials from the client configuration.
 
 ## Decide what to retry
 

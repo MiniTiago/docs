@@ -1,17 +1,15 @@
 ---
 title: Configure the Hyperliquid SDK
-description: Configure Hyperliquid Mainnet or Testnet, HTTP request timeouts and WebSocket connection options. Find default values and complete SDK option types.
+description: Set Hyperliquid networks, HTTP and WebSocket timeouts, reconnect delays and signing options.
 ---
 
 # Configuration
 
 Pass options when constructing a client. Network selection and signing options belong in the first argument; `RestClient` accepts HTTP request options in a second argument.
 
-For retry decisions, rate limits and shutdown, see [Production usage](/guides/production). For a failed connection or request, see [Troubleshooting](/guides/troubleshooting).
-
 ## Networks
 
-All three clients accept `testnet: true`. Configure each client explicitly so REST requests and subscriptions use the same network.
+All three clients accept `testnet: true`. Set it on each client so requests and subscriptions use the same network.
 
 <<< @/../examples/testnet.ts
 
@@ -47,7 +45,7 @@ Use `accountAddress` for account queries and `privateKey` or `signer` for signed
 
 ## Browser usage
 
-The SDK supports public REST requests and public subscriptions in browser bundles. Direct REST access also depends on the exchange's CORS policy. The examples in these guides target Node.js; replace Node-specific environment variables and shutdown handling when adapting them to a browser. For wallet access, use a [custom signer](/guides/authentication#custom-signers).
+Browser bundles support public REST requests and subscriptions. REST access depends on the exchange's CORS rules. Replace the examples' Node.js environment variables and shutdown handlers when adapting them for a browser. For wallet access, use a [custom signer](/guides/authentication#custom-signers).
 
 ## Configuration reference
 

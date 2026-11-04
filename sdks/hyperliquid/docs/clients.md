@@ -1,6 +1,6 @@
 ---
 title: Hyperliquid SDK clients
-description: Compare RestClient, WebsocketClient and WebsocketAPIClient. Initialize HTTP and WebSocket clients and manage their connection lifecycle.
+description: Choose a Hyperliquid client for HTTP requests, streaming subscriptions or awaitable WebSocket requests.
 ---
 
 # Clients
@@ -15,7 +15,7 @@ The SDK exports three clients. Each supports Mainnet and Testnet; public queries
 
 ## RestClient
 
-Use `RestClient` for individual requests. Construct the client, call a method and await its result.
+`RestClient` sends HTTP requests and returns promises.
 
 <<< @/../examples/first-call.ts
 
@@ -27,7 +27,7 @@ Market data methods work without credentials. Account queries need an account ad
 
 Use `WebsocketClient` for subscriptions. Register `message` and `exception` listeners before calling `subscribe()`. The client opens the required connection automatically.
 
-The [WebSocket subscriptions guide](/guides/websockets) includes a complete example with event handling and cleanup. `subscribe()` resolves when the subscription has been sent locally. Server acknowledgements arrive through the `response` event.
+`subscribe()` resolves after sending locally. Server acknowledgements arrive on `response`. See the [subscription example](/guides/websockets) for event handling and cleanup.
 
 Call `unsubscribe()` to remove a topic while keeping the connection, or `closeAll()` to close all connections. Removing an event listener does not remove the subscription.
 
@@ -35,7 +35,7 @@ Call `unsubscribe()` to remove a topic while keeping the connection, or `closeAl
 
 ## WebsocketAPIClient
 
-`WebsocketAPIClient` extends `RestClient` and sends its requests through Hyperliquid's WebSocket POST protocol. Its methods return promises, so calling code uses `await` in the same way as HTTP requests.
+`WebsocketAPIClient` extends `RestClient` and sends the same methods through Hyperliquid's WebSocket POST protocol.
 
 <<< @/../examples/ws-request.ts
 

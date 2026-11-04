@@ -1,5 +1,3 @@
-## Collect a useful reproduction
+## Reporting a problem {#collect-a-useful-reproduction}
 
-Include the SDK and Node.js versions, selected client, environment, method and non-sensitive parameters. Include HTTP status and exchange error code where available. Remove credentials, signatures and personal account information before sharing logs.
-
-A minimal reproduction should make one request and report its result. For stream issues, record the topic and connection lifecycle events.
+Include SDK and Node.js versions, client, environment, method, HTTP status and exchange error code. Add a minimal request example or, for streams, the topic and connection events. Remove credentials, signatures and private account data before sharing.

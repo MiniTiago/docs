@@ -11,8 +11,6 @@ Read a Spot price with `RestClientV5`. No account credentials are required.
 
 <!--@include: ./.vitepress/snippets/installation.md-->
 
-Use a maintained Node.js release for these examples. The installed package includes TypeScript definitions.
-
 <!--@include: @/.vitepress/shared/getting-started/runtime-compatibility.md-->
 
 ## Make a request
@@ -27,21 +25,17 @@ Run it with:
 node prices.mjs
 ```
 
-## Verify the result
-
-Illustrative output:
+## Example output {#verify-the-result}
 
 ```text
 BTCUSDT last price: 65000.00
 ```
 
-The actual value changes with the market. `getTickers()` returns a response envelope. Check `retCode === 0` before reading `result.list`. The `category` selects the market; these examples use `spot`. A symbol such as `BTCUSDT` may also exist in a derivatives category.
+`getTickers()` returns tickers in `result.list`. The example checks `retCode === 0` before reading the first price.
 
 ## Module formats
 
-The examples use ES module imports. The `.mjs` extension enables ES modules without changing your project's package settings. For a CommonJS `.cjs` file, replace the import with `const { RestClientV5 } = require('bybit-api')` and keep the async `main()` function.
-
-TypeScript projects can use the same imports. Compile them with your project's TypeScript configuration.
+The `.mjs` extension enables ES modules. In a CommonJS `.cjs` file, use `const { RestClientV5 } = require('bybit-api')` and keep the async `main()` function. TypeScript projects can use the same imports.
 
 ## Next steps
 

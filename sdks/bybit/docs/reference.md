@@ -5,7 +5,7 @@ description: "Public client methods, parameters and response types for bybit-api
 
 # API reference
 
-Browse the public exports of `bybit-api`. JavaScript and TypeScript use the same client methods and parameter objects.
+Client methods, parameters and response types exported by `bybit-api`. The same API works in JavaScript and TypeScript.
 
 ## Clients
 
@@ -22,6 +22,6 @@ Browse the public exports of `bybit-api`. JavaScript and TypeScript use the same
 | Subscribe to ticker updates | [`subscribeV5()`](/api/classes/WebsocketClient#subscribev5) |
 | Close streaming connections | [`closeAll()`](/api/classes/WebsocketClient#closeall) |
 
-Use **Search** or press **⌘K / Ctrl+K** to find methods and types within this SDK. The SDK menu switches to another package's documentation.
+Search methods and types with **⌘K / Ctrl+K**.
 
 [All exports](/api/) · [Bybit tutorial](https://siebly.io/sdk/bybit/javascript/tutorial) · [Upstream API documentation](https://bybit-exchange.github.io/docs/v5/intro)

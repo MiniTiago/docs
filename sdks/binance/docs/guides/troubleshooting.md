@@ -5,8 +5,6 @@ description: "Diagnose Binance installation, authentication, response and WebSoc
 
 # Troubleshooting
 
-Start with the symptom, then check the request's market and environment. Reproduce problems with a public request where possible.
-
 ## Common symptoms
 
 | Symptom | What to check |
@@ -22,7 +20,7 @@ Start with the symptom, then check the request's market and environment. Reprodu
 
 ## Installation and imports
 
-Confirm the installed package with `npm ls binance`. Use `.mjs` for the JavaScript Quickstart or compile the TypeScript examples. Check that the imported client exists in the [API reference](/reference) for the version you installed.
+Run `npm ls binance` to check the installed version. The JavaScript Quickstart uses `.mjs`; the TypeScript examples need a compiler or runner. Check exported clients in the [API reference](/reference).
 
 <!--@include: @/.vitepress/shared/troubleshooting/reproduction.md-->
 

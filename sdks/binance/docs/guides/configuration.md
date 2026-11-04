@@ -17,14 +17,14 @@ The example selects Spot Testnet and a ten-second HTTP timeout. `recvWindow` is 
 
 `MainClient` uses Spot endpoints. `USDMClient` and `CoinMClient` target their respective futures products. Select the client first, then choose an environment supported by that product. `testnet: true` selects the supported test endpoint for the client; demo trading uses the separate `demoTrading` setting.
 
-Do not reuse a Spot key or symbol assumption across all products. Check the [upstream Binance documentation](https://developers.binance.com/docs/binance-spot-api-docs) for the product you intend to use.
+Keys and symbols depend on the product. See the [Binance documentation](https://developers.binance.com/docs/binance-spot-api-docs).
 
 ## Preserve decimal precision
 
-Leave `beautifyResponses` disabled when you want the original response representation. Parse decimal strings deliberately for calculations and format order quantities against the relevant instrument filters.
+Leave `beautifyResponses` disabled to preserve decimal strings. Use decimal arithmetic for exact calculations and apply the instrument's filters when formatting order quantities.
 
 ## Reuse clients
 
-Create a client for each credential and environment combination, then reuse it across requests. Manage concurrency in your application. Creating a new client for every request is unnecessary.
+Reuse a client for each credential and environment combination. Limit concurrent requests in the application.
 
 [Client reference](/api/classes/MainClient) · [Production usage](/guides/production)

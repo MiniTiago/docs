@@ -15,14 +15,14 @@ The example selects Testnet and a ten-second HTTP timeout. `recv_window` control
 
 ## Select an environment
 
-The default is the live environment. Set `testnet: true` for Testnet. Demo trading uses the separate `demoTrading` option; it is not interchangeable with Testnet. Use credentials created for the selected environment, and consult [Bybit's demo documentation](https://bybit-exchange.github.io/docs/v5/demo) for supported endpoints.
+The default is live. Set `testnet: true` for Testnet or `demoTrading` for demo trading, with credentials for that environment. [Bybit's demo documentation](https://bybit-exchange.github.io/docs/v5/demo) lists supported endpoints.
 
 ## Rate-limit information
 
-`parseAPIRateLimits: true` adds parsed endpoint limit information to `rateLimitApi` when the response headers support it. Use the [current Bybit limits](https://bybit-exchange.github.io/docs/v5/rate-limit) to design request scheduling; do not assume every endpoint has the same allowance.
+`parseAPIRateLimits: true` adds `rateLimitApi` from the response headers when available. Use it alongside [Bybit's endpoint limits](https://bybit-exchange.github.io/docs/v5/rate-limit) to schedule requests.
 
 ## Reuse clients
 
-Create a client for each credential and environment combination, then reuse it across requests. Manage concurrency in your application. Creating a new client for every request is unnecessary.
+Reuse a client for each credential and environment combination. Limit concurrent requests in the application.
 
 [Client reference](/api/classes/RestClientV5) · [Production usage](/guides/production)

@@ -1,6 +1,6 @@
 ---
 title: "Binance SDK for JavaScript and TypeScript"
-description: "Install binance, query public market data and explore the Siebly Binance SDK API reference."
+description: "Install binance and use Binance REST and WebSocket clients for market data, account queries and trading."
 ---
 
 <script setup>
@@ -9,7 +9,7 @@ import sdk from './.vitepress/generated.json';
 
 # Binance SDK
 
-`binance` is a JavaScript and TypeScript SDK for Binance's REST APIs and WebSockets. Start with public market data, then add authenticated account queries and trading workflows.
+`binance` provides JavaScript and TypeScript clients for Binance market data, account queries, trading and WebSocket streams.
 
 <p class="sdk-release">JavaScript &amp; TypeScript <span>·</span> v{{ sdk.version }} <span>·</span> {{ sdk.license }} license</p>
 
@@ -23,18 +23,11 @@ This request reads the BTCUSDT Spot price and requires no API key.
 
 <<< @/../examples/first-call.ts
 
-`MainClient.getSymbolPriceTicker()` returns the response data directly. Its TypeScript return type permits either one ticker or an array, so the example narrows the result before accessing `price`. These examples use Binance Spot.
+The example prints the BTCUSDT price. See the [Quickstart](/getting-started) to run it.
 
 ## Choose a client
 
-| Client | Purpose |
-| --- | --- |
-| `MainClient` | Spot and related account endpoints over HTTP. |
-| `USDMClient` | USD-M futures endpoints. |
-| `CoinMClient` | COIN-M futures endpoints. |
-| `PortfolioClient` | Portfolio Margin endpoints. |
-| `WebsocketClient` | Market and account streams, with raw `message` events and optional formatted events. |
-| `WebsocketAPIClient` | Supported awaitable operations over Binance WebSocket APIs. |
+<!--@include: ./clients.md#client-list-->
 
 ## Next steps
 

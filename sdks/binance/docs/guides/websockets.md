@@ -9,22 +9,20 @@ Subscribe to BTCUSDT Spot ticker updates. This public stream requires no API key
 
 ## Subscribe to a ticker
 
-Save the example as `stream.ts` in a TypeScript project. It prints incoming messages for thirty seconds, then closes its connections. It also handles Ctrl+C and process termination.
+Save this as `stream.ts` in a TypeScript project. It prints updates for 30 seconds and closes on completion, Ctrl+C or `SIGTERM`.
 
 <<< @/../examples/stream.ts
 
 ## Subscription results and messages
 
-Wait for subscription promises and catch failures. Incoming market updates arrive on `message`; subscription replies use `response`. A subscription acknowledgement is not a market-data snapshot.
+Await the subscription promise and catch failures. Market data arrives on `message`; `response` carries subscription replies.
 
 ## Recover after a disconnect
 
-Listen for `reconnecting`, `reconnected` and `exception`. The client manages reconnection and remembered subscriptions. Application state can still be stale after a connection gap; reconcile orders and balances before acting on cached values.
-
-For a local order book, follow Binance's documented snapshot and depth-update sequence rules. Reconnecting a socket alone does not rebuild an accurate book.
+The client reconnects and restores subscriptions. Use `reconnecting`, `reconnected` and `exception` to track connection changes. See [stream recovery](/guides/production#recover-streaming-state) for rebuilding application state after a gap.
 
 ## Shut down
 
-Call `closeAll()` to stop streaming connections. Clear your own timers and prevent new work during shutdown. The example closes all connections owned by this client instance.
+Call `closeAll()` to close this client's connections. Clear application timers and stop new work during shutdown.
 
 [Production usage](/guides/production) · [WebsocketClient reference](/api/classes/WebsocketClient)

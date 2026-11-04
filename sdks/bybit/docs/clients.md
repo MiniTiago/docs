@@ -5,27 +5,29 @@ description: "Choose a REST or WebSocket client for your Bybit integration."
 
 # Clients
 
-Choose the client for your transport and market. A REST call returns a promise; streaming data arrives through WebSocket event listeners.
+`RestClientV5` returns REST responses as promises. `WebsocketClient` delivers streaming updates through event listeners.
 
+<!-- #region client-list -->
 | Client | Purpose |
 | --- | --- |
 | `RestClientV5` | Current V5 market data, account queries and trading endpoints over HTTP. |
 | `WebsocketClient` | Public and private subscriptions through `subscribeV5()`, with `update` events. |
 | `WebsocketAPIClient` | Supported awaitable operations over the Bybit WebSocket API. |
+<!-- #endregion client-list -->
 
 ## REST requests
 
 <<< @/../examples/first-call.ts
 
-`getTickers()` returns a response envelope. Check `retCode === 0` before reading `result.list`. The `category` selects the market; these examples use `spot`. A symbol such as `BTCUSDT` may also exist in a derivatives category.
+`getTickers()` returns an envelope with `retCode` and `result`. Check `retCode === 0` before reading `result.list`.
 
 ## WebSocket subscriptions
 
-Use `WebsocketClient` for ongoing updates. Register event listeners before subscribing and close the connections when the application shuts down. See [WebSocket subscriptions](/guides/websockets) for a runnable example.
+Register listeners before subscribing with `WebsocketClient`. The [subscription example](/guides/websockets) shows message handling and shutdown.
 
 ## WebSocket API requests
 
-`WebsocketAPIClient` provides awaitable operations for the exchange's supported WebSocket API methods. Consult its [generated reference](/api/classes/WebsocketAPIClient) for available methods; do not assume that it exposes every REST operation.
+`WebsocketAPIClient` returns promises for supported Bybit WebSocket API operations. Its [method list](/api/classes/WebsocketAPIClient) differs from the REST clients.
 
 ## Full reference
 

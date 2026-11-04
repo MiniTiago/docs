@@ -1,6 +1,6 @@
 ---
 title: Hyperliquid market data in JavaScript
-description: Read Hyperliquid mid prices, L2 order books and candle history using the Siebly JavaScript and TypeScript SDK, with typed request and response links.
+description: Read Hyperliquid mid prices, L2 order books and candle history, and resolve Spot and perpetual asset names.
 ---
 
 # Market data
@@ -44,4 +44,4 @@ This example requests hourly BTC candles starting 24 hours ago. Times are Unix m
 
 Use `BTC` for a native perpetual, `@107` for a native Spot identifier, or a `dex:COIN` name for a HIP-3 market. `getOrderBook`, `getCandles` and `getFundingHistory` can resolve readable Spot aliases through metadata. Other Info methods and stream subscriptions pass `coin` through unchanged.
 
-For a complete integration walkthrough, including account state and asset resolution, continue with the [Hyperliquid tutorial on Siebly.io](https://siebly.io/sdk/hyperliquid/javascript/tutorial).
+[Hyperliquid tutorial](https://siebly.io/sdk/hyperliquid/javascript/tutorial)

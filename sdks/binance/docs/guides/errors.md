@@ -9,15 +9,15 @@ description: "Interpret Binance API responses, HTTP failures and transport error
 
 REST requests reject on HTTP and transport failures. With the default `parseExceptions` setting, a Binance HTTP error can expose `code`, `message`, `body` and `headers`. `code` is the Binance error code, not necessarily the HTTP status.
 
-A connection failure can have a different shape, and thrown values are not always `Error` instances. Avoid assuming `error.response.data` exists for every failure.
+Connection failures can have a different shape. Check fields before reading them; thrown values may not be `Error` instances.
 
 ## Keep original transport errors
 
-Set `parseExceptions: false` in the first constructor argument when your application needs the original Axios error, including its HTTP response status. This setting uses camelCase in the Binance SDK.
+Set `parseExceptions: false` in the first constructor argument to retain the Axios error and its HTTP response status.
 
 ## Log useful fields
 
-Log the operation, symbol, HTTP status when available, and Binance error code. Do not serialize the whole error: request URLs and transport configuration can contain signatures or credentials even when selected fields have been redacted.
+Log the operation, symbol, HTTP status and Binance error code when available. Whole errors can include credentials or signatures in request URLs and configuration.
 
 ## Decide what to retry
 

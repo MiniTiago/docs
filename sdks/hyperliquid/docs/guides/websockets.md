@@ -15,7 +15,7 @@ Register listeners before subscribing. Save this example as `stream.mjs` and run
 
 The `message` event carries subscription data. For the `allMids` channel, `event.data.mids` maps coin names to price strings. Inspect `channel` to narrow the event's `data` type.
 
-For example, a message payload might contain the following fields. Values are illustrative; the full event also includes connection context.
+Example payload fields; the full event also includes connection context:
 
 ```json
 {
@@ -40,13 +40,13 @@ For example, a message payload might contain the following fields. Values are il
 
 The client reconnects after unexpected disconnects by default and restores cached subscriptions. It exposes `reconnecting`, `reconnected` and `exception` events. Set `autoReconnect: false` to disable automatic reconnection.
 
-After an account-stream gap, reload the relevant state before relying on incremental updates again. A restored connection does not tell your application what happened while it was disconnected. See [Production usage](/guides/production#recover-after-a-disconnect) for recovery and [Troubleshooting](/guides/troubleshooting#websocket-subscriptions) if updates do not arrive.
+After an account-stream gap, [reload affected state](/guides/production#recover-after-a-disconnect) before applying incremental updates. If updates do not arrive, see [Troubleshooting](/guides/troubleshooting#websocket-subscriptions).
 
 ## Unsubscribe and close
 
-Call [`unsubscribe()`](/api/classes/WebsocketClient#unsubscribe) with the original subscription object to remove a topic. The cached topic is removed even while disconnected, so it will not be restored on reconnect. Event listeners and subscriptions have separate lifecycles: removing a listener does not unsubscribe a topic.
+Call [`unsubscribe()`](/api/classes/WebsocketClient#unsubscribe) with the original subscription object to remove a topic, including its cached subscription while disconnected. Removing an event listener leaves the subscription active.
 
-Call `closeAll()` when the application no longer needs the client. This closes connections and cancels queued reconnects. The example above also clears its timer and removes its process listener.
+Call `closeAll()` to close connections and cancel queued reconnects. Clear timers and process listeners as shown in the example.
 
 ## Asset names
 

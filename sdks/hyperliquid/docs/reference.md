@@ -5,7 +5,7 @@ description: Browse the public clients, request parameters, response types and W
 
 # API reference
 
-Browse the public TypeScript API for `@siebly/hyperliquid-api`. JavaScript users can use the same methods and parameter objects.
+Client methods, parameters and response types exported by `@siebly/hyperliquid-api`. The same API works in JavaScript and TypeScript.
 
 ## Clients
 
@@ -29,7 +29,7 @@ Browse the public TypeScript API for `@siebly/hyperliquid-api`. JavaScript users
 
 Signed actions require [authentication](/guides/authentication). See [Error handling](/guides/errors) for rejected requests and per-order results.
 
-Selected methods include the same examples used in the guides, with links to the complete workflow. For connection recovery, uncertain order outcomes and shutdown, see [Production usage](/guides/production).
+For retries, recovery and shutdown, see [Production usage](/guides/production).
 
 ## Types
 
@@ -41,8 +41,8 @@ Selected methods include the same examples used in the guides, with links to the
 
 ## Find a method or type
 
-Use **Search** in the header, or press **⌘K** / **Ctrl+K**. Search includes guides, method names, descriptions and type fields.
+Search guides, methods and types with **⌘K / Ctrl+K**.
 
 [All exports](/api/)
 
-For step-by-step workflows, visit the [Hyperliquid JavaScript tutorial](https://siebly.io/sdk/hyperliquid/javascript/tutorial). For HTTP protocol details, consult the [upstream Hyperliquid API documentation](https://hyperliquid.gitbook.io/hyperliquid-docs/for-developers/api).
+[Hyperliquid tutorial](https://siebly.io/sdk/hyperliquid/javascript/tutorial) · [Upstream API documentation](https://hyperliquid.gitbook.io/hyperliquid-docs/for-developers/api)
