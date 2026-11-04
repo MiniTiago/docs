@@ -1,0 +1,23 @@
+export default {
+  name: 'Hyperliquid',
+  sourceDirectory: 'hyperliquid-api',
+  packageName: '@siebly/hyperliquid-api',
+  entryPoint: 'src/index.ts',
+  tsconfig: 'tsconfig.esm.json',
+  clients: ['RestClient', 'WebsocketClient', 'WebsocketAPIClient'],
+  website: 'https://siebly.io/sdk/hyperliquid/javascript',
+  tutorial: 'https://siebly.io/sdk/hyperliquid/javascript/tutorial',
+  repository: 'https://github.com/sieblyio/hyperliquid-api',
+  // References and shared examples only. API contracts stay in SDK source comments.
+  referenceHelp: [
+    { client: 'RestClient', method: 'getAllMids', example: 'first-call.ts', guide: '/getting-started', title: 'Quickstart' },
+    { client: 'RestClient', method: 'getOrderBook', example: 'order-book.ts', guide: '/guides/market-data#l2-order-book', title: 'Read an order book' },
+    { client: 'RestClient', method: 'getCandles', example: 'candles.ts', guide: '/guides/market-data#candle-history', title: 'Read candle history' },
+    { client: 'RestClient', method: 'getPerpAccountSummary', example: 'account-state.ts', guide: '/guides/authentication#read-account-state', title: 'Read account state' },
+    { client: 'RestClient', method: 'getOrderStatus', example: 'order-status.ts', guide: '/guides/production#check-an-order-after-a-timeout', title: 'Check an order after a timeout' },
+    { client: 'RestClient', method: 'submitOrder', guide: '/guides/errors#order-results', title: 'Handle individual order results' },
+    { client: 'WebsocketClient', method: 'subscribe', guide: '/guides/websockets#subscribe-to-mid-prices', title: 'Subscribe to market data' },
+    { client: 'WebsocketClient', method: 'closeAll', guide: '/guides/production#shut-down-cleanly', title: 'Shut down cleanly' },
+    { client: 'WebsocketAPIClient', method: 'close', guide: '/guides/production#shut-down-cleanly', title: 'Shut down cleanly' },
+  ],
+};

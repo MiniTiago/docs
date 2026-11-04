@@ -1,0 +1,11 @@
+{
+  "java": {
+    "name": "OpenJDK17U-jdk_aarch64_mac_hotspot_17.0.21_9.tar.gz",
+    "url": "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.21%2B9/OpenJDK17U-jdk_aarch64_mac_hotspot_17.0.21_9.tar.gz",
+    "sha256": "78b08c7f5a0598242d5719c022e19479cb4a3aa45c37c19726a757a469ed1c15"
+  },
+  "commandLineTools": {
+    "url": "https://dl.google.com/android/repository/commandlinetools-mac_arm64-16111833_latest.zip",
+    "sha1": "ad03dc49bfacfd52c110b14104ea548b8a07e830"
+  }
+}

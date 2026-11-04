@@ -1,0 +1,359 @@
+{
+  "schemaVersion": 1,
+  "suiteVersion": "2-live",
+  "sdk": "bybit",
+  "packageName": "bybit-api",
+  "packageVersion": "4.8.4",
+  "source": "npm",
+  "traffic": "live-mainnet",
+  "packageAvailable": true,
+  "platform": "darwin/arm64",
+  "runId": "compat-s6U8PV",
+  "checkedAt": "2026-11-04T11:21:02.433Z",
+  "selection": {
+    "kind": "explicit",
+    "requestedVersion": "4.8.4",
+    "documentationVersion": "4.8.3"
+  },
+  "targets": {
+    "node": {
+      "target": "node",
+      "status": "passed",
+      "runtimeVersion": "v24.19.0",
+      "checks": [
+        {
+          "id": "import",
+          "status": "passed",
+          "elapsedMs": 36
+        },
+        {
+          "id": "rest",
+          "status": "passed",
+          "price": "78572.1",
+          "endpoint": "https://api.bybit.com/v5/market/tickers?category=spot&symbol=BTCUSDT",
+          "observedAt": "2026-11-04T11:07:47.750Z",
+          "elapsedMs": 589
+        },
+        {
+          "id": "websocket",
+          "status": "passed",
+          "price": "78572.1",
+          "endpoint": "wss://stream.bybit.com/v5/public/spot",
+          "observedAt": "2026-11-04T11:07:48.510Z",
+          "elapsedMs": 759
+        },
+        {
+          "id": "cleanup",
+          "status": "passed",
+          "elapsedMs": 1
+        },
+        {
+          "id": "commonjs",
+          "status": "passed"
+        },
+        {
+          "id": "types",
+          "status": "passed"
+        }
+      ],
+      "reason": "The package checks listed below passed against the live exchange APIs.",
+      "checkedAt": "2026-11-04T11:07:44.591Z",
+      "platform": "darwin/arm64"
+    },
+    "bun": {
+      "target": "bun",
+      "status": "passed",
+      "runtimeVersion": "1.4.4",
+      "checks": [
+        {
+          "id": "import",
+          "status": "passed",
+          "elapsedMs": 41
+        },
+        {
+          "id": "rest",
+          "status": "passed",
+          "price": "78576.4",
+          "endpoint": "https://api.bybit.com/v5/market/tickers?category=spot&symbol=BTCUSDT",
+          "observedAt": "2026-11-04T11:07:54.045Z",
+          "elapsedMs": 242
+        },
+        {
+          "id": "websocket",
+          "status": "passed",
+          "price": "78576.4",
+          "endpoint": "wss://stream.bybit.com/v5/public/spot",
+          "observedAt": "2026-11-04T11:07:54.767Z",
+          "elapsedMs": 722
+        },
+        {
+          "id": "cleanup",
+          "status": "passed",
+          "elapsedMs": 0
+        },
+        {
+          "id": "commonjs",
+          "status": "passed"
+        },
+        {
+          "id": "types",
+          "status": "passed"
+        }
+      ],
+      "reason": "The package checks listed below passed against the live exchange APIs.",
+      "checkedAt": "2026-11-04T11:07:44.591Z",
+      "platform": "darwin/arm64"
+    },
+    "deno": {
+      "target": "deno",
+      "status": "passed",
+      "runtimeVersion": "deno 2.9.6 (stable, release, aarch64-apple-darwin)",
+      "checks": [
+        {
+          "id": "import",
+          "status": "passed",
+          "elapsedMs": 58
+        },
+        {
+          "id": "rest",
+          "status": "passed",
+          "price": "78576.4",
+          "endpoint": "https://api.bybit.com/v5/market/tickers?category=spot&symbol=BTCUSDT",
+          "observedAt": "2026-11-04T11:07:59.107Z",
+          "elapsedMs": 278
+        },
+        {
+          "id": "websocket",
+          "status": "passed",
+          "price": "78576.4",
+          "endpoint": "wss://stream.bybit.com/v5/public/spot",
+          "observedAt": "2026-11-04T11:07:59.861Z",
+          "elapsedMs": 754
+        },
+        {
+          "id": "cleanup",
+          "status": "passed",
+          "elapsedMs": 1
+        },
+        {
+          "id": "commonjs",
+          "status": "passed"
+        },
+        {
+          "id": "types",
+          "status": "passed"
+        }
+      ],
+      "reason": "The package checks listed below passed against the live exchange APIs.",
+      "checkedAt": "2026-11-04T11:07:44.591Z",
+      "platform": "darwin/arm64"
+    },
+    "vite": {
+      "target": "vite",
+      "status": "not-run",
+      "runtimeVersion": null,
+      "checks": [],
+      "reason": "Not checked in this run."
+    },
+    "browser": {
+      "target": "browser",
+      "status": "failed",
+      "runtimeVersion": "Chromium 156.0.0.0",
+      "checks": [
+        {
+          "id": "bundle",
+          "status": "passed"
+        },
+        {
+          "id": "import",
+          "status": "failed",
+          "detail": "Object.defineProperty called on non-object",
+          "elapsedMs": 15
+        }
+      ],
+      "reason": "The default Vite consumer failed browser execution checks. See the observed failures below.",
+      "checkedAt": "2026-11-04T11:07:44.591Z",
+      "platform": "darwin/arm64",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36",
+      "secureContext": true,
+      "profile": "vite"
+    },
+    "browser-configured": {
+      "target": "browser-configured",
+      "status": "passed",
+      "runtimeVersion": "Chromium 156.0.0.0",
+      "checks": [
+        {
+          "id": "bundle",
+          "status": "passed"
+        },
+        {
+          "id": "import",
+          "status": "passed",
+          "elapsedMs": 13
+        },
+        {
+          "id": "rest",
+          "status": "passed",
+          "price": "78601.4",
+          "endpoint": "https://api.bybit.com/v5/market/tickers?category=spot&symbol=BTCUSDT",
+          "observedAt": "2026-11-04T11:08:23.012Z",
+          "elapsedMs": 410
+        },
+        {
+          "id": "websocket",
+          "status": "passed",
+          "price": "78601.4",
+          "endpoint": "wss://stream.bybit.com/v5/public/spot",
+          "observedAt": "2026-11-04T11:08:23.734Z",
+          "elapsedMs": 721
+        },
+        {
+          "id": "cleanup",
+          "status": "passed",
+          "elapsedMs": 0
+        }
+      ],
+      "reason": "The Vite consumer with an events polyfill passed execution checks in the browser shown here, against the live exchange REST and WebSocket APIs.",
+      "checkedAt": "2026-11-04T11:07:44.591Z",
+      "platform": "darwin/arm64",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36",
+      "secureContext": true,
+      "profile": "configured"
+    },
+    "browser-bundle": {
+      "target": "browser-bundle",
+      "status": "not-run",
+      "runtimeVersion": null,
+      "checks": [],
+      "reason": "Not checked in this run."
+    },
+    "next": {
+      "target": "next",
+      "status": "passed",
+      "runtimeVersion": "Next.js 16.4.5 / Node v24.19.0",
+      "checks": [
+        {
+          "id": "bundle",
+          "status": "passed"
+        },
+        {
+          "id": "route",
+          "status": "passed"
+        }
+      ],
+      "reason": "Production build and live exchange REST execution in a Node.js Route Handler passed. Client Components and the Edge runtime are not covered.",
+      "checkedAt": "2026-11-04T11:07:44.591Z",
+      "platform": "darwin/arm64",
+      "observation": {
+        "price": "78609.2",
+        "observedAt": "2026-11-04T11:08:41.170Z"
+      }
+    },
+    "react-native": {
+      "target": "react-native",
+      "status": "failed",
+      "runtimeVersion": "React Native 0.88.1 / Expo 58.0.23",
+      "checks": [
+        {
+          "id": "native-bundle-android",
+          "status": "failed"
+        }
+      ],
+      "reason": "The standard Expo consumer failed its android Metro build. Metro could not resolve the module https.",
+      "checkedAt": "2026-11-04T11:17:08.526Z",
+      "platform": "darwin/arm64"
+    },
+    "react-native-ios": {
+      "target": "react-native-ios",
+      "status": "failed",
+      "runtimeVersion": "React Native 0.88.1 / Expo 58.0.23",
+      "checks": [
+        {
+          "id": "native-bundle-ios",
+          "status": "failed"
+        }
+      ],
+      "reason": "The standard Expo consumer failed its ios Metro build. Metro could not resolve the module https.",
+      "checkedAt": "2026-11-04T11:07:44.591Z",
+      "platform": "darwin/arm64"
+    },
+    "react-native-configured": {
+      "target": "react-native-configured",
+      "status": "passed",
+      "runtimeVersion": "React Native 0.88.1 / Expo 58.0.23 / Android API 35 / Hermes",
+      "checks": [
+        {
+          "id": "native-bundle-android",
+          "status": "passed"
+        },
+        {
+          "id": "native-import",
+          "status": "passed",
+          "elapsedMs": 275
+        },
+        {
+          "id": "rest",
+          "status": "passed",
+          "price": "78623.2",
+          "endpoint": "https://api.bybit.com/v5/market/tickers?category=spot&symbol=BTCUSDT",
+          "observedAt": "2026-11-04T11:21:53.479Z",
+          "elapsedMs": 576
+        },
+        {
+          "id": "websocket",
+          "status": "passed",
+          "price": "78623.2",
+          "endpoint": "wss://stream.bybit.com/v5/public/spot",
+          "observedAt": "2026-11-04T11:21:54.810Z",
+          "elapsedMs": 1331
+        },
+        {
+          "id": "cleanup",
+          "status": "passed",
+          "elapsedMs": 7
+        }
+      ],
+      "reason": "The SDK passed live exchange REST and WebSocket checks in Expo Go on the Android emulator. iOS, background suspension and custom native development builds are not covered.",
+      "checkedAt": "2026-11-04T11:21:02.433Z",
+      "platform": "darwin/arm64",
+      "profile": "configured",
+      "consumerDependencies": {
+        "buffer": "6.0.3",
+        "events": "3.3.0",
+        "https-browserify": "1.0.0",
+        "stream-http": "3.2.0",
+        "url": "0.11.4"
+      },
+      "expoGoVersion": "58.0.5",
+      "executionMode": "Expo Go / development server"
+    },
+    "react-native-ios-configured": {
+      "target": "react-native-ios-configured",
+      "status": "build-only",
+      "runtimeVersion": "React Native 0.88.1 / Expo 58.0.23",
+      "checks": [
+        {
+          "id": "native-bundle-ios",
+          "status": "passed"
+        }
+      ],
+      "reason": "The iOS Metro bundle passed. No iOS simulator or device execution has been performed.",
+      "checkedAt": "2026-11-04T11:21:02.433Z",
+      "platform": "darwin/arm64",
+      "profile": "configured",
+      "consumerDependencies": {
+        "buffer": "6.0.3",
+        "events": "3.3.0",
+        "https-browserify": "1.0.0",
+        "stream-http": "3.2.0",
+        "url": "0.11.4"
+      }
+    }
+  },
+  "artifact": {
+    "tarball": "https://registry.npmjs.org/bybit-api/-/bybit-api-4.8.4.tgz",
+    "integrity": "sha512-I/YqgcUxwq3LmYK9EYzXveLEqLH01hdW+FMt2lOuoC+5w+EK1h0y7LIY5Wo25p+uK3bhipvrbDRdKZ07DeNlpw=="
+  },
+  "evidenceRedactions": "Raw build logs and local-path warnings omitted; observed checks, failures, runtime versions, timestamps and exchange responses retained."
+}

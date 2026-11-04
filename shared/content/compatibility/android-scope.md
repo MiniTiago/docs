@@ -1,0 +1,1 @@
+The Android check builds with Metro, then runs direct exchange requests and subscriptions in Expo Go on an Android 15 ARM64 emulator with Hermes. A build failure prevents runtime verification. Background lifecycle and standalone release builds are not covered.

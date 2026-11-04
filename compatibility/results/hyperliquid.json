@@ -1,0 +1,294 @@
+{
+  "schemaVersion": 1,
+  "suiteVersion": "2-live",
+  "sdk": "hyperliquid",
+  "packageName": "@siebly/hyperliquid-api",
+  "packageVersion": "1.0.1",
+  "source": "npm",
+  "traffic": "live-mainnet",
+  "packageAvailable": true,
+  "platform": "darwin/arm64",
+  "runId": "compat-8GaSK8",
+  "checkedAt": "2026-11-04T11:12:22.548Z",
+  "targets": {
+    "node": {
+      "target": "node",
+      "status": "passed",
+      "runtimeVersion": "v24.19.0",
+      "checks": [
+        {
+          "id": "import",
+          "status": "passed",
+          "elapsedMs": 69
+        },
+        {
+          "id": "rest",
+          "status": "passed",
+          "price": "78543.5",
+          "endpoint": "https://api.hyperliquid.xyz/info",
+          "observedAt": "2026-11-04T11:05:06.569Z",
+          "elapsedMs": 553
+        },
+        {
+          "id": "websocket",
+          "status": "passed",
+          "price": "78551.5",
+          "endpoint": "wss://api.hyperliquid.xyz/ws",
+          "observedAt": "2026-11-04T11:05:10.424Z",
+          "elapsedMs": 3854
+        },
+        {
+          "id": "cleanup",
+          "status": "passed",
+          "elapsedMs": 1
+        },
+        {
+          "id": "commonjs",
+          "status": "passed"
+        },
+        {
+          "id": "types",
+          "status": "passed"
+        }
+      ],
+      "reason": "The package checks listed below passed against the live exchange APIs.",
+      "checkedAt": "2026-11-04T11:05:02.889Z",
+      "platform": "darwin/arm64"
+    },
+    "bun": {
+      "target": "bun",
+      "status": "passed",
+      "runtimeVersion": "1.4.4",
+      "checks": [
+        {
+          "id": "import",
+          "status": "passed",
+          "elapsedMs": 55
+        },
+        {
+          "id": "rest",
+          "status": "passed",
+          "price": "78620.5",
+          "endpoint": "https://api.hyperliquid.xyz/info",
+          "observedAt": "2026-11-04T11:12:31.099Z",
+          "elapsedMs": 331
+        },
+        {
+          "id": "websocket",
+          "status": "passed",
+          "price": "78615.5",
+          "endpoint": "wss://api.hyperliquid.xyz/ws",
+          "observedAt": "2026-11-04T11:12:34.133Z",
+          "elapsedMs": 3034
+        },
+        {
+          "id": "cleanup",
+          "status": "passed",
+          "elapsedMs": 1
+        },
+        {
+          "id": "commonjs",
+          "status": "passed"
+        },
+        {
+          "id": "types",
+          "status": "passed"
+        }
+      ],
+      "reason": "The package checks listed below passed against the live exchange APIs.",
+      "checkedAt": "2026-11-04T11:12:22.548Z",
+      "platform": "darwin/arm64"
+    },
+    "deno": {
+      "target": "deno",
+      "status": "passed",
+      "runtimeVersion": "deno 2.9.6 (stable, release, aarch64-apple-darwin)",
+      "checks": [
+        {
+          "id": "import",
+          "status": "passed",
+          "elapsedMs": 99
+        },
+        {
+          "id": "rest",
+          "status": "passed",
+          "price": "78609.5",
+          "endpoint": "https://api.hyperliquid.xyz/info",
+          "observedAt": "2026-11-04T11:12:38.616Z",
+          "elapsedMs": 554
+        },
+        {
+          "id": "websocket",
+          "status": "passed",
+          "price": "78610.5",
+          "endpoint": "wss://api.hyperliquid.xyz/ws",
+          "observedAt": "2026-11-04T11:12:44.374Z",
+          "elapsedMs": 5757
+        },
+        {
+          "id": "cleanup",
+          "status": "passed",
+          "elapsedMs": 2
+        },
+        {
+          "id": "commonjs",
+          "status": "passed"
+        },
+        {
+          "id": "types",
+          "status": "passed"
+        }
+      ],
+      "reason": "The package checks listed below passed against the live exchange APIs.",
+      "checkedAt": "2026-11-04T11:12:22.548Z",
+      "platform": "darwin/arm64"
+    },
+    "vite": {
+      "target": "vite",
+      "status": "not-run",
+      "runtimeVersion": null,
+      "checks": [],
+      "reason": "Not checked in this run."
+    },
+    "browser": {
+      "target": "browser",
+      "status": "passed",
+      "runtimeVersion": "Chromium 156.0.0.0",
+      "checks": [
+        {
+          "id": "bundle",
+          "status": "passed"
+        },
+        {
+          "id": "import",
+          "status": "passed",
+          "elapsedMs": 18
+        },
+        {
+          "id": "rest",
+          "status": "passed",
+          "price": "78568.5",
+          "endpoint": "https://api.hyperliquid.xyz/info",
+          "observedAt": "2026-11-04T11:06:08.279Z",
+          "elapsedMs": 566
+        },
+        {
+          "id": "websocket",
+          "status": "passed",
+          "price": "78565.5",
+          "endpoint": "wss://api.hyperliquid.xyz/ws",
+          "observedAt": "2026-11-04T11:06:10.683Z",
+          "elapsedMs": 2404
+        },
+        {
+          "id": "cleanup",
+          "status": "passed",
+          "elapsedMs": 0
+        }
+      ],
+      "reason": "The default Vite consumer received real exchange REST and WebSocket market data.",
+      "checkedAt": "2026-11-04T11:05:02.889Z",
+      "platform": "darwin/arm64",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36",
+      "secureContext": true,
+      "profile": "vite"
+    },
+    "browser-configured": {
+      "target": "browser-configured",
+      "status": "not-run",
+      "runtimeVersion": null,
+      "checks": [],
+      "reason": "Not checked in this run."
+    },
+    "browser-bundle": {
+      "target": "browser-bundle",
+      "status": "not-run",
+      "runtimeVersion": null,
+      "checks": [],
+      "reason": "Not checked in this run."
+    },
+    "next": {
+      "target": "next",
+      "status": "passed",
+      "runtimeVersion": "Next.js 16.4.5 / Node v24.19.0",
+      "checks": [
+        {
+          "id": "bundle",
+          "status": "passed"
+        },
+        {
+          "id": "route",
+          "status": "passed"
+        }
+      ],
+      "reason": "Production build and live exchange REST execution in a Node.js Route Handler passed. Client Components and the Edge runtime are not covered.",
+      "checkedAt": "2026-11-04T11:12:22.548Z",
+      "platform": "darwin/arm64",
+      "observation": {
+        "price": "78614.5",
+        "observedAt": "2026-11-04T11:13:05.807Z"
+      }
+    },
+    "react-native": {
+      "target": "react-native",
+      "status": "passed",
+      "runtimeVersion": "React Native 0.88.1 / Expo 58.0.23 / Android API 35 / Hermes",
+      "checks": [
+        {
+          "id": "native-bundle-android",
+          "status": "passed"
+        },
+        {
+          "id": "native-import",
+          "status": "passed",
+          "elapsedMs": 472
+        },
+        {
+          "id": "rest",
+          "status": "passed",
+          "price": "78565.5",
+          "endpoint": "https://api.hyperliquid.xyz/info",
+          "observedAt": "2026-11-04T11:07:02.868Z",
+          "elapsedMs": 1127
+        },
+        {
+          "id": "websocket",
+          "status": "passed",
+          "price": "78565.5",
+          "endpoint": "wss://api.hyperliquid.xyz/ws",
+          "observedAt": "2026-11-04T11:07:06.374Z",
+          "elapsedMs": 3505
+        },
+        {
+          "id": "cleanup",
+          "status": "passed",
+          "elapsedMs": 5
+        }
+      ],
+      "reason": "The SDK passed live exchange REST and WebSocket checks in Expo Go on the Android emulator. iOS, background suspension and custom native development builds are not covered.",
+      "checkedAt": "2026-11-04T11:05:02.889Z",
+      "platform": "darwin/arm64",
+      "expoGoVersion": "58.0.5",
+      "executionMode": "Expo Go / development server"
+    },
+    "react-native-ios": {
+      "target": "react-native-ios",
+      "status": "build-only",
+      "runtimeVersion": "React Native 0.88.1 / Expo 58.0.23",
+      "checks": [
+        {
+          "id": "native-bundle-ios",
+          "status": "passed"
+        }
+      ],
+      "reason": "The iOS Metro bundle passed. No iOS simulator or device execution has been performed.",
+      "checkedAt": "2026-11-04T11:05:02.889Z",
+      "platform": "darwin/arm64"
+    }
+  },
+  "artifact": {
+    "tarball": "https://registry.npmjs.org/@siebly/hyperliquid-api/-/hyperliquid-api-1.0.1.tgz",
+    "integrity": "sha512-jKZwEUhGRmjZ8WkGSnv+LYHHGP8mh1nnZEniSjkjPlJSLyHyh+f7d4heuUmaC4w4NIcQJLJ2Hj2z8aXDpozonQ=="
+  },
+  "evidenceRedactions": "Raw build logs and local-path warnings omitted; observed checks, failures, runtime versions, timestamps and exchange responses retained."
+}

@@ -1,0 +1,15 @@
+node_modules/
+.cache/
+.work/
+dist/
+dist.next/
+dist.previous/
+tmp/
+verification/
+compatibility/results/*.json.next
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.npmrc

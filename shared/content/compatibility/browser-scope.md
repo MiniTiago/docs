@@ -1,0 +1,1 @@
+Browser requests go directly to the exchange, without a local proxy. A failure can reflect browser CORS restrictions, exchange access restrictions, network conditions or an SDK issue; the observed error is retained above. Safari and Firefox have not been tested.

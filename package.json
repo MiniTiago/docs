@@ -1,0 +1,33 @@
+{
+  "name": "siebly-sdk-docs",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "preview": "node scripts/preview.mjs",
+    "dev": "node scripts/dev.mjs",
+    "verify": "node scripts/verify.mjs",
+    "check": "node scripts/check-site.mjs dist",
+    "check:content": "node --test scripts/shared-content.test.mjs",
+    "compat": "node compatibility/run.mjs",
+    "compat:check-report": "node --test compatibility/report.test.mjs",
+    "build:checked": "node scripts/build-checked.mjs",
+    "releases:check": "node scripts/releases.mjs check",
+    "build:release": "node scripts/releases.mjs build",
+    "check:releases": "node --test scripts/releases.test.mjs",
+    "check:public": "node scripts/check-public.mjs dist",
+    "check:ci": "node --test scripts/ci-plan.test.mjs",
+    "check:site-tests": "node --test scripts/check-site.test.mjs"
+  },
+  "devDependencies": {
+    "tar": "7.5.22",
+    "typedoc": "0.28.20",
+    "typedoc-plugin-markdown": "4.14.1",
+    "typescript": "6.0.3",
+    "vite": "5.4.21",
+    "vitepress": "1.6.4"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

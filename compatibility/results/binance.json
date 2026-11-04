@@ -1,0 +1,354 @@
+{
+  "schemaVersion": 1,
+  "suiteVersion": "2-live",
+  "sdk": "binance",
+  "packageName": "binance",
+  "packageVersion": "3.6.11",
+  "source": "npm",
+  "traffic": "live-mainnet",
+  "packageAvailable": true,
+  "platform": "darwin/arm64",
+  "runId": "compat-mMfs9j",
+  "checkedAt": "2026-11-04T11:22:17.058Z",
+  "targets": {
+    "node": {
+      "target": "node",
+      "status": "passed",
+      "runtimeVersion": "v24.19.0",
+      "checks": [
+        {
+          "id": "import",
+          "status": "passed",
+          "elapsedMs": 34
+        },
+        {
+          "id": "rest",
+          "status": "passed",
+          "price": "78630.00000000",
+          "endpoint": "https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT",
+          "observedAt": "2026-11-04T11:09:51.154Z",
+          "elapsedMs": 345
+        },
+        {
+          "id": "websocket",
+          "status": "passed",
+          "price": "78630.00000000",
+          "endpoint": "wss://stream.binance.com:9443",
+          "observedAt": "2026-11-04T11:09:53.105Z",
+          "elapsedMs": 1950
+        },
+        {
+          "id": "cleanup",
+          "status": "passed",
+          "elapsedMs": 0
+        },
+        {
+          "id": "commonjs",
+          "status": "passed"
+        },
+        {
+          "id": "types",
+          "status": "passed"
+        }
+      ],
+      "reason": "The package checks listed below passed against the live exchange APIs.",
+      "checkedAt": "2026-11-04T11:09:48.352Z",
+      "platform": "darwin/arm64"
+    },
+    "bun": {
+      "target": "bun",
+      "status": "passed",
+      "runtimeVersion": "1.4.4",
+      "checks": [
+        {
+          "id": "import",
+          "status": "passed",
+          "elapsedMs": 42
+        },
+        {
+          "id": "rest",
+          "status": "passed",
+          "price": "78629.99000000",
+          "endpoint": "https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT",
+          "observedAt": "2026-11-04T11:09:58.234Z",
+          "elapsedMs": 285
+        },
+        {
+          "id": "websocket",
+          "status": "passed",
+          "price": "78630.00000000",
+          "endpoint": "wss://stream.binance.com:9443",
+          "observedAt": "2026-11-04T11:10:00.113Z",
+          "elapsedMs": 1879
+        },
+        {
+          "id": "cleanup",
+          "status": "passed",
+          "elapsedMs": 0
+        },
+        {
+          "id": "commonjs",
+          "status": "passed"
+        },
+        {
+          "id": "types",
+          "status": "passed"
+        }
+      ],
+      "reason": "The package checks listed below passed against the live exchange APIs.",
+      "checkedAt": "2026-11-04T11:09:48.352Z",
+      "platform": "darwin/arm64"
+    },
+    "deno": {
+      "target": "deno",
+      "status": "passed",
+      "runtimeVersion": "deno 2.9.6 (stable, release, aarch64-apple-darwin)",
+      "checks": [
+        {
+          "id": "import",
+          "status": "passed",
+          "elapsedMs": 73
+        },
+        {
+          "id": "rest",
+          "status": "passed",
+          "price": "78630.00000000",
+          "endpoint": "https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT",
+          "observedAt": "2026-11-04T11:10:04.964Z",
+          "elapsedMs": 332
+        },
+        {
+          "id": "websocket",
+          "status": "passed",
+          "price": "78630.00000000",
+          "endpoint": "wss://stream.binance.com:9443",
+          "observedAt": "2026-11-04T11:10:07.114Z",
+          "elapsedMs": 2149
+        },
+        {
+          "id": "cleanup",
+          "status": "passed",
+          "elapsedMs": 1
+        },
+        {
+          "id": "commonjs",
+          "status": "passed"
+        },
+        {
+          "id": "types",
+          "status": "passed"
+        }
+      ],
+      "reason": "The package checks listed below passed against the live exchange APIs.",
+      "checkedAt": "2026-11-04T11:09:48.352Z",
+      "platform": "darwin/arm64"
+    },
+    "vite": {
+      "target": "vite",
+      "status": "not-run",
+      "runtimeVersion": null,
+      "checks": [],
+      "reason": "Not checked in this run."
+    },
+    "browser": {
+      "target": "browser",
+      "status": "failed",
+      "runtimeVersion": "Chromium 156.0.0.0",
+      "checks": [
+        {
+          "id": "bundle",
+          "status": "passed"
+        },
+        {
+          "id": "import",
+          "status": "failed",
+          "detail": "Class extends value #<Object> is not a constructor or null",
+          "elapsedMs": 14
+        }
+      ],
+      "reason": "The default Vite consumer failed browser execution checks. See the observed failures below.",
+      "checkedAt": "2026-11-04T11:09:48.352Z",
+      "platform": "darwin/arm64",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36",
+      "secureContext": true,
+      "profile": "vite"
+    },
+    "browser-configured": {
+      "target": "browser-configured",
+      "status": "passed",
+      "runtimeVersion": "Chromium 156.0.0.0",
+      "checks": [
+        {
+          "id": "bundle",
+          "status": "passed"
+        },
+        {
+          "id": "import",
+          "status": "passed",
+          "elapsedMs": 13
+        },
+        {
+          "id": "rest",
+          "status": "passed",
+          "price": "78624.60000000",
+          "endpoint": "https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT",
+          "observedAt": "2026-11-04T11:11:00.535Z",
+          "elapsedMs": 309
+        },
+        {
+          "id": "websocket",
+          "status": "passed",
+          "price": "78610.00000000",
+          "endpoint": "wss://stream.binance.com:9443",
+          "observedAt": "2026-11-04T11:11:03.109Z",
+          "elapsedMs": 2574
+        },
+        {
+          "id": "cleanup",
+          "status": "passed",
+          "elapsedMs": 1
+        }
+      ],
+      "reason": "The Vite consumer with an events polyfill and the SDK browser-signing alias passed execution checks in the browser shown here, against the live exchange REST and WebSocket APIs.",
+      "checkedAt": "2026-11-04T11:09:48.352Z",
+      "platform": "darwin/arm64",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36",
+      "secureContext": true,
+      "profile": "configured"
+    },
+    "browser-bundle": {
+      "target": "browser-bundle",
+      "status": "not-run",
+      "runtimeVersion": null,
+      "checks": [],
+      "reason": "Not checked in this run."
+    },
+    "next": {
+      "target": "next",
+      "status": "passed",
+      "runtimeVersion": "Next.js 16.4.5 / Node v24.19.0",
+      "checks": [
+        {
+          "id": "bundle",
+          "status": "passed"
+        },
+        {
+          "id": "route",
+          "status": "passed"
+        }
+      ],
+      "reason": "Production build and live exchange REST execution in a Node.js Route Handler passed. Client Components and the Edge runtime are not covered.",
+      "checkedAt": "2026-11-04T11:09:48.352Z",
+      "platform": "darwin/arm64",
+      "observation": {
+        "price": "78619.94000000",
+        "observedAt": "2026-11-04T11:11:20.465Z"
+      }
+    },
+    "react-native": {
+      "target": "react-native",
+      "status": "failed",
+      "runtimeVersion": "React Native 0.88.1 / Expo 58.0.23",
+      "checks": [
+        {
+          "id": "native-bundle-android",
+          "status": "failed"
+        }
+      ],
+      "reason": "The standard Expo consumer failed its android Metro build. Metro could not resolve the module https.",
+      "checkedAt": "2026-11-04T11:09:48.352Z",
+      "platform": "darwin/arm64"
+    },
+    "react-native-ios": {
+      "target": "react-native-ios",
+      "status": "failed",
+      "runtimeVersion": "React Native 0.88.1 / Expo 58.0.23",
+      "checks": [
+        {
+          "id": "native-bundle-ios",
+          "status": "failed"
+        }
+      ],
+      "reason": "The standard Expo consumer failed its ios Metro build. Metro could not resolve the module https.",
+      "checkedAt": "2026-11-04T11:09:48.352Z",
+      "platform": "darwin/arm64"
+    },
+    "react-native-configured": {
+      "target": "react-native-configured",
+      "status": "passed",
+      "runtimeVersion": "React Native 0.88.1 / Expo 58.0.23 / Android API 35 / Hermes",
+      "checks": [
+        {
+          "id": "native-bundle-android",
+          "status": "passed"
+        },
+        {
+          "id": "native-import",
+          "status": "passed",
+          "elapsedMs": 328
+        },
+        {
+          "id": "rest",
+          "status": "passed",
+          "price": "78611.32000000",
+          "endpoint": "https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT",
+          "observedAt": "2026-11-04T11:23:21.951Z",
+          "elapsedMs": 633
+        },
+        {
+          "id": "websocket",
+          "status": "passed",
+          "price": "78611.32000000",
+          "endpoint": "wss://stream.binance.com:9443",
+          "observedAt": "2026-11-04T11:23:23.285Z",
+          "elapsedMs": 1335
+        },
+        {
+          "id": "cleanup",
+          "status": "passed",
+          "elapsedMs": 1
+        }
+      ],
+      "reason": "The SDK passed live exchange REST and WebSocket checks in Expo Go on the Android emulator. iOS, background suspension and custom native development builds are not covered.",
+      "checkedAt": "2026-11-04T11:22:17.058Z",
+      "platform": "darwin/arm64",
+      "profile": "configured",
+      "consumerDependencies": {
+        "buffer": "6.0.3",
+        "events": "3.3.0",
+        "https-browserify": "1.0.0",
+        "stream-http": "3.2.0",
+        "url": "0.11.4"
+      },
+      "expoGoVersion": "58.0.5",
+      "executionMode": "Expo Go / development server"
+    },
+    "react-native-ios-configured": {
+      "target": "react-native-ios-configured",
+      "status": "build-only",
+      "runtimeVersion": "React Native 0.88.1 / Expo 58.0.23",
+      "checks": [
+        {
+          "id": "native-bundle-ios",
+          "status": "passed"
+        }
+      ],
+      "reason": "The iOS Metro bundle passed. No iOS simulator or device execution has been performed.",
+      "checkedAt": "2026-11-04T11:22:17.058Z",
+      "platform": "darwin/arm64",
+      "profile": "configured",
+      "consumerDependencies": {
+        "buffer": "6.0.3",
+        "events": "3.3.0",
+        "https-browserify": "1.0.0",
+        "stream-http": "3.2.0",
+        "url": "0.11.4"
+      }
+    }
+  },
+  "artifact": {
+    "tarball": "https://registry.npmjs.org/binance/-/binance-3.6.11.tgz",
+    "integrity": "sha512-k5x24AU7C7uw7vontOAgbSFpcns0cCgFwEWBQ9oyWeyKKgEittzqH9wTqnx1rDvGqDc9s+8Fk/Bz4zBsTAxHRA=="
+  },
+  "evidenceRedactions": "Raw build logs and local-path warnings omitted; observed checks, failures, runtime versions, timestamps and exchange responses retained."
+}
