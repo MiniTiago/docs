@@ -5,7 +5,7 @@ import { analyticsAttributes } from './site-services.mjs';
 export default function siteConfig(data, docs) {
   const { sdk, siteUrl, originUrl, indexable, catalogue } = data;
   const site = new URL(siteUrl);
-  const analytics = analyticsAttributes(originUrl, indexable);
+  const analytics = analyticsAttributes(originUrl, indexable, catalogue);
   const groups = [
     { text: 'Getting started', items: [
       { text: 'Introduction', link: '/' }, { text: 'Quickstart', link: '/getting-started' }, { text: 'Clients', link: '/clients' },

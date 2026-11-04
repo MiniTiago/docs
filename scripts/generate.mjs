@@ -121,7 +121,8 @@ console.log(`Generated ${apiFiles.length} reference pages from ${pkg.name}@${pkg
 const metadata = JSON.parse(await readFile(path.join(ctx.docs, '.vitepress/generated.json'), 'utf8'));
 const data = {
   sdk: { ...sdk, ...metadata, clients: sdk.clients }, siteUrl: ctx.site.href, originUrl: ctx.origin.href,
-  indexable: ctx.indexable, catalogue: (await catalogue()).map(({ id, name }) => ({ id, name })),
+  indexable: ctx.indexable, catalogue: (await catalogue()).map(({ id, name, packageName, repository, website, tutorial }) =>
+    ({ id, name, packageName, repository, website, tutorial })),
 };
 await writeFile(path.join(ctx.docs, '.vitepress/site.json'), JSON.stringify(data, null, 2));
 const configImport = path.relative(path.join(ctx.docs, '.vitepress'), path.join(root, 'shared/config.mjs')).split(path.sep).join('/');

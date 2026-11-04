@@ -1,6 +1,6 @@
 import { cp, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { root, ids } from './context.mjs';
+import { root, ids, catalogue } from './context.mjs';
 import { analyticsAttributes, searchConsoleFile } from '../shared/site-services.mjs';
 
 const escape = (s) => String(s).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('"', '&quot;');
@@ -9,7 +9,7 @@ export async function assemblePortal(out, manifest) {
   await cp(path.join(root, 'shared/portal.css'), path.join(out, 'portal.css'));
   const site = new URL(manifest.siteUrl);
   await cp(path.join(root, 'shared/verification', searchConsoleFile), path.join(out, searchConsoleFile));
-  const attributes = analyticsAttributes(manifest.siteUrl, manifest.indexable);
+  const attributes = analyticsAttributes(manifest.siteUrl, manifest.indexable, await catalogue());
   const analytics = attributes ? `<script ${Object.entries(attributes).map(([name, value]) => `${name}="${escape(value)}"`).join(' ')}></script>` : '';
   const cards = ids.filter((id) => manifest.sdks[id]).map((id) => {
     const sdk = manifest.sdks[id];
@@ -18,7 +18,7 @@ export async function assemblePortal(out, manifest) {
   const sdkNames = ids.filter((id) => manifest.sdks[id]).map((id) => manifest.sdks[id].name).join(', ');
   const seo = manifest.indexable ? `<link rel="canonical" href="${escape(site.href)}"><script type="application/ld+json">${JSON.stringify({ '@context': 'https://schema.org', '@type': 'CollectionPage', name: 'Siebly SDK documentation', url: site.href })}</script>` : '';
   await writeFile(path.join(out, 'index.html'), `<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>JavaScript and TypeScript SDK documentation | Siebly</title><meta name="description" content="Documentation for Siebly's ${escape(sdkNames)} SDKs. Install a package, make your first request and explore the API reference."><meta name="robots" content="${manifest.indexable ? 'index,follow' : 'noindex,nofollow'}">${seo}${analytics}<link rel="icon" href="${site.pathname}favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="${site.pathname}portal.css"></head><body><header><a href="${site.pathname}" aria-label="Siebly documentation home"><picture><source media="(prefers-color-scheme: dark)" srcset="${site.pathname}brand/siebly-wordmark-dark.svg"><img src="${site.pathname}brand/siebly-wordmark-light.svg" alt="Siebly" width="98" height="28"></picture></a><nav><a href="https://siebly.io/">Siebly.io ↗</a><a href="https://github.com/sieblyio">GitHub ↗</a></nav></header><main><p class="eyebrow">DEVELOPER DOCUMENTATION</p><h1>JavaScript &amp; TypeScript SDKs</h1><p class="intro">Connect to exchange REST APIs and WebSockets.<br>Choose your SDK to get started.</p><div class="sdk-grid">${cards}</div><section><h2>Examples and support</h2><div class="resources"><a href="https://siebly.io/examples">Browse examples ↗</a><a href="https://siebly.io/support">Get support ↗</a></div></section></main><footer>Built by Siebly. Open source SDKs for exchange APIs.</footer></body></html>`);
-  await writeFile(path.join(out, '404.html'), `<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"><title>Page not found | Siebly Docs</title>${analytics}<link rel="stylesheet" href="${site.pathname}portal.css"></head><body><main><h1>Page not found</h1><p>Choose an SDK to find its guides and API reference.</p><a href="${site.pathname}">All SDK documentation</a></main></body></html>`);
+  await writeFile(path.join(out, '404.html'), `<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"><title>Page not found | Siebly Docs</title>${analytics}<link rel="stylesheet" href="${site.pathname}portal.css"></head><body data-docs-not-found><main><h1>Page not found</h1><p>Choose an SDK to find its guides and API reference.</p><a href="${site.pathname}">All SDK documentation</a></main></body></html>`);
   await writeFile(path.join(out, '.nojekyll'), '');
   if (manifest.indexable) {
     const locations = [site.href];

@@ -1,6 +1,6 @@
 export const searchConsoleFile = 'google0fafc2e8f296be03.html';
 
-export function analyticsAttributes(siteUrl, indexable) {
+export function analyticsAttributes(siteUrl, indexable, catalogue = []) {
   if (!indexable) return undefined;
   const site = new URL(siteUrl);
   return {
@@ -10,5 +10,7 @@ export function analyticsAttributes(siteUrl, indexable) {
     'data-measurement-id': 'G-KQWZYX9C7R',
     'data-site-origin': site.origin,
     'data-site-base': site.pathname,
+    'data-sdk-catalogue': JSON.stringify(catalogue.map(({ id, packageName, repository, website, tutorial }) =>
+      ({ id, packageName, repository, website, tutorial }))),
   };
 }
