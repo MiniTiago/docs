@@ -119,3 +119,14 @@ COMPAT_WORK_ROOT="$PWD/tmp/compat" npm run compat -- --sdk bybit --package-versi
 ```
 
 This updates the tracked reports in `compatibility/results/`; review them before committing. Browser and Android checks require an interactive session. See [compatibility/run.mjs](compatibility/run.mjs) for available options and [compatibility/native-config/](compatibility/native-config/) for native setup.
+
+For iOS runtime checks, prepare the published release sources with `npm run build:release`, boot an iOS simulator and install Expo Go for the Expo SDK version in `compatibility/config.mjs`. The simulator app must support that Expo SDK; a Metro bundle alone does not verify runtime execution. Run:
+
+```sh
+xcrun simctl list devices booted
+COMPAT_IOS_UDID="<booted-device-UDID>" npm run compat -- --sdk hyperliquid --targets react-native-ios --keep
+COMPAT_IOS_UDID="<booted-device-UDID>" npm run compat -- --sdk bybit --targets react-native-ios,react-native-ios-configured --keep
+COMPAT_IOS_UDID="<booted-device-UDID>" npm run compat -- --sdk binance --targets react-native-ios,react-native-ios-configured --keep
+```
+
+`COMPAT_IOS_UDID` is optional when exactly one simulator is booted. Accept Expo Go's first launch prompt if shown. The app has five minutes to load its development bundle and return results; set `COMPAT_NATIVE_TIMEOUT_MS` to change that bound (1,000 to 900,000 ms). The live WebSocket check retains its separate 25-second deadline. Run SDKs sequentially because the runner owns `tmp/compat.lock` and Expo Go displays one consumer at a time. Default Bybit and Binance Metro builds may fail; the configured targets apply the documented consumer polyfills. Successful runtime reports identify the simulator, Expo Go version and run ID, with raw results and screenshots in the printed evidence directory. `--keep` retains the generated consumers under `tmp/` for inspection.

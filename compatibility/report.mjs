@@ -24,6 +24,7 @@ export async function generateCompatibility(ctx,root) {
   const version=resultVersionForPage(report,ctx.pkg.name,ctx.pkg.version);
   const current=matchingReport(report,ctx.pkg.name,version);
   const visible=targets.filter(t=>t.endsWith('-configured')&&t.startsWith('react-native')?ctx.id!=='hyperliquid':t==='vite'?displayedTarget(report,t,ctx.pkg.name,version).status!=='not-run':t==='browser-configured'?ctx.id!=='hyperliquid':t==='browser-bundle'?displayedTarget(report,t,ctx.pkg.name,version).status!=='not-run':true);
+  const setupTarget=['react-native-configured','react-native-ios-configured'].find(t=>{const c=displayedTarget(report,t,ctx.pkg.name,version);return c.status==='passed'&&c.consumerDependencies;});
   const lines=['---',`title: "${ctx.sdk.name} SDK runtime compatibility"`,`description: "Live exchange REST and WebSocket checks for ${ctx.sdk.name} across JavaScript runtimes."`,'---','','# Runtime compatibility','',
     `Setup and recorded public REST and WebSocket checks for the ${ctx.sdk.name} SDK. Install commands use the latest SDK release; test results identify the version checked.`, '',
     '| Environment | Tested version | Result |','| --- | --- | --- |',...visible.map(t=>{const c=displayedTarget(report,t,ctx.pkg.name,version);return `| [${labels[t]}](#${t}) | ${safe(c.runtimeVersion||'Not checked')} | ${statusLabel[c.status]||'Not verified'} |`;}),''];
@@ -45,7 +46,7 @@ export async function generateCompatibility(ctx,root) {
       lines.push('### Vite configuration','','Install the SDK and EventEmitter polyfill:','','```sh',`npm install ${ctx.pkg.name} events@3.3.0`,'```','','Save this as `vite.config.mjs` at the application root:','','```js',recipe.trim(),'```','','This supplies EventEmitter'+(ctx.id==='binance'?" and selects Binance's browser signing module":'')+'. Tested with Vite 5.4.21 and an npm installation.','');
     }
     if(t==='vite')lines.push('Bundling only; see the browser results for runtime checks.','');
-    if(t==='react-native-configured'&&c.status==='passed') {
+    if(t===setupTarget) {
       const recipe=await readFile(path.join(projectRoot,'compatibility/native-config/metro.cjs'),'utf8');
       const deps=c.consumerDependencies;
       lines.push('### Expo and Metro setup','','Install the latest SDK and the required polyfills:','','```sh',`npm install ${ctx.pkg.name} ${Object.entries(deps).map(([name,v])=>`${name}@${v}`).join(' ')}`,'```','',
@@ -57,11 +58,11 @@ export async function generateCompatibility(ctx,root) {
         '[Metro resolver documentation](https://metrobundler.dev/docs/configuration/#resolverequest)','');
     }
     if(t==='react-native'&&c.status==='failed')lines.push('This is the default configuration. See [Android with polyfills](#react-native-configured) for the consumer setup and its live results.','');
-    if(t==='react-native-ios'&&c.status==='failed')lines.push('See [iOS with polyfills](#react-native-ios-configured) for the configured Metro build result.','');
+    if(t==='react-native-ios'&&c.status==='failed')lines.push('See [iOS with polyfills](#react-native-ios-configured) for the configured consumer setup and results.','');
+    if(t==='react-native-ios-configured'&&setupTarget&&t!==setupTarget)lines.push('Use the shared [Expo and Metro setup](#expo-and-metro-setup) above. The same helper is used for the iOS checks.','');
     if(t==='next')lines.push('Checked in a Node.js Route Handler. Client Components and Edge execution are untested.','');
-    if(t==='react-native-ios'||t==='react-native-ios-configured')lines.push('iOS bundling is checked separately. No iOS simulator or device execution has been performed.','');
   }
-  lines.push(sharedInclude('live-check-scope'),'',sharedInclude('browser-scope'),'',sharedInclude('android-scope'),'',
+  lines.push(sharedInclude('live-check-scope'),'',sharedInclude('browser-scope'),'',sharedInclude('android-scope'),'',sharedInclude('ios-scope'),'',
     ...(current&&version!==ctx.pkg.version?[`Test metadata: SDK ${version}; API reference source ${ctx.pkg.version}.`,'']:[]),
     '[Quickstart](/getting-started) · [Production usage](/guides/production) · [Troubleshooting](/guides/troubleshooting)','');
   await writeFile(path.join(ctx.docs,'compatibility.md'),lines.join('\n'));

@@ -9,7 +9,7 @@
   "packageAvailable": true,
   "platform": "darwin/arm64",
   "runId": "compat-8GaSK8",
-  "checkedAt": "2026-11-04T11:12:22.548Z",
+  "checkedAt": "2026-11-04T14:35:52.187Z",
   "targets": {
     "node": {
       "target": "node",
@@ -273,16 +273,52 @@
     },
     "react-native-ios": {
       "target": "react-native-ios",
-      "status": "build-only",
-      "runtimeVersion": "React Native 0.88.1 / Expo 58.0.23",
+      "profile": "default",
+      "runId": "ios-2hVNWX",
+      "status": "passed",
+      "runtimeVersion": "React Native 0.88.1 / Expo 58.0.23 / iOS 26.3.1 / Hermes",
       "checks": [
         {
           "id": "native-bundle-ios",
           "status": "passed"
+        },
+        {
+          "id": "native-import",
+          "status": "passed",
+          "elapsedMs": 524
+        },
+        {
+          "id": "rest",
+          "status": "passed",
+          "price": "78653.5",
+          "endpoint": "https://api.hyperliquid.xyz/info",
+          "observedAt": "2026-11-04T14:37:21.980Z",
+          "elapsedMs": 817
+        },
+        {
+          "id": "websocket",
+          "status": "passed",
+          "price": "78623.5",
+          "endpoint": "wss://api.hyperliquid.xyz/ws",
+          "observedAt": "2026-11-04T14:37:29.814Z",
+          "elapsedMs": 7834
+        },
+        {
+          "id": "cleanup",
+          "status": "passed",
+          "elapsedMs": 2
         }
       ],
-      "reason": "The iOS Metro bundle passed. No iOS simulator or device execution has been performed.",
-      "checkedAt": "2026-11-04T11:05:02.889Z",
+      "reason": "The SDK passed live exchange REST and WebSocket checks in Expo Go on the iOS simulator. Physical devices, background suspension and custom native development builds are not covered.",
+      "expoGoVersion": "58.0.7",
+      "simulator": {
+        "name": "iPhone 17 Pro",
+        "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-26-3"
+      },
+      "executionMode": "Expo Go / development server",
+      "screenshot": "verification/compatibility/ios-2hVNWX/hyperliquid-ios-screen-clean.png",
+      "evidence": "verification/compatibility/ios-2hVNWX/hyperliquid-ios-native.json",
+      "checkedAt": "2026-11-04T14:35:52.187Z",
       "platform": "darwin/arm64"
     }
   },
@@ -290,5 +326,5 @@
     "tarball": "https://registry.npmjs.org/@siebly/hyperliquid-api/-/hyperliquid-api-1.0.1.tgz",
     "integrity": "sha512-jKZwEUhGRmjZ8WkGSnv+LYHHGP8mh1nnZEniSjkjPlJSLyHyh+f7d4heuUmaC4w4NIcQJLJ2Hj2z8aXDpozonQ=="
   },
-  "evidenceRedactions": "Raw build logs and local-path warnings omitted; observed checks, failures, runtime versions, timestamps and exchange responses retained."
+  "evidenceRedactions": "Raw build logs, local paths and simulator identifiers omitted; observed checks, failures, runtime versions, timestamps and exchange responses retained."
 }

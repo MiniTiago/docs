@@ -6,7 +6,7 @@ import { root } from '../scripts/context.mjs';
 import { displayedTarget, resultVersionForPage, generateCompatibility } from './report.mjs';
 import { suiteVersion, completeRuntimeResult, runtimeChecks } from './config.mjs';
 import {completeBrowserResult} from './browser.mjs';
-import {completeNativeResult} from './native.mjs';
+import {completeNativeResult,matchingNativeReport} from './native.mjs';
 const report={schemaVersion:1,suiteVersion,traffic:'live-mainnet',source:'npm',packageName:'example',packageVersion:'1.0.0',packageAvailable:true,targets:{bun:{status:'failed',checks:[]},node:{status:'passed',checks:[]}}};
 test('results for another release cannot become a current green badge',()=>assert.equal(displayedTarget(report,'node','example','1.0.1').status,'not-run'));
 test('an explicit comparison retains its tested version without certifying the docs version',()=>{
@@ -54,4 +54,63 @@ test('live reports require the full exchange check set',()=>{
 test('simulated results cannot be presented as live',()=>{
   assert.equal(displayedTarget({...report,traffic:undefined},'node','example','1.0.0').status,'not-run');
   assert.equal(displayedTarget({...report,suiteVersion:'1'},'node','example','1.0.0').status,'not-run');
+});
+
+test('native completion requires the expected platform, Hermes and every live check',()=>{
+  const report={platform:'ios',hermes:true,checks:['native-import','rest','websocket','cleanup'].map(id=>({id,status:'passed'}))};
+  assert.equal(completeNativeResult(report,'ios'),true);
+  assert.equal(completeNativeResult({...report,platform:'android'},'ios'),false);
+  assert.equal(completeNativeResult(report,'android'),false);
+  assert.equal(completeNativeResult({...report,hermes:false},'ios'),false);
+  assert.equal(completeNativeResult({...report,checks:report.checks.filter(c=>c.id!=='websocket')},'ios'),false);
+  assert.equal(completeNativeResult({...report,checks:[...report.checks,{id:'native-execution',status:'failed'}]},'ios'),false);
+});
+test('native collector rejects another run, package, profile or platform',()=>{
+  const expected={runId:'run-1',packageName:'example',packageVersion:'1.0.0',platform:'ios',profile:'configured'};
+  const report={...expected,checks:[]};
+  assert.equal(matchingNativeReport(report,expected),true);
+  for(const field of Object.keys(expected))assert.equal(matchingNativeReport({...report,[field]:'other'},expected),false);
+  assert.equal(matchingNativeReport({...report,checks:null},expected),false);
+});
+
+test('iOS pages distinguish simulator execution from bundle-only evidence',async()=>{
+  await mkdir(path.join(root,'tmp'),{recursive:true});
+  const work=await mkdtemp(path.join(root,'tmp/report-ios-test-'));
+  try {
+    await mkdir(path.join(work,'compatibility/results'),{recursive:true});
+    const ios={status:'passed',reason:'The SDK passed live exchange REST and WebSocket checks in Expo Go on the iOS simulator.',runtimeVersion:'React Native 0.88.1 / Expo 58.0.23 / iOS 26.3.1 / Hermes',checks:['native-bundle-ios','native-import','rest','websocket','cleanup'].map(id=>({id,status:'passed'}))};
+    const fixture={...report,checkedAt:'2026-11-04T14:00:00Z',platform:'darwin/arm64',targets:{'react-native-ios':ios}};
+    await writeFile(path.join(work,'compatibility/results/hyperliquid.json'),JSON.stringify(fixture));
+    const ctx={id:'hyperliquid',sdk:{name:'Example'},pkg:{name:'example',version:'1.0.0'},docs:work};
+    await generateCompatibility(ctx,work);
+    const live=await readFile(path.join(work,'compatibility.md'),'utf8');
+    assert.match(live,/Live checks passed.*The SDK passed live exchange REST/);
+    assert.match(live,/shared\/compatibility\/ios-scope.md/);
+    assert.doesNotMatch(live,/No iOS simulator or device execution has been performed/);
+    fixture.targets['react-native-ios']={status:'build-only',reason:'The iOS Metro bundle passed. No iOS simulator or device execution has been performed.',checks:[{id:'native-bundle-ios',status:'passed'}]};
+    await writeFile(path.join(work,'compatibility/results/hyperliquid.json'),JSON.stringify(fixture));
+    await generateCompatibility(ctx,work);
+    const bundle=await readFile(path.join(work,'compatibility.md'),'utf8');
+    assert.match(bundle,/Build only.*No iOS simulator or device execution/);
+    assert.doesNotMatch(bundle,/Live checks passed/);
+  }finally{await rm(work,{recursive:true,force:true});}
+});
+
+test('configured iOS can supply the shared Metro recipe without an Android result',async()=>{
+  const work=await mkdtemp(path.join(root,'tmp/report-ios-setup-test-'));
+  try {
+    await mkdir(path.join(work,'compatibility/results'),{recursive:true});
+    const fixture={...report,checkedAt:'2026-11-04T14:00:00Z',platform:'darwin/arm64',targets:{'react-native-ios-configured':{status:'passed',checks:[],consumerDependencies:{events:'3.3.0'}}}};
+    const ctx={id:'bybit',sdk:{name:'Example'},pkg:{name:'example',version:'1.0.0'},docs:work};
+    await writeFile(path.join(work,'compatibility/results/bybit.json'),JSON.stringify(fixture));
+    await generateCompatibility(ctx,work);
+    const ios=await readFile(path.join(work,'compatibility.md'),'utf8');
+    assert.match(ios,/### Expo and Metro setup/);
+    assert.match(ios,/npm install example events@3.3.0/);
+    fixture.targets={};
+    await writeFile(path.join(work,'compatibility/results/bybit.json'),JSON.stringify(fixture));
+    await generateCompatibility(ctx,work);
+    const empty=await readFile(path.join(work,'compatibility.md'),'utf8');
+    assert.doesNotMatch(empty,/#expo-and-metro-setup/);
+  }finally{await rm(work,{recursive:true,force:true});}
 });

@@ -9,7 +9,7 @@
   "packageAvailable": true,
   "platform": "darwin/arm64",
   "runId": "compat-s6U8PV",
-  "checkedAt": "2026-11-04T11:21:02.433Z",
+  "checkedAt": "2026-11-04T14:38:33.527Z",
   "selection": {
     "kind": "explicit",
     "requestedVersion": "4.8.4",
@@ -275,8 +275,12 @@
         }
       ],
       "reason": "The standard Expo consumer failed its ios Metro build. Metro could not resolve the module https.",
-      "checkedAt": "2026-11-04T11:07:44.591Z",
-      "platform": "darwin/arm64"
+      "checkedAt": "2026-11-04T14:38:33.527Z",
+      "platform": "darwin/arm64",
+      "profile": "default",
+      "runId": "compat-9btqbG",
+      "evidenceDirectory": "verification/compatibility/compat-9btqbG",
+      "evidence": "verification/compatibility/compat-9btqbG/bybit-ios-native-ios-bundle.log"
     },
     "react-native-configured": {
       "target": "react-native-configured",
@@ -330,30 +334,66 @@
     },
     "react-native-ios-configured": {
       "target": "react-native-ios-configured",
-      "status": "build-only",
-      "runtimeVersion": "React Native 0.88.1 / Expo 58.0.23",
+      "status": "passed",
+      "runtimeVersion": "React Native 0.88.1 / Expo 58.0.23 / iOS 26.3.1 / Hermes",
       "checks": [
         {
           "id": "native-bundle-ios",
           "status": "passed"
+        },
+        {
+          "id": "native-import",
+          "status": "passed",
+          "elapsedMs": 158
+        },
+        {
+          "id": "rest",
+          "status": "passed",
+          "price": "79398.5",
+          "endpoint": "https://api.bybit.com/v5/market/tickers?category=spot&symbol=BTCUSDT",
+          "observedAt": "2026-11-04T14:45:13.397Z",
+          "elapsedMs": 598
+        },
+        {
+          "id": "websocket",
+          "status": "passed",
+          "price": "79395.5",
+          "endpoint": "wss://stream.bybit.com/v5/public/spot",
+          "observedAt": "2026-11-04T14:45:14.526Z",
+          "elapsedMs": 1129
+        },
+        {
+          "id": "cleanup",
+          "status": "passed",
+          "elapsedMs": 1
         }
       ],
-      "reason": "The iOS Metro bundle passed. No iOS simulator or device execution has been performed.",
-      "checkedAt": "2026-11-04T11:21:02.433Z",
+      "reason": "The SDK passed live exchange REST and WebSocket checks in Expo Go on the iOS simulator. Physical devices, background suspension and custom native development builds are not covered.",
+      "checkedAt": "2026-11-04T14:38:33.527Z",
       "platform": "darwin/arm64",
       "profile": "configured",
+      "runId": "compat-9btqbG",
+      "evidenceDirectory": "verification/compatibility/compat-9btqbG",
       "consumerDependencies": {
         "buffer": "6.0.3",
         "events": "3.3.0",
         "https-browserify": "1.0.0",
         "stream-http": "3.2.0",
         "url": "0.11.4"
-      }
+      },
+      "expoGoVersion": "58.0.7",
+      "simulator": {
+        "name": "iPhone 17 Pro",
+        "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-26-3"
+      },
+      "executionMode": "Expo Go / development server",
+      "screenshot": "verification/compatibility/compat-9btqbG/bybit-configured-ios-screen.png",
+      "evidence": "verification/compatibility/compat-9btqbG/bybit-configured-ios-native.json"
     }
   },
   "artifact": {
     "tarball": "https://registry.npmjs.org/bybit-api/-/bybit-api-4.8.4.tgz",
     "integrity": "sha512-I/YqgcUxwq3LmYK9EYzXveLEqLH01hdW+FMt2lOuoC+5w+EK1h0y7LIY5Wo25p+uK3bhipvrbDRdKZ07DeNlpw=="
   },
-  "evidenceRedactions": "Raw build logs and local-path warnings omitted; observed checks, failures, runtime versions, timestamps and exchange responses retained."
+  "evidenceRedactions": "Raw build logs, local paths and simulator identifiers omitted; observed checks, failures, runtime versions, timestamps and exchange responses retained."
 }

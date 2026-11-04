@@ -1,0 +1,1 @@
+iOS checks use Metro and Expo Go on an iOS simulator with Hermes. Runtime checks follow a successful build. The row records the tested iOS and framework versions. Physical devices, background lifecycle and standalone release builds are untested.
