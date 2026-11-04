@@ -1,10 +1,13 @@
-## Environment quickstarts
+## Choose your setup {#environment-quickstarts}
 
-Choose a complete runnable project with setup, source files, cleanup and troubleshooting:
+Start with the tools you already use. Each guide includes a complete project, setup commands, expected output and cleanup where applicable.
 
-- [Bun](/environments/bun) and [Deno](/environments/deno): read a BTC price and close a WebSocket subscription.
-- [Vite and browser](/environments/vite): display REST and live prices in a browser page.
-- [Next.js server](/environments/next): return a price from a Node.js Route Handler.
-- [React Native and Expo](/environments/expo): display prices and stop the subscription on iOS and Android.
+- [Node.js / JavaScript](/environments/node): run plain JavaScript with `import` or `require`, without a TypeScript compiler.
+- [Node.js / TypeScript](/environments/typescript): type-check and compile a Node.js price and subscription script.
+- [React](/environments/react): display live prices in a React component with effect cleanup, using Vite.
+- [Vite (plain JavaScript)](/environments/vite): display prices in a browser page without React.
+- [Next.js](/environments/next): return a price from a Node.js server Route Handler.
+- [React Native / Expo](/environments/expo): display prices and stop subscriptions on iOS and Android.
+- [Bun](/environments/bun) and [Deno](/environments/deno): run a price and WebSocket script in your chosen runtime.
 
-Each guide includes a downloadable starter generated from the maintained examples and runtime configuration. [Runtime compatibility](/compatibility) records the tested versions and scope.
+Each guide includes a downloadable starter generated from the maintained examples and runtime configuration. [Runtime compatibility](/compatibility) records tested versions and scope.

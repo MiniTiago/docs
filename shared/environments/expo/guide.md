@@ -1,6 +1,6 @@
 ---
-title: @@SDK@@ React Native and Expo quickstart
-description: @@SDK@@ SDK. Run a public BTC price and WebSocket screen on iOS and Android with Expo.
+title: @@SDK@@ React Native Expo API quickstart
+description: Use the @@SDK@@ API in a React Native and Expo app. Display public BTC REST and WebSocket prices on iOS and Android.
 ---
 
 # React Native and Expo quickstart

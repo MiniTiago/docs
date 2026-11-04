@@ -1,11 +1,11 @@
 ---
-title: Get started with the Hyperliquid JavaScript SDK
-description: Install @siebly/hyperliquid-api and read the BTC mid price in Node.js without a wallet or private key.
+title: Hyperliquid Node.js quickstart with JavaScript
+description: Install @siebly/hyperliquid-api and make your first REST request in Node.js. Read the BTC mid price with plain JavaScript, without a wallet, private key or TypeScript compiler.
 ---
 
-# Quickstart
+# Node.js quickstart with JavaScript
 
-Install `@siebly/hyperliquid-api` and retrieve the BTC mid price. This public request does not require a wallet or private key.
+Install `@siebly/hyperliquid-api` and retrieve the BTC mid price with one REST request in Node.js. The example is plain JavaScript and needs no TypeScript compiler, wallet or private key.
 
 ## Installation
 
@@ -17,7 +17,7 @@ Install `@siebly/hyperliquid-api` and retrieve the BTC mid price. This public re
 
 Save this as `prices.mjs` in the project where the package is installed.
 
-<<< @/../examples/first-call.ts
+<<< @/../examples/first-call.ts{js}
 
 Run the script:
 
@@ -43,7 +43,7 @@ For import errors, failed requests or a missing BTC price, see [Troubleshooting]
 
 ## Module formats
 
-The `.mjs` extension enables ES modules. For CommonJS, use a `.cjs` file with `const { RestClient } = require('@siebly/hyperliquid-api')` and keep the async `main()` function. TypeScript projects can use the same imports and the included type definitions.
+The `.mjs` extension tells Node.js to use ES modules and `import`. For CommonJS, use a `.cjs` file with `const { RestClient } = require('@siebly/hyperliquid-api')` and keep the async `main()` function. The [complete Node.js project](/environments/node) includes both formats. TypeScript projects can use the same imports and the included type definitions; the [Node.js TypeScript guide](/environments/typescript) adds a compiler configuration and build commands.
 
 ## Choose a client
 

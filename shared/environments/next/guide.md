@@ -1,6 +1,6 @@
 ---
-title: @@SDK@@ Next.js server quickstart
-description: @@SDK@@ SDK. Read a public BTC price in a Next.js Node.js Route Handler.
+title: @@SDK@@ Next.js API quickstart
+description: Use the @@SDK@@ API in a Next.js Node.js server Route Handler to return a public BTC price.
 ---
 
 # Next.js server quickstart

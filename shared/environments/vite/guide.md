@@ -1,9 +1,9 @@
 ---
-title: @@SDK@@ Vite and browser quickstart
-description: @@SDK@@ SDK. Build a browser page that displays public BTC REST and WebSocket prices with Vite.
+title: @@SDK@@ Vite JavaScript API quickstart
+description: Use the @@SDK@@ API in a plain JavaScript browser page built with Vite. Display public BTC REST and WebSocket prices.
 ---
 
-# Vite and browser quickstart
+# Vite (plain JavaScript) quickstart
 
 Build a page that displays a public BTC REST price and live WebSocket updates from `@@PACKAGE@@`. No API key is needed. @@PRICE_KIND@@
 

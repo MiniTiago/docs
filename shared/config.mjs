@@ -11,12 +11,15 @@ export default function siteConfig(data, docs) {
       { text: 'Introduction', link: '/' }, { text: 'Quickstart', link: '/getting-started' }, { text: 'Clients', link: '/clients' },
       { text: 'Runtime compatibility', link: '/compatibility' },
     ] },
-    { text: 'Environments', items: [
+    { text: 'Choose your setup', items: [
+      { text: 'Node.js / JavaScript', link: '/environments/node' },
+      { text: 'Node.js / TypeScript', link: '/environments/typescript' },
+      { text: 'React', link: '/environments/react' },
+      { text: 'Vite (plain JavaScript)', link: '/environments/vite' },
+      { text: 'Next.js', link: '/environments/next' },
+      { text: 'React Native / Expo', link: '/environments/expo' },
       { text: 'Bun', link: '/environments/bun' },
       { text: 'Deno', link: '/environments/deno' },
-      { text: 'Vite and browser', link: '/environments/vite' },
-      { text: 'Next.js server', link: '/environments/next' },
-      { text: 'React Native and Expo', link: '/environments/expo' },
     ] },
     { text: 'Guides', items: [
       { text: 'Market data', link: '/guides/market-data' },

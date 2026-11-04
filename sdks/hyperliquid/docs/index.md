@@ -1,17 +1,17 @@
 ---
-title: Hyperliquid SDK for JavaScript and TypeScript
-description: Install the Siebly Hyperliquid SDK for JavaScript and TypeScript. Query market data and account state, submit orders, and subscribe to WebSocket updates.
+title: Hyperliquid API SDK for Node.js, JavaScript and TypeScript
+description: Use @siebly/hyperliquid-api in Node.js to query market data and accounts, submit signed actions, and receive WebSocket updates. Start with runnable JavaScript and TypeScript examples.
 ---
 
 <script setup>
 import sdk from './.vitepress/generated.json';
 </script>
 
-# Hyperliquid SDK
+# Hyperliquid API SDK
 
-`@siebly/hyperliquid-api` provides JavaScript and TypeScript clients for market data, account queries, and all other REST API and WebSocket capabilities.
+`@siebly/hyperliquid-api` provides JavaScript and TypeScript clients for Hyperliquid market data, account queries, signed trading actions and WebSocket subscriptions.
 
-Automate your algorithmic trading on HyperLiquid in Node.js, monitor realtime market data with blazingly fast WebSockets.
+Build trading bots and automate your strategies in Node.js, or use real-time market data in a dashboard. Start with a public price request, then add authentication and order handling for your trading workflow.
 
 <p class="sdk-release">JavaScript &amp; TypeScript <span>·</span> v{{ sdk.version }} <template v-if="sdk.license"><span>·</span> {{ sdk.license }} license</template></p>
 
@@ -25,9 +25,9 @@ Automate your algorithmic trading on HyperLiquid in Node.js, monitor realtime ma
 
 `RestClient.getAllMids()` reads current mid prices without a wallet or private key.
 
-<<< @/../examples/first-call.ts
+<<< @/../examples/first-call.ts{js}
 
-The example prints the BTC mid price. Save it as `prices.mjs` and run `node prices.mjs`. See the [Quickstart](/getting-started) for module formats and example output.
+The example prints the BTC mid price. Save it as `prices.mjs` and run `node prices.mjs`. See the [Node.js quickstart](/getting-started) for module formats and example output.
 
 ## Clients
 

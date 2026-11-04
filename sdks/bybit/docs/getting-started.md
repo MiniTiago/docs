@@ -1,11 +1,11 @@
 ---
-title: "Get started with the Bybit JavaScript SDK"
-description: "Install bybit-api and make a public BTCUSDT price request without API credentials."
+title: "Bybit Node.js quickstart with JavaScript"
+description: "Install bybit-api and make your first REST request in Node.js. Read the BTCUSDT Spot price with plain JavaScript, without API credentials or a TypeScript compiler."
 ---
 
-# Quickstart
+# Node.js quickstart with JavaScript
 
-Read a Spot price with `RestClientV5`. No account credentials are required.
+Install `bybit-api` and read the BTCUSDT Spot price with one REST request from `RestClientV5` in Node.js. The example is plain JavaScript and needs no TypeScript compiler or API credentials.
 
 ## Installation
 
@@ -17,7 +17,7 @@ Read a Spot price with `RestClientV5`. No account credentials are required.
 
 Save this example as `prices.mjs` in your project.
 
-<<< @/../examples/first-call.ts
+<<< @/../examples/first-call.ts{js}
 
 Run it with:
 
@@ -37,7 +37,7 @@ BTCUSDT last price: 65000.00
 
 ## Module formats
 
-The `.mjs` extension enables ES modules. In a CommonJS `.cjs` file, use `const { RestClientV5 } = require('bybit-api')` and keep the async `main()` function. TypeScript projects can use the same imports.
+The `.mjs` extension tells Node.js to use ES modules and `import`. In a CommonJS `.cjs` file, use `const { RestClientV5 } = require('bybit-api')` and keep the async `main()` function. The [complete Node.js project](/environments/node) includes both formats. TypeScript projects can use the same imports and the included type definitions; the [Node.js TypeScript guide](/environments/typescript) adds a compiler configuration and build commands.
 
 ## Next steps
 

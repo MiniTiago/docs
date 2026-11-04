@@ -12,7 +12,7 @@ export async function readPrice() {
   return positivePrice(await market.read(market.client(sdk)));
 }
 
-// Returns cleanup immediately, including while subscription acknowledgement is pending.
+// Returns cleanup without waiting for subscription acknowledgement.
 export function watchPrice(onPrice, onError) {
   const ws = market.stream(sdk);
   let stopped = false;
@@ -27,7 +27,16 @@ export function watchPrice(onPrice, onError) {
   const deadline = setTimeout(() => fail(new Error('No BTC update within 30 seconds. Check network access.')), 30000);
   ws.on(market.event, receive);
   ws.on('exception', fail);
-  Promise.resolve(market.subscribe(ws)).catch(fail);
+  // React may clean up an effect before its queued subscription starts.
+  Promise.resolve().then(async () => {
+    if (stopped) return;
+    try {
+      await market.subscribe(ws);
+    } finally {
+      // A connection may finish opening after cleanup was requested.
+      if (stopped) ws.closeAll();
+    }
+  }).catch(fail);
   return () => {
     if (stopped) return;
     stopped = true;

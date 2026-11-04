@@ -4,11 +4,51 @@ import { create, list } from 'tar';
 import { root } from './context.mjs';
 import { frameworkVersions, nativeVersions } from '../compatibility/config.mjs';
 
-export const environments = ['bun', 'deno', 'vite', 'next', 'expo'];
-export const environmentTitles = { bun: 'Bun', deno: 'Deno', vite: 'Vite and browser', next: 'Next.js server', expo: 'React Native and Expo' };
+export const environments = ['node', 'typescript', 'react', 'vite', 'next', 'expo', 'bun', 'deno'];
+export const environmentTitles = { node: 'Node.js / JavaScript', typescript: 'Node.js / TypeScript', react: 'React', vite: 'Vite (plain JavaScript)', next: 'Next.js', expo: 'React Native / Expo', bun: 'Bun', deno: 'Deno' };
+const reactPluginVersion = '4.7.0';
 const json = value => JSON.stringify(value, null, 2) + '\n';
 const source = relative => readFile(path.join(root, relative), 'utf8');
 const template = relative => source(`shared/environments/${relative}`);
+
+// These small translations keep the runnable JavaScript, CommonJS and typed
+// examples on the same request and subscription implementations.
+function commonJs(input) {
+  const exported = [...input.matchAll(/^export (?:async )?(?:function|const) (\w+)/gm)].map(match => match[1]);
+  const requirePath = value => value.startsWith('.') ? value.replace(/\.js$/, '.cjs') : value;
+  const output = input
+    .replace(/^import \* as (\w+) from '([^']+)';$/gm, (_, name, target) => `const ${name} = require('${requirePath(target)}');`)
+    .replace(/^import (\{[^}]+\}|\w+) from '([^']+)';$/gm, (_, names, target) => `const ${names} = require('${requirePath(target)}');`)
+    .replace(/^export /gm, '');
+  if (/^(?:import|export) /m.test(output)) throw new Error('Unsupported module syntax in shared JavaScript example.');
+  return output.trimEnd() + (exported.length ? `\n\nmodule.exports = { ${exported.join(', ')} };\n` : '\n');
+}
+
+function replaceSignature(input, before, after) {
+  if (!input.includes(before)) throw new Error(`Missing shared example signature: ${before}`);
+  return input.replace(before, after);
+}
+
+function typedSources(sdk, market, price, cli) {
+  market = `import type * as SDK from '${sdk.packageName}';\ntype Sdk = typeof SDK;\n\n` + market;
+  for (const [before, after] of [
+    ['client(sdk)', 'client(sdk: Sdk)'],
+    ['read(client)', `read(client: InstanceType<Sdk['${sdk.clients[0]}']>)`],
+    ['stream(sdk, logger)', "stream(sdk: Sdk, logger?: ConstructorParameters<Sdk['WebsocketClient']>[1])"],
+    ['value(message)', 'value(message: any)'],
+    ['subscribe(ws)', "subscribe(ws: InstanceType<Sdk['WebsocketClient']>)"],
+  ]) market = replaceSignature(market, before, after);
+  for (const [before, after] of [
+    ['positivePrice(value)', 'positivePrice(value: unknown): string'],
+    ['readPrice()', 'readPrice(): Promise<string>'],
+    ['watchPrice(onPrice, onError)', 'watchPrice(onPrice: (price: string) => void, onError: (error: unknown) => void): () => void'],
+    ['const receive = message =>', 'const receive = (message: Parameters<typeof market.value>[0]) =>'],
+    ['const fail = error =>', 'const fail = (error: unknown) =>'],
+  ]) price = replaceSignature(price, before, after);
+  cli = replaceSignature(cli, 'let stop;', 'let stop: (() => void) | undefined;');
+  cli = replaceSignature(cli, 'new Promise(', 'new Promise<string>(');
+  return new Map([['market.ts', market], ['price.ts', price], ['prices.ts', cli]]);
+}
 
 // Runtime checks and published starters consume the same exchange adapters and
 // resolver configuration. Only the type-check-only fixture is omitted.
@@ -20,21 +60,39 @@ export async function environmentFiles(id, sdk, environment) {
   const pkg = { name: `${id}-${environment}-quickstart`, private: true, type: 'module', scripts: {}, dependencies: { [sdk.packageName]: 'latest' } };
   put('market.js', (await source(`compatibility/adapters/${id}.mjs`)).split('export const typeExample =')[0]);
   put('price.js', (await template('common/price.js')).replaceAll('@@PACKAGE@@', sdk.packageName));
-  if (environment === 'bun' || environment === 'deno') {
+  if (environment === 'node') {
+    await copy('prices.js', 'runtime/prices.js');
+    for (const name of ['market', 'price', 'prices']) put(`${name}.cjs`, commonJs(files.get(`${name}.js`)));
+    pkg.scripts = { start: 'node prices.js', 'start:require': 'node prices.cjs' };
+  } else if (environment === 'typescript') {
+    const typed = typedSources(sdk, files.get('market.js'), files.get('price.js'), await template('runtime/prices.js'));
+    files.clear();
+    for (const [name, content] of typed) put(name, content);
+    pkg.scripts = { check: 'tsc --noEmit', build: 'tsc', start: 'npm run build && node dist/prices.js' };
+    pkg.devDependencies = { typescript: JSON.parse(await source('package.json')).devDependencies.typescript, '@types/node': '24.13.2' };
+    put('tsconfig.json', json({ compilerOptions: { target: 'ES2022', module: 'NodeNext', moduleResolution: 'NodeNext', strict: true, skipLibCheck: true, outDir: 'dist', types: ['node'] }, include: ['*.ts'] }));
+  } else if (environment === 'bun' || environment === 'deno') {
     await copy('prices.js', 'runtime/prices.js');
     if (environment === 'bun') pkg.scripts.start = 'bun prices.js';
     else {
       // npm packages need environment and filesystem access for Node compatibility.
       put('deno.json', json({ nodeModulesDir: 'auto', tasks: { start: 'deno run --allow-net --allow-env --allow-read prices.js' } }));
     }
-  } else if (environment === 'vite') {
+  } else if (environment === 'vite' || environment === 'react') {
     pkg.scripts = { dev: 'vite --host 127.0.0.1', build: 'vite build', preview: 'vite preview --host 127.0.0.1' };
     pkg.devDependencies = { vite: frameworkVersions.vite };
-    await copy('index.html', 'vite/index.html');
-    await copy('main.js', 'vite/main.js');
+    await copy('index.html', `${environment}/index.html`);
+    if (environment === 'react') {
+      Object.assign(pkg.dependencies, { react: frameworkVersions.react, 'react-dom': frameworkVersions.react });
+      pkg.devDependencies['@vitejs/plugin-react'] = reactPluginVersion;
+      await copy('App.jsx', 'react/App.jsx');
+      await copy('main.jsx', 'react/main.jsx');
+      const sdkConfig = id === 'hyperliquid' ? 'const sdkConfig = {};' : "import sdkConfig from './sdk.vite.config.js';";
+      put('vite.config.js', `import react from '@vitejs/plugin-react';\n${sdkConfig}\nexport default { ...sdkConfig, plugins: [...(sdkConfig.plugins || []), react()] };\n`);
+    } else await copy('main.js', 'vite/main.js');
     if (id !== 'hyperliquid') {
       pkg.dependencies.events = '3.3.0';
-      put('vite.config.js', await source(`compatibility/browser-config/${id}.mjs`));
+      put(environment === 'react' ? 'sdk.vite.config.js' : 'vite.config.js', await source(`compatibility/browser-config/${id}.mjs`));
     }
   } else if (environment === 'next') {
     pkg.scripts = { dev: 'next dev --webpack', build: 'next build --webpack', start: 'next start' };
@@ -92,7 +150,7 @@ export async function checkStarter(archive, expected) {
   if (seen.size !== expected.size) throw new Error('Starter is missing required files.');
 }
 
-const fence = (name, content) => `### \`${name}\`\n\n\`\`\`${name.endsWith('.json') ? 'json' : name.endsWith('.html') ? 'html' : name.endsWith('.cjs') ? 'js' : 'jsx'}\n${content.trimEnd()}\n\`\`\``;
+const fence = (name, content) => `### \`${name}\`\n\n\`\`\`${name.endsWith('.json') ? 'json' : name.endsWith('.html') ? 'html' : name.endsWith('.ts') ? 'ts' : name.endsWith('.jsx') ? 'jsx' : 'js'}\n${content.trimEnd()}\n\`\`\``;
 export async function generateEnvironments(ctx) {
   const output = path.join(ctx.docs, 'environments');
   const downloads = path.join(ctx.docs, 'public/starters');
@@ -111,16 +169,16 @@ export async function generateEnvironments(ctx) {
     const setup = environment === 'bun' ? 'bun install' : environment === 'deno' ? 'deno install' : 'npm install';
     const run = environment === 'bun' ? 'bun run start' : environment === 'deno' ? 'deno task start' : environment === 'expo' ? 'npm start' : 'npm run dev';
     const configured = ctx.id !== 'hyperliquid';
-    const browser = environment === 'vite';
+    const browser = environment === 'vite' || environment === 'react';
     const substitutions = {
       SDK: ctx.sdk.name, TITLE: environmentTitles[environment], PACKAGE: ctx.sdk.packageName, ENV: environment,
       PRICE_KIND: ctx.id === 'hyperliquid' ? 'Prices are BTC mid prices.' : 'Prices are BTCUSDT last traded prices.',
       SETUP: `\`\`\`sh\nmkdir ${ctx.id}-${environment}-quickstart\ncd ${ctx.id}-${environment}-quickstart\n\`\`\`\n\nCopy the files below, or extract the downloaded archive into this directory (adjust the download path if needed):\n\n\`\`\`sh\ntar -xzf ~/Downloads/${environment}.tar.gz\n\`\`\`\n\nInstall the dependencies after saving or extracting the files:\n\n\`\`\`sh\n${setup}\n\`\`\``,
       RUN: `\`\`\`sh\n${run}\n\`\`\``, FILES: [...files].map(([name, content]) => fence(name, content)).join('\n\n'),
-      VITE: frameworkVersions.vite, NEXT: frameworkVersions.next, REACT: frameworkVersions.react,
+      TYPESCRIPT: JSON.parse(await source('package.json')).devDependencies.typescript, REACT_PLUGIN: reactPluginVersion, VITE: frameworkVersions.vite, NEXT: frameworkVersions.next, REACT: frameworkVersions.react,
       EXPO: nativeVersions.expo, RN: nativeVersions.reactNative, NATIVE_REACT: nativeVersions.react,
       CONFIG_NOTE: configured
-        ? browser ? `Keep the supplied Vite config: it resolves the events polyfill${ctx.id === 'binance' ? ' and selects Binance browser support' : ''}.`
+        ? browser ? `Keep the supplied Vite config${environment === 'react' ? ' files' : ''}: it resolves the events polyfill${ctx.id === 'binance' ? ' and selects Binance browser support' : ''}.`
           : 'Keep both Metro configuration files and the five polyfill dependencies. They are the same resolver configuration used in the native checks.'
         : 'No additional SDK polyfill configuration is needed for this recipe.',
       POLYFILL_TROUBLE: configured

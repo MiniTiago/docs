@@ -1,6 +1,6 @@
 ---
-title: @@SDK@@ @@TITLE@@ quickstart
-description: @@SDK@@ SDK. Read a public BTC price, receive a WebSocket update and close the connection with @@TITLE@@.
+title: @@SDK@@ @@TITLE@@ API quickstart
+description: Use the @@SDK@@ API with @@TITLE@@ to read a public BTC price, receive a WebSocket update and close the connection.
 ---
 
 # @@TITLE@@ quickstart
