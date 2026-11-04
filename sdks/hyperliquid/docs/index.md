@@ -9,13 +9,17 @@ import sdk from './.vitepress/generated.json';
 
 # Hyperliquid SDK
 
-`@siebly/hyperliquid-api` provides JavaScript and TypeScript clients for market data, account queries, signed actions and WebSocket subscriptions.
+`@siebly/hyperliquid-api` provides JavaScript and TypeScript clients for market data, account queries, and all other REST API and WebSocket capabilities.
+
+Automate your algorithmic trading on HyperLiquid in Node.js, monitor realtime market data with blazingly fast WebSockets.
 
 <p class="sdk-release">JavaScript &amp; TypeScript <span>·</span> v{{ sdk.version }} <template v-if="sdk.license"><span>·</span> {{ sdk.license }} license</template></p>
 
 ## Installation
 
 <!--@include: ./.vitepress/snippets/installation.md-->
+
+<!--@include: @/.vitepress/shared/getting-started/environments.md-->
 
 ## Usage
 
@@ -25,26 +29,24 @@ import sdk from './.vitepress/generated.json';
 
 The example prints the BTC mid price. Save it as `prices.mjs` and run `node prices.mjs`. See the [Quickstart](/getting-started) for module formats and example output.
 
-<!--@include: @/.vitepress/shared/getting-started/environments.md-->
-
 ## Clients
 
-| Client | Purpose |
-| --- | --- |
-| [`RestClient`](/api/classes/RestClient) | Query market data and account state, or submit signed actions over HTTP. |
-| [`WebsocketClient`](/api/classes/WebsocketClient) | Subscribe to market data and account updates. |
-| [`WebsocketAPIClient`](/api/classes/WebsocketAPIClient) | Call the REST client's methods over a WebSocket connection. |
+| Client                                                  | Purpose                                                                  |
+| ------------------------------------------------------- | ------------------------------------------------------------------------ |
+| [`RestClient`](/api/classes/RestClient)                 | Query market data and account state, or submit signed actions over HTTP. |
+| [`WebsocketClient`](/api/classes/WebsocketClient)       | Subscribe to market data and account updates.                            |
+| [`WebsocketAPIClient`](/api/classes/WebsocketAPIClient) | Call the REST client's methods over a WebSocket connection.              |
 
 See [Clients](/clients) for setup and cleanup, or the [API reference](/reference) for methods and types.
 
 ## Common tasks
 
-| Task | Guide |
-| --- | --- |
-| Read prices, order books and candles | [Market data](/guides/market-data) |
-| Receive market updates | [WebSocket subscriptions](/guides/websockets) |
-| Query accounts or configure a signer | [Authentication](/guides/authentication) |
-| Choose a network and set timeouts | [Configuration](/guides/configuration) |
+| Task                                 | Guide                                         |
+| ------------------------------------ | --------------------------------------------- |
+| Read prices, order books and candles | [Market data](/guides/market-data)            |
+| Receive market updates               | [WebSocket subscriptions](/guides/websockets) |
+| Query accounts or configure a signer | [Authentication](/guides/authentication)      |
+| Choose a network and set timeouts    | [Configuration](/guides/configuration)        |
 
 ## Using the SDK
 
