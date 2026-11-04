@@ -3,7 +3,7 @@ import { pathToFileURL } from 'node:url';
 import { catalogue } from './context.mjs';
 import { trustedReleaseRun, inspectReleaseRun, validateReleasePR, mergeReleaseRun } from './release-update.mjs';
 import { releaseManifestPath, releaseVersions, validateReleaseUpdate, validateRelease } from './release-manifest.mjs';
-import { repository, refreshBranch, requireThat, requireMainDispatch, createGitHubApi, manifestAt, summary, sha, dispatchPublication } from './github-automation.mjs';
+import { repository, refreshBranch, requireThat, requireMainDispatch, createGitHubApi, manifestAt, summary, sha } from './github-automation.mjs';
 
 export function updatedManifest(before, latest) {
   const previous = releaseVersions(before);
@@ -114,8 +114,7 @@ async function main() {
   const api = createGitHubApi(process.env.GH_TOKEN);
   const result = await refreshReleases(api, await readLatestVersions());
   if (!result.changed) {
-    await dispatchPublication(api, 'main');
-    await summary('The SDK release manifest already matches npm latest. No PR was needed; publication was dispatched to refresh the live docs.');
+    await summary('All SDK releases are already up to date. No PR, build or deployment was started.');
     return;
   }
   await summary(`SDK refresh PR: ${result.pr}`);
