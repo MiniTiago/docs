@@ -1,7 +1,24 @@
 version: 2
 updates:
-  - package-ecosystem: github-actions
-    directory: /
+  - package-ecosystem: npm
+    directory: /releases
     schedule:
-      interval: monthly
-    open-pull-requests-limit: 5
+      interval: cron
+      cronjob: '19 */6 * * *'
+    versioning-strategy: increase
+    open-pull-requests-limit: 1
+    allow:
+      - dependency-name: '@siebly/hyperliquid-api'
+      - dependency-name: bybit-api
+      - dependency-name: binance
+    groups:
+      sdk-releases:
+        patterns:
+          - '@siebly/hyperliquid-api'
+          - bybit-api
+          - binance
+    cooldown:
+      exclude:
+        - '@siebly/hyperliquid-api'
+        - bybit-api
+        - binance

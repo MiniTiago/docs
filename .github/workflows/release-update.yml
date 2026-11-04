@@ -1,0 +1,52 @@
+name: Merge validated SDK release updates
+
+on:
+  workflow_run:
+    workflows: [Build and deploy SDK documentation]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: Completed PR run ID to inspect without merging or dispatching
+        required: true
+        type: string
+
+permissions: {}
+
+concurrency:
+  group: sdk-release-updates
+  cancel-in-progress: false
+
+jobs:
+  merge:
+    if: >-
+      github.repository == 'sieblyio/docs' && github.ref == 'refs/heads/main' &&
+      (github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.actor.login == 'dependabot[bot]' &&
+      github.event.workflow_run.head_repository.full_name == 'sieblyio/docs'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: write
+    steps:
+      - name: Checkout trusted default-branch automation only
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          sparse-checkout: |
+            scripts/release-update.mjs
+            scripts/release-manifest.mjs
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Validate release PR, merge its checked head and dispatch publication
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/release-update.mjs

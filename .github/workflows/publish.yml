@@ -4,18 +4,8 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths:
-      - 'shared/**'
-      - 'sdks/**'
-      - 'scripts/**'
-      - 'compatibility/**'
-      - 'package.json'
-      - 'package-lock.json'
-      - '.github/workflows/publish.yml'
   pull_request:
     branches: [main]
-  schedule:
-    - cron: '19 */6 * * *'
 
 permissions:
   contents: read
@@ -50,28 +40,23 @@ jobs:
         id: plan
         run: node scripts/ci-plan.mjs
       - name: Check content, evidence, release selection and CI planning
-        if: steps.plan.outputs.build == 'true'
         run: |
           npm run check:content
           npm run compat:check-report
           npm run check:releases
           npm run check:ci
           npm run check:site-tests
+          npm run check:release-update
       - name: Build all SDK sites from the resolved release records
-        if: steps.plan.outputs.build == 'true'
         env:
           DOCS_RELEASE_RECORD: .work/available-releases.json
         run: npm run build:release
       - name: Upload validated Pages output
-        if: steps.plan.outputs.build == 'true'
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: dist/
           include-hidden-files: true
           retention-days: 7
-      - name: Record unchanged release check
-        if: steps.plan.outputs.build != 'true'
-        run: echo 'Published npm versions and documentation revision unchanged; no build or deployment needed.' >> "$GITHUB_STEP_SUMMARY"
 
   deploy:
     needs: build

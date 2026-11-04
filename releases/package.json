@@ -1,0 +1,9 @@
+{
+  "name": "siebly-sdk-release-inputs",
+  "private": true,
+  "dependencies": {
+    "@siebly/hyperliquid-api": "1.0.1",
+    "bybit-api": "4.8.4",
+    "binance": "3.6.11"
+  }
+}

@@ -5,6 +5,7 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import * as tar from 'tar';
 import { root, catalogue } from './context.mjs';
+import { readReleaseVersions } from './release-manifest.mjs';
 
 export function validateRelease(sdk, metadata) {
   if (metadata.name !== sdk.packageName || !/^\d+\.\d+\.\d+$/.test(metadata.version)) throw new Error(`Invalid stable release for ${sdk.packageName}`);
@@ -14,10 +15,6 @@ export function validateRelease(sdk, metadata) {
   if (metadata.gitHead && !/^[a-f0-9]{40}$/.test(metadata.gitHead)) throw new Error('Invalid npm gitHead');
   return { packageName: metadata.name, version: metadata.version, repository: sdk.repository,
     npmTarball: metadata.dist.tarball, npmIntegrity: metadata.dist.integrity, ...(metadata.gitHead ? { gitHead: metadata.gitHead } : {}) };
-}
-
-export function versionsChanged(releases, manifest) {
-  return Object.entries(releases).some(([id, release]) => (manifest?.releases?.[id]?.version ?? manifest?.sdks?.[id]?.version) !== release.version);
 }
 
 async function fetchBytes(url) {
@@ -65,19 +62,24 @@ export function run(command, args, options = {}) {
   });
 }
 
-export async function resolveLatest() {
+export async function resolveReleases() {
+  const versions = await readReleaseVersions();
   const releases = {};
   for (const sdk of await catalogue()) {
-    const metadata = JSON.parse(await fetchBytes(`https://registry.npmjs.org/${encodeURIComponent(sdk.packageName)}/latest`));
+    const version = versions[sdk.packageName];
+    const metadata = JSON.parse(await fetchBytes(`https://registry.npmjs.org/${encodeURIComponent(sdk.packageName)}/${version}`));
+    if (metadata.version !== version) throw new Error(`npm metadata does not match the pinned ${sdk.packageName}@${version}`);
     releases[sdk.id] = validateRelease(sdk, metadata);
   }
   return releases;
 }
 
 export async function prepare(releases) {
+  const versions = await readReleaseVersions();
   const records = {};
   for (const sdk of await catalogue()) {
     const release = releases[sdk.id];
+    if (release?.packageName !== sdk.packageName || release.version !== versions[sdk.packageName]) throw new Error(`Release record does not match releases/package.json: ${sdk.id}`);
     // Validate persisted records too; the allowlist always comes from authored config.
     validateRelease(sdk, { name: release.packageName, version: release.version, repository: release.repository, gitHead: release.gitHead, dist: { tarball: release.npmTarball, integrity: release.npmIntegrity } });
     const directory = path.join(root, '.work/releases', sdk.id);
@@ -115,7 +117,7 @@ async function main() {
   await mkdir(path.join(root, '.work'), { recursive: true });
   const releases = command === 'build' && process.env.DOCS_RELEASE_RECORD
     ? JSON.parse(await readFile(path.resolve(process.env.DOCS_RELEASE_RECORD), 'utf8'))
-    : await resolveLatest();
+    : await resolveReleases();
   console.log(JSON.stringify(releases, null, 2));
   await writeFile(path.join(root, '.work/available-releases.json'), JSON.stringify(releases, null, 2) + '\n');
   if (command === 'build') {
