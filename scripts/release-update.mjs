@@ -1,6 +1,4 @@
 import { readFile } from 'node:fs/promises';
-import { execFile } from 'node:child_process';
-import { promisify } from 'node:util';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { releaseManifestPath, validateReleaseUpdate } from './release-manifest.mjs';
@@ -63,15 +61,17 @@ export async function inspectReleaseRun(api, runId) {
   return { run, pr, jobs, files, mainSha, mergeBaseSha, before, after };
 }
 
-export async function mergeReleaseRun(api, runId, { dryRun = false } = {}) {
-  const candidate = await inspectReleaseRun(api, runId);
+export async function mergeReleaseRun(api, runId, { dryRun = false, inspect = inspectReleaseRun } = {}) {
+  const candidate = await inspect(api, runId);
   requireThat(candidate, 'No unique trusted SDK release PR matches this run');
   const decision = validateCandidate(candidate);
   const { run, pr } = candidate;
   if (dryRun) return `Read-only inspection passed for SDK release PR #${pr.number}; no merge or dispatch performed.`;
-  if (!decision.alreadyMerged) await promisify(execFile)('gh', ['pr', 'merge', String(pr.number), '--repo', repository, '--squash', '--match-head-commit', run.head_sha], { env: process.env });
-  const merged = await api(`/pulls/${pr.number}`);
-  requireThat(merged.merged === true && merged.head.sha === run.head_sha && sha(merged.merge_commit_sha), 'Merge completion was not confirmed; rerun this job to recover');
+  if (!decision.alreadyMerged) {
+    // This response confirms the protected merge; a subsequent PR read can lag behind it.
+    const merged = await api(`/pulls/${pr.number}/merge`, 'PUT', { sha: run.head_sha, merge_method: 'squash' });
+    requireThat(merged.merged === true && sha(merged.sha), 'GitHub did not confirm the protected merge; rerun this job to recover');
+  }
   await dispatchPublication(api, 'main');
   return `${decision.alreadyMerged ? 'Confirmed prior merge of' : 'Merged'} SDK release PR #${pr.number} (${decision.changed.join(', ')}) and dispatched the main documentation build.`;
 }

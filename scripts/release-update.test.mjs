@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { eligibleRun, validateCandidate } from './release-update.mjs';
+import { eligibleRun, validateCandidate, mergeReleaseRun } from './release-update.mjs';
 import { refreshBranch } from './github-automation.mjs';
 import { readReleaseVersions, releaseVersions, validateReleaseUpdate } from './release-manifest.mjs';
 
@@ -101,4 +101,31 @@ test('only real bot PR builds on the reserved refresh branch can validate manual
   ]) { const invalid = structuredClone(value); change(invalid); assert.throws(() => validateCandidate(invalid)); }
   Object.assign(value.pr, { state: 'closed', merged: true, merged_by: { login: 'github-actions[bot]' }, merge_commit_sha: 'c'.repeat(40) });
   assert.equal(validateCandidate(value).alreadyMerged, true, 'Manual refresh merges retain dispatch recovery');
+});
+
+
+test('the protected merge response confirms success without a stale follow-up PR read', async () => {
+  const value = candidate(); value.pr.number = 7;
+  const calls = [];
+  const api = async (endpoint, method, body) => {
+    calls.push({ endpoint, method, body });
+    if (endpoint === '/pulls/7/merge') return { merged: true, sha: 'c'.repeat(40) };
+    if (endpoint === '/actions/workflows/publish.yml/dispatches') return;
+    throw new Error('Unexpected read after authoritative merge confirmation');
+  };
+  const message = await mergeReleaseRun(api, 42, { inspect: async () => value });
+  assert.match(message, /Merged SDK release PR #7/);
+  assert.deepEqual(calls, [
+    { endpoint: '/pulls/7/merge', method: 'PUT', body: { sha: head, merge_method: 'squash' } },
+    { endpoint: '/actions/workflows/publish.yml/dispatches', method: 'POST', body: { ref: 'main' } },
+  ]);
+});
+
+test('a refused protected merge never dispatches publication', async () => {
+  const value = candidate(); value.pr.number = 7;
+  const calls = [];
+  await assert.rejects(mergeReleaseRun(async (endpoint) => {
+    calls.push(endpoint); return { merged: false };
+  }, 42, { inspect: async () => value }), /did not confirm/);
+  assert.deepEqual(calls, ['/pulls/7/merge']);
 });

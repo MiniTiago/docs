@@ -79,7 +79,7 @@ test('foreign PRs, human commits, extra files and pending downgrades are preserv
   ]) { const value = input(); change(value); assert.throws(() => validateRefreshBranch(value)); }
 });
 
-test('no change creates no branch, PR or build', async () => {
+test('an up-to-date manifest creates no release proposal', async () => {
   const f = fixture();
   assert.deepEqual(await refreshReleases(f.api, manifest().dependencies), { changed: false });
   assert.equal(f.calls.some((c) => c.method !== 'GET'), false);
