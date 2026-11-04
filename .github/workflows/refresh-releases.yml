@@ -1,0 +1,41 @@
+name: Refresh SDK releases
+
+on:
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: sdk-release-updates
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    if: github.repository == 'sieblyio/docs' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: write
+    steps:
+      - name: Checkout trusted main release automation only
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          sparse-checkout: |
+            scripts/github-automation.mjs
+            scripts/release-refresh.mjs
+            scripts/release-manifest.mjs
+            scripts/context.mjs
+            sdks/*/sdk.config.mjs
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Open or reuse the checked SDK release PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/release-refresh.mjs

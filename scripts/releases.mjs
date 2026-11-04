@@ -5,17 +5,9 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import * as tar from 'tar';
 import { root, catalogue } from './context.mjs';
-import { readReleaseVersions } from './release-manifest.mjs';
+import { readReleaseVersions, validateRelease } from './release-manifest.mjs';
 
-export function validateRelease(sdk, metadata) {
-  if (metadata.name !== sdk.packageName || !/^\d+\.\d+\.\d+$/.test(metadata.version)) throw new Error(`Invalid stable release for ${sdk.packageName}`);
-  const repository = typeof metadata.repository === 'string' ? metadata.repository : metadata.repository?.url;
-  if (repository?.replace(/^git\+/, '').replace(/\.git$/, '') !== sdk.repository) throw new Error(`Unexpected repository for ${sdk.packageName}`);
-  if (!/^https:\/\/registry\.npmjs\.org\//.test(metadata.dist?.tarball || '') || !/^sha512-[A-Za-z0-9+/]+={0,2}$/.test(metadata.dist?.integrity || '')) throw new Error(`Missing trusted npm archive/integrity for ${sdk.packageName}`);
-  if (metadata.gitHead && !/^[a-f0-9]{40}$/.test(metadata.gitHead)) throw new Error('Invalid npm gitHead');
-  return { packageName: metadata.name, version: metadata.version, repository: sdk.repository,
-    npmTarball: metadata.dist.tarball, npmIntegrity: metadata.dist.integrity, ...(metadata.gitHead ? { gitHead: metadata.gitHead } : {}) };
-}
+export { validateRelease } from './release-manifest.mjs';
 
 async function fetchBytes(url) {
   const response = await fetch(url, { signal: AbortSignal.timeout(120_000), headers: { 'User-Agent': 'siebly-sdk-docs' } });

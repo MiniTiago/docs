@@ -18,7 +18,8 @@
     "check:public": "node scripts/check-public.mjs dist",
     "check:ci": "node --test scripts/ci-plan.test.mjs",
     "check:site-tests": "node --test scripts/check-site.test.mjs scripts/analytics.test.mjs",
-    "check:release-update": "node --test scripts/release-update.test.mjs"
+    "check:release-update": "node --test scripts/release-update.test.mjs",
+    "check:release-refresh": "node --test scripts/release-refresh.test.mjs"
   },
   "devDependencies": {
     "tar": "7.5.22",

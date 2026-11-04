@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { eligibleRun, validateCandidate } from './release-update.mjs';
+import { refreshBranch } from './github-automation.mjs';
 import { readReleaseVersions, releaseVersions, validateReleaseUpdate } from './release-manifest.mjs';
 
 const main = 'a'.repeat(40), head = 'b'.repeat(40);
@@ -82,4 +83,22 @@ test('non-PR and unsuccessful runs cannot enter privileged release processing', 
   for (const event of ['push', 'workflow_dispatch', 'schedule']) assert.equal(eligibleRun({ ...candidate().run, event }), false);
   assert.equal(eligibleRun({ ...candidate().run, head_sha: '../main' }), false);
   assert.equal(eligibleRun({ ...candidate().run, path: '.github/workflows/other.yml' }), false);
+});
+
+test('only bot-dispatched builds on the reserved refresh branch can validate manual refresh PRs', () => {
+  const value = candidate();
+  Object.assign(value.run, { event: 'workflow_dispatch', actor: { login: 'github-actions[bot]' }, head_branch: refreshBranch });
+  value.pr.user.login = 'github-actions[bot]';
+  value.pr.head.ref = refreshBranch;
+  assert.equal(validateCandidate(value).alreadyMerged, false);
+  for (const change of [
+    (v) => { v.run.actor.login = 'someone'; },
+    (v) => { v.pr.user.login = 'someone'; },
+    (v) => { v.run.head_branch = v.pr.head.ref = 'arbitrary-branch'; },
+    (v) => { v.run.event = 'pull_request'; },
+    (v) => { v.pr.head.sha = 'e'.repeat(40); },
+    (v) => { v.files.push({ filename: 'README.md', status: 'modified' }); },
+  ]) { const invalid = structuredClone(value); change(invalid); assert.throws(() => validateCandidate(invalid)); }
+  Object.assign(value.pr, { state: 'closed', merged: true, merged_by: { login: 'github-actions[bot]' }, merge_commit_sha: 'c'.repeat(40) });
+  assert.equal(validateCandidate(value).alreadyMerged, true, 'Manual refresh merges retain dispatch recovery');
 });

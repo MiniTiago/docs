@@ -70,7 +70,7 @@ After sources have been prepared, `npm run build` reuses them. `npm run build --
 - `shared/` theme, branding, common config, shared Markdown fragments.
 - `sdks/<id>/` SDK config, maintained guides, checked TypeScript examples.
 - `scripts/` generates the reference, checks examples and assembles the website.
-- `releases/package.json` contains the SDK release versions maintained by Dependabot.
+- `releases/package.json` contains the SDK release versions maintained by release automation.
 - `compatibility/` real-exchange runtime harness and sanitized recorded results.
 - `.work/`, `tmp/`, `verification/`, `dist/` disposable, ignored build data.
 
@@ -87,6 +87,7 @@ npm run check:releases
 npm run check:ci
 npm run check:site-tests
 npm run check:release-update
+npm run check:release-refresh
 ```
 
 Builds check examples, links, assets and site metadata before replacing `dist/`. Failed builds leave the previous output intact. To recheck an existing build:
@@ -110,13 +111,17 @@ The [publishing workflow](.github/workflows/publish.yml):
 - Builds and deploys every change to `main` after checks pass.
 - Uses GitHub's temporary credentials, with no stored secrets or SDK repository write access.
 
-The [release-update workflow](.github/workflows/release-update.yml) automatically merges successful Dependabot PRs that change only SDK versions, then dispatches publication. It validates the current head, base and manifest before merging. Privileged code comes from `main`, never the PR. Protect `main` with the required **build** check from **GitHub Actions**, require up-to-date branches, and allow squash merges.
+The [release-update workflow](.github/workflows/release-update.yml) automatically merges successful Dependabot PRs and bot-dispatched manual refresh PRs that change only SDK versions, then dispatches publication. It validates the current head, base and manifest before merging. Privileged code comes from `main`, never the PR. Protect `main` with the required **build** check from **GitHub Actions**, require up-to-date branches, and allow squash merges.
 
 This uses [Dependabot's scheduler](https://docs.github.com/en/code-security/reference/supply-chain-security/dependabot-options-reference), so there is no Actions cron to disable after 60 quiet days. Dependabot watches SDK releases only; action-pin upgrades remain reviewed maintenance. Failed SDK updates still need fixing: an update PR left untouched for over 90 days [can pause Dependabot](https://docs.github.com/en/code-security/reference/supply-chain-security/troubleshoot-dependabot/dependabot-updates-stopped). No release PR means no inactivity pause.
 
-To force a full refresh, use **Actions > Build and deploy SDK documentation > Run workflow** on `main`. Each deployment's SDK versions and source identifiers are listed in [build-manifest.json](https://sieblyio.github.io/docs/build-manifest.json).
+To check npm immediately, use **Actions > Refresh SDK releases > Run workflow** on `main`. It checks `latest` for the three allowlisted SDK packages and opens, updates or reuses a bot-owned PR on `automation/refresh-sdk-releases`. Versions must be stable and move forward. The summary links to the PR and validation build, or reports that the manifest already matches npm. Existing human changes are rejected, and an expected-head update protects concurrent edits. A later release starts a clean proposal from current `main`, even when the previous refresh branch remains after merging.
 
-If a merge succeeds but publication dispatch fails, rerun the failed release-update job; it can retry dispatch without merging again. Its manual **Run workflow** mode accepts a completed PR run ID for read-only inspection.
+The action explicitly dispatches the publishing workflow on the refresh branch, so it does not depend on approval-required runs from token-created PR events. That build has read-only permissions and cannot deploy. The trusted merge handler accepts only a successful bot-dispatched build for the exact refresh PR head, validates the manifest-only change and current main ancestry, and preserves the same protected **build** check as Dependabot. It then dispatches publication on `main` using the temporary token. No new secrets, permissions settings or SDK repository changes are required.
+
+To rebuild and publish the versions already recorded in `releases/package.json`, use **Actions > Build and deploy SDK documentation > Run workflow** on `main`. This does not check npm for newer versions. Each deployment's SDK versions and source identifiers are listed in [build-manifest.json](https://sieblyio.github.io/docs/build-manifest.json).
+
+If refresh validation dispatch fails after PR creation, rerun **Refresh SDK releases**; it reuses the PR and retries the branch build. If a merge succeeds but publication dispatch fails, rerun the failed release-update job; it can retry dispatch without merging again. Its manual **Run workflow** mode accepts a completed PR run ID for read-only inspection.
 
 ## Analytics and Search Console
 

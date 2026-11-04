@@ -47,6 +47,7 @@ jobs:
           npm run check:ci
           npm run check:site-tests
           npm run check:release-update
+          npm run check:release-refresh
       - name: Build all SDK sites from the resolved release records
         env:
           DOCS_RELEASE_RECORD: .work/available-releases.json
