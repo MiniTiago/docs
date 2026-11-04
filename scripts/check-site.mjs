@@ -1,6 +1,7 @@
 import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { searchConsoleFile } from '../shared/site-services.mjs';
 
 const decode = (s) => s.replaceAll('&amp;', '&').replaceAll('&#39;', "'").replaceAll('&quot;', '"');
 export async function checkSite(root) {
@@ -10,6 +11,10 @@ export async function checkSite(root) {
   const pages = new Map();
   for (const file of files) if (file.endsWith('.html')) {
     const html = await readFile(path.join(root, file), 'utf8');
+    if (file === searchConsoleFile) {
+      if (html.trim() !== `google-site-verification: ${searchConsoleFile}`) throw new Error('Incorrect Search Console verification file.');
+      continue;
+    }
     pages.set(file, { html, ids: new Set([...html.matchAll(/\bid="([^"]+)"/g)].map((m) => decode(m[1]))) });
   }
   const errors = new Set();

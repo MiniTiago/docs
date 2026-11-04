@@ -1,9 +1,11 @@
 import path from 'node:path';
 import { sourceCommentMarkup } from './markdown.mjs';
+import { analyticsAttributes } from './site-services.mjs';
 
 export default function siteConfig(data, docs) {
   const { sdk, siteUrl, originUrl, indexable, catalogue } = data;
   const site = new URL(siteUrl);
+  const analytics = analyticsAttributes(originUrl, indexable);
   const groups = [
     { text: 'Getting started', items: [
       { text: 'Introduction', link: '/' }, { text: 'Quickstart', link: '/getting-started' }, { text: 'Clients', link: '/clients' },
@@ -40,6 +42,7 @@ export default function siteConfig(data, docs) {
       .filter((item) => !item.url.endsWith('404.html'))
       .map((item) => ({ ...item, url: new URL(item.url.replace(/^\//, ''), site).href })) } : undefined,
     head: [
+      ...(analytics ? [['script', analytics]] : []),
       ['link', { rel: 'icon', type: 'image/svg+xml', href: `${site.pathname}favicon.svg` }],
       ['meta', { name: 'robots', content: indexable ? 'index,follow' : 'noindex,nofollow' }],
       ['meta', { name: 'theme-color', content: '#ffffff', media: '(prefers-color-scheme: light)' }],

@@ -17,7 +17,7 @@
     "check:releases": "node --test scripts/releases.test.mjs",
     "check:public": "node scripts/check-public.mjs dist",
     "check:ci": "node --test scripts/ci-plan.test.mjs",
-    "check:site-tests": "node --test scripts/check-site.test.mjs",
+    "check:site-tests": "node --test scripts/check-site.test.mjs scripts/analytics.test.mjs",
     "check:release-update": "node --test scripts/release-update.test.mjs"
   },
   "devDependencies": {

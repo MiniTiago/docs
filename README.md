@@ -93,6 +93,21 @@ To force a full refresh, use **Actions > Build and deploy SDK documentation > Ru
 
 If a merge succeeds but publication dispatch fails, rerun the failed release-update job; it can retry dispatch without merging again. Its manual **Run workflow** mode accepts a completed PR run ID for read-only inspection.
 
+## Analytics and Search Console
+
+Indexable builds automatically load the same GA4 web stream as siebly.io (`G-KQWZYX9C7R`) on the portal, SDK pages and error pages. Preview builds omit the tag; a production build served on another origin also does not send traffic. The docs do not add a consent prompt.
+
+The stream's enhanced measurement setting **Page views > Page changes based on browser history events** must remain enabled. It measures VitePress navigation without additional manual pageview events.
+
+To compare the sites in GA4 reports or Explorations, filter by **Hostname**:
+
+- Docs: `sieblyio.github.io`, with **Page path** beginning `/docs/`.
+- Main website: `siebly.io` (include `www.siebly.io` if used).
+
+Docs events also carry the built-in **Content group** value `Documentation`. No custom dimension is needed. In the shared stream's **Configure tag settings > Configure your domains**, include `siebly.io` and `sieblyio.github.io` to preserve journeys between the sites.
+
+The Google verification file is maintained unchanged in `shared/verification/` and copied to the site's root. After deployment, verify the URL-prefix property `https://sieblyio.github.io/docs/` in Search Console and submit `https://sieblyio.github.io/docs/sitemap.xml`. Keep the verification file in subsequent deployments.
+
 ## Compatibility checks
 
 Recorded results live in [compatibility/results/](compatibility/results/). Each SDK's compatibility guide shows the tested versions, runtime coverage and limitations. These checks use public mainnet APIs and run manually, separately from docs builds and CI.
