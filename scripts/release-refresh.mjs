@@ -34,7 +34,7 @@ export async function readLatestVersions() {
   return versions;
 }
 
-export async function refreshReleases(api, latest) {
+export async function refreshReleases(api, latest, { sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms)) } = {}) {
   const main = (await api('/git/ref/heads/main')).object.sha;
   const before = await manifestAt(api, main);
   const desired = updatedManifest(before, latest);
@@ -65,8 +65,18 @@ export async function refreshReleases(api, latest) {
   }
   requireThat(prs.length <= 1, 'Multiple open refresh PRs exist');
   let pr = prs[0];
-  if (pr) requireThat(pr.user?.login === 'github-actions[bot]' && pr.head?.sha === head && pr.base?.ref === 'main', 'The refresh PR changed during this run');
-  else pr = await api('/pulls', 'POST', { title: 'Refresh SDK release versions', head: refreshBranch, base: 'main', body: 'Updates the SDK release manifest from npm latest. The documentation build validates the proposed releases before the protected merge and publication.' });
+  if (pr) {
+    const ownedPR = () => requireThat(pr.state === 'open' && pr.user?.login === 'github-actions[bot]' && pr.user?.type === 'Bot' && pr.head?.repo?.full_name === repository && pr.head.ref === refreshBranch && pr.base?.repo?.full_name === repository && pr.base.ref === 'main', 'The refresh PR changed during this run');
+    ownedPR();
+    // GitHub updates the branch before its PR response reflects the new head.
+    for (let attempt = 0; pr.head.sha !== head && attempt < 30; attempt++) {
+      requireThat((await api(`/git/ref/heads/${refreshBranch}`)).object.sha === head, 'The refresh branch changed while waiting for its PR');
+      await sleep(2_000);
+      pr = await api(`/pulls/${pr.number}`);
+      ownedPR();
+    }
+    requireThat(pr.head.sha === head, `GitHub has not reported the updated PR head: ${pr.html_url}. Rerun Refresh SDK releases to continue.`);
+  } else pr = await api('/pulls', 'POST', { title: 'Refresh SDK release versions', head: refreshBranch, base: 'main', body: 'Updates the SDK release manifest from npm latest. The documentation build validates the proposed releases before the protected merge and publication.' });
   return { changed: true, pr: pr.html_url, number: pr.number, head };
 }
 
