@@ -2,6 +2,31 @@
 
 The shared TypeDoc and VitePress builder, guides, examples and compatibility harness for the SDK documentation published to GitHub Pages, available at [sieblyio.github.io/docs](https://sieblyio.github.io/docs/).
 
+## Documentation Updates
+
+A huge portion of the docs is codegen directly from the rich types included with each of our SDKs. Most of the remaining custom content is Markdown in `sdks/<sdk>/docs/`.
+
+| Content                                   | Source                                                                                                                  |
+| ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| SDK introductions, quickstarts and guides | `sdks/<sdk>/docs/`                                                                                                      |
+| Shared guidance                           | [shared/content/](shared/content/)                                                                                      |
+| Included code examples                    | `sdks/<sdk>/examples/`                                                                                                  |
+| Main documentation landing page           | [scripts/portal.mjs](scripts/portal.mjs)                                                                                |
+| Navigation labels and common footer       | [shared/config.mjs](shared/config.mjs)                                                                                  |
+| Compatibility page wording                | [shared/content/compatibility/](shared/content/compatibility/) and [compatibility/report.mjs](compatibility/report.mjs) |
+
+---
+
+Notes:
+
+- Follow `<!--@include: ...-->` and `<<< ...` references to edit shared text or examples at their source.
+- Keep the includes so each change reaches every page that uses it. Preserve heading anchors such as `{#verify-the-result}` when renaming sections.
+- API references come from the released SDK's source comments;
+- Installation snippets use package metadata. Edit those inputs for changes to generated content.
+- Files under `.work/` and `dist/` are overwritten during builds. Do not edit these directly.
+
+After the initial build below, use `npm run dev` while editing. Refresh the preview after it reports "Preview updated."
+
 ## Build & Release
 
 Use Node.js 22 or newer.
