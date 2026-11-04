@@ -85,9 +85,9 @@ test('non-PR and unsuccessful runs cannot enter privileged release processing', 
   assert.equal(eligibleRun({ ...candidate().run, path: '.github/workflows/other.yml' }), false);
 });
 
-test('only bot-dispatched builds on the reserved refresh branch can validate manual refresh PRs', () => {
+test('only real bot PR builds on the reserved refresh branch can validate manual refresh PRs', () => {
   const value = candidate();
-  Object.assign(value.run, { event: 'workflow_dispatch', actor: { login: 'github-actions[bot]' }, head_branch: refreshBranch });
+  Object.assign(value.run, { event: 'pull_request', actor: { login: 'github-actions[bot]' }, head_branch: refreshBranch });
   value.pr.user.login = 'github-actions[bot]';
   value.pr.head.ref = refreshBranch;
   assert.equal(validateCandidate(value).alreadyMerged, false);
@@ -95,7 +95,7 @@ test('only bot-dispatched builds on the reserved refresh branch can validate man
     (v) => { v.run.actor.login = 'someone'; },
     (v) => { v.pr.user.login = 'someone'; },
     (v) => { v.run.head_branch = v.pr.head.ref = 'arbitrary-branch'; },
-    (v) => { v.run.event = 'pull_request'; },
+    (v) => { v.run.event = 'workflow_dispatch'; },
     (v) => { v.pr.head.sha = 'e'.repeat(40); },
     (v) => { v.files.push({ filename: 'README.md', status: 'modified' }); },
   ]) { const invalid = structuredClone(value); change(invalid); assert.throws(() => validateCandidate(invalid)); }

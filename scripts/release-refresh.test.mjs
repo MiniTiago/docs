@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { refreshReleases, updatedManifest, validateRefreshBranch } from './release-refresh.mjs';
-import { requireMainDispatch, repository, refreshBranch } from './github-automation.mjs';
+import { refreshReleases, updatedManifest, validateRefreshBranch, approveAndMergeRefresh } from './release-refresh.mjs';
+import { requireMainDispatch, repository, refreshBranch, createGitHubApi } from './github-automation.mjs';
 
 const base = 'a'.repeat(40), proposal = 'b'.repeat(40), newer = 'c'.repeat(40);
 const manifest = (hl = '1.0.1') => ({ name: 'siebly-sdk-release-inputs', private: true, dependencies: { '@siebly/hyperliquid-api': hl, 'bybit-api': '4.8.4', binance: '3.6.11' } });
@@ -9,8 +9,8 @@ const pr = (head = proposal) => ({ number: 7, html_url: `https://github.com/${re
 const comparison = () => ({ merge_base_commit: { sha: base }, total_commits: 1, files: [{ filename: 'releases/package.json', status: 'modified' }], commits: [{ author: { login: 'github-actions[bot]' } }] });
 
 // GitHub automation state only. These tests never run SDK or exchange consumers.
-function fixture({ initialHead, existingPr, failDispatch = false, previousMain = base, concurrentEdit = false } = {}) {
-  let head = initialHead, open = existingPr, dispatchFailed = false;
+function fixture({ initialHead, existingPr, previousMain = base, concurrentEdit = false } = {}) {
+  let head = initialHead, open = existingPr;
   const refs = new Map(initialHead ? [[refreshBranch, initialHead]] : []);
   const contents = new Map([[base, manifest()], [proposal, manifest('1.0.2')]]);
   const calls = [];
@@ -47,11 +47,6 @@ function fixture({ initialHead, existingPr, failDispatch = false, previousMain =
       return { data: { updateRefs: {} } };
     }
     if (endpoint === '/pulls' && method === 'POST') { open = pr(head); return open; }
-    if (endpoint === '/actions/workflows/publish.yml/dispatches') {
-      assert.deepEqual(body, { ref: refreshBranch });
-      if (failDispatch && !dispatchFailed) { dispatchFailed = true; throw new Error('Dispatch failed'); }
-      return { workflow_run_id: 42 };
-    }
     throw new Error(`Unexpected request ${endpoint}`);
   }
   return { api, calls, refs };
@@ -86,12 +81,12 @@ test('no change creates no branch, PR or build', async () => {
   assert.equal(f.calls.some((c) => c.method !== 'GET'), false);
 });
 
-test('creates one manifest-only bot PR and explicitly dispatches its branch build', async () => {
+test('creates one manifest-only bot PR for real pull-request validation', async () => {
   const f = fixture();
   const result = await refreshReleases(f.api, manifest('1.0.2').dependencies);
   assert.equal(result.changed, true);
   assert.equal(result.pr, pr().html_url);
-  assert.match(result.build, /actions\/runs\/42$/);
+  assert.equal(result.number, 7);
   assert.equal(f.calls.filter((c) => c.endpoint === '/pulls' && c.method === 'POST').length, 1);
   assert.deepEqual([...f.refs.keys()], [refreshBranch]);
   const swap = f.calls.filter((c) => c.body?.variables?.input?.refUpdates?.some((u) => u.name === `refs/heads/${refreshBranch}`))[0];
@@ -99,14 +94,14 @@ test('creates one manifest-only bot PR and explicitly dispatches its branch buil
   assert.equal(swap.body.variables.input.refUpdates[0].beforeOid, '0'.repeat(40));
 });
 
-test('rerun after PR creation and dispatch failure reuses the PR/head without new writes', async () => {
-  const f = fixture({ failDispatch: true });
-  await assert.rejects(refreshReleases(f.api, manifest('1.0.2').dependencies), /Dispatch failed/);
+test('rerun after PR creation reuses the PR/head without new writes', async () => {
+  const f = fixture();
+  await refreshReleases(f.api, manifest('1.0.2').dependencies);
   const writes = f.calls.filter((c) => c.endpoint === '/graphql' || c.endpoint === '/pulls').length;
   const result = await refreshReleases(f.api, manifest('1.0.2').dependencies);
   assert.equal(result.head, newer);
   assert.equal(f.calls.filter((c) => c.endpoint === '/graphql' || c.endpoint === '/pulls').length, writes);
-  assert.equal(f.calls.filter((c) => c.endpoint.endsWith('/dispatches')).length, 2);
+  assert.equal(f.calls.some((c) => c.endpoint.endsWith('/dispatches')), false);
 });
 
 test('a concurrent edit fails the expected-head swap and preserves the edited branch', async () => {
@@ -123,4 +118,85 @@ test('a persistent branch from a previous merged PR starts a clean main-based pr
   const commit = f.calls.find((c) => c.endpoint === '/git/commits');
   assert.deepEqual(commit.body.parents, [base]);
   assert.equal(f.calls.filter((c) => c.endpoint === '/pulls').length, 1);
+});
+
+function approvalFixture({ status = 'action_required', deny, change } = {}) {
+  const value = {
+    run: { id: 42, event: 'pull_request', status: 'completed', conclusion: status, path: '.github/workflows/publish.yml', actor: { login: 'github-actions[bot]' }, repository: { full_name: repository }, head_repository: { full_name: repository }, head_sha: proposal, head_branch: refreshBranch, html_url: `https://github.com/${repository}/actions/runs/42` },
+    pr: { ...pr(), state: 'open', changed_files: 1 },
+    jobs: [], files: [{ filename: 'releases/package.json', status: 'modified' }],
+    mainSha: base, mergeBaseSha: base, before: manifest(), after: manifest('1.0.2'),
+  };
+  if (change) change(value);
+  let approvals = 0, merges = 0, clock = 0;
+  const api = async (endpoint, method = 'GET') => {
+    if (endpoint.includes('/runs?')) return { workflow_runs: [value.run] };
+    assert.equal(endpoint, '/actions/runs/42/approve');
+    assert.equal(method, 'POST');
+    approvals++;
+    if (deny) throw Object.assign(new Error('Forbidden'), { status: deny });
+    value.run.status = 'in_progress'; value.run.conclusion = null;
+  };
+  const options = {
+    inspect: async () => structuredClone(value),
+    merge: async () => { merges++; return 'Merged protected PR'; },
+    now: () => clock,
+    sleep: async (ms) => { clock += ms; if (approvals) { value.run.status = 'completed'; value.run.conclusion = 'success'; } },
+  };
+  return { api, options, proposal: { number: 7, head: proposal, pr: pr().html_url }, counts: () => ({ approvals, merges, clock }) };
+}
+
+test('approves only the validated held PR run, waits once, then invokes the shared merger', async () => {
+  const f = approvalFixture();
+  assert.equal(await approveAndMergeRefresh(f.api, f.proposal, f.options), 'Merged protected PR');
+  assert.deepEqual(f.counts(), { approvals: 1, merges: 1, clock: 15_000 });
+});
+
+test('a previously successful real PR run is reused without approval or another build', async () => {
+  const f = approvalFixture({ status: 'success' });
+  await approveAndMergeRefresh(f.api, f.proposal, f.options);
+  assert.deepEqual(f.counts(), { approvals: 0, merges: 1, clock: 0 });
+});
+
+test('extra files, a different head or a human author are rejected before approval', async () => {
+  for (const change of [
+    (v) => { v.files.push({ filename: 'README.md', status: 'modified' }); },
+    (v) => { v.pr.head.sha = 'e'.repeat(40); },
+    (v) => { v.pr.user.login = 'someone'; },
+  ]) {
+    const f = approvalFixture({ change });
+    await assert.rejects(approveAndMergeRefresh(f.api, f.proposal, f.options));
+    assert.equal(f.counts().approvals, 0); assert.equal(f.counts().merges, 0);
+  }
+});
+
+test('approval refusal fails with the exact run URL and never merges or bypasses checks', async () => {
+  for (const deny of [403, 422]) {
+    const f = approvalFixture({ deny });
+    await assert.rejects(approveAndMergeRefresh(f.api, f.proposal, f.options), new RegExp(`cannot approve.*HTTP ${deny}.*actions/runs/42`));
+    assert.equal(f.counts().merges, 0);
+  }
+});
+
+test('failed real checks stop immediately and absent runs stop within the bounded wait', async () => {
+  const failed = approvalFixture({ status: 'failure' });
+  await assert.rejects(approveAndMergeRefresh(failed.api, failed.proposal, failed.options), /required PR build did not pass/);
+  assert.equal(failed.counts().merges, 0);
+  const absent = approvalFixture();
+  await assert.rejects(approveAndMergeRefresh(async () => ({ workflow_runs: [] }), absent.proposal, absent.options), /Timed out/);
+  assert.equal(absent.counts().clock, 15 * 60_000);
+});
+
+test('empty successful approval API responses are accepted', async (t) => {
+  t.mock.method(globalThis, 'fetch', async () => new Response(null, { status: 201 }));
+  assert.equal(await createGitHubApi('test')('/actions/runs/42/approve', 'POST'), undefined);
+});
+
+test('a run completed by another approval is reused without a stale approval request', async () => {
+  const f = approvalFixture();
+  const inspect = f.options.inspect;
+  f.options.inspect = async (...args) => { const value = await inspect(...args); value.run.status = 'completed'; value.run.conclusion = 'success'; return value; };
+  await approveAndMergeRefresh(f.api, f.proposal, f.options);
+  assert.equal(f.counts().approvals, 0);
+  assert.equal(f.counts().merges, 1);
 });

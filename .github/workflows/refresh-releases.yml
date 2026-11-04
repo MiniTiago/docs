@@ -13,7 +13,7 @@ jobs:
   refresh:
     if: github.repository == 'sieblyio/docs' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 20
     permissions:
       contents: write
       pull-requests: write
@@ -27,6 +27,7 @@ jobs:
           sparse-checkout: |
             scripts/github-automation.mjs
             scripts/release-refresh.mjs
+            scripts/release-update.mjs
             scripts/release-manifest.mjs
             scripts/context.mjs
             sdks/*/sdk.config.mjs

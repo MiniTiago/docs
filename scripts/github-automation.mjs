@@ -23,7 +23,8 @@ export function createGitHubApi(token) {
         });
       } catch (error) { if (attempt === 2) throw error; }
       if (response?.ok) {
-        const result = response.status === 204 ? undefined : await response.json();
+        const text = await response.text();
+        const result = text ? JSON.parse(text) : undefined;
         requireThat(!result?.errors?.length, 'GitHub rejected the atomic branch operation; rerun after checking the refresh branch');
         return result;
       }

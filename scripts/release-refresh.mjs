@@ -1,8 +1,9 @@
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { catalogue } from './context.mjs';
+import { trustedReleaseRun, inspectReleaseRun, validateReleasePR, mergeReleaseRun } from './release-update.mjs';
 import { releaseManifestPath, releaseVersions, validateReleaseUpdate, validateRelease } from './release-manifest.mjs';
-import { repository, refreshBranch, requireThat, requireMainDispatch, createGitHubApi, manifestAt, summary, dispatchPublication, sha } from './github-automation.mjs';
+import { repository, refreshBranch, requireThat, requireMainDispatch, createGitHubApi, manifestAt, summary, sha } from './github-automation.mjs';
 
 export function updatedManifest(before, latest) {
   const previous = releaseVersions(before);
@@ -66,13 +67,44 @@ export async function refreshReleases(api, latest) {
   let pr = prs[0];
   if (pr) requireThat(pr.user?.login === 'github-actions[bot]' && pr.head?.sha === head && pr.base?.ref === 'main', 'The refresh PR changed during this run');
   else pr = await api('/pulls', 'POST', { title: 'Refresh SDK release versions', head: refreshBranch, base: 'main', body: 'Updates the SDK release manifest from npm latest. The documentation build validates the proposed releases before the protected merge and publication.' });
-  const build = await dispatchPublication(api, refreshBranch);
-  return { changed: true, pr: pr.html_url, head, build: build?.html_url || (build?.workflow_run_id ? `https://github.com/${repository}/actions/runs/${build.workflow_run_id}` : `https://github.com/${repository}/actions/workflows/publish.yml`) };
+  return { changed: true, pr: pr.html_url, number: pr.number, head };
+}
+
+export async function approveAndMergeRefresh(api, proposal, { now = Date.now, sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms)), inspect = inspectReleaseRun, merge = mergeReleaseRun } = {}) {
+  const deadline = now() + 15 * 60_000;
+  let approved;
+  while (now() < deadline) {
+    const runs = await api(`/actions/workflows/publish.yml/runs?event=pull_request&head_sha=${proposal.head}&per_page=100`);
+    const run = runs.workflow_runs.find((value) => trustedReleaseRun(value) && value.actor.login === 'github-actions[bot]' && value.head_sha === proposal.head);
+    if (run) {
+      const link = run.html_url || `https://github.com/${repository}/actions/runs/${run.id}`;
+      if (run.status === 'completed' && run.conclusion === 'success') return merge(api, run.id);
+      if (run.conclusion === 'action_required') {
+        if (approved !== run.id) {
+          const candidate = await inspect(api, run.id);
+          requireThat(candidate && candidate.pr.number === proposal.number && candidate.run.head_sha === proposal.head, `The refresh PR/run changed: ${link}`);
+          validateReleasePR(candidate);
+          if (candidate.run.status === 'completed' && candidate.run.conclusion === 'success') return merge(api, run.id);
+          try { if (candidate.run.conclusion === 'action_required') await api(`/actions/runs/${run.id}/approve`, 'POST'); }
+          catch (error) {
+            if ([403, 422].includes(error.status)) throw new Error(`The temporary token cannot approve the required PR workflow (HTTP ${error.status}): ${link}. No merge or publication was attempted.`);
+            throw error;
+          }
+          approved = run.id;
+        }
+      } else requireThat(run.status !== 'completed', `The required PR build did not pass: ${link}`);
+    }
+    await sleep(15_000);
+  }
+  throw new Error(`Timed out waiting for the real PR build: ${proposal.pr}. Rerun Refresh SDK releases to continue.`);
 }
 
 async function main() {
   requireMainDispatch(process.env);
-  const result = await refreshReleases(createGitHubApi(process.env.GH_TOKEN), await readLatestVersions());
-  await summary(result.changed ? `SDK refresh PR: ${result.pr}\n\nValidation build: ${result.build}` : 'The SDK release manifest already matches npm latest. No PR or build was created.');
+  const api = createGitHubApi(process.env.GH_TOKEN);
+  const result = await refreshReleases(api, await readLatestVersions());
+  if (!result.changed) { await summary('The SDK release manifest already matches npm latest. No PR or build was created.'); return; }
+  await summary(`SDK refresh PR: ${result.pr}`);
+  await summary(await approveAndMergeRefresh(api, result));
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) await main();
