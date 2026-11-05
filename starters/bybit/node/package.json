@@ -1,0 +1,14 @@
+{
+  "name": "bybit-node-quickstart",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node price.mjs",
+    "stream": "node stream.mjs",
+    "start:require": "node price.cjs",
+    "stream:require": "node stream.cjs"
+  },
+  "dependencies": {
+    "bybit-api": "latest"
+  }
+}

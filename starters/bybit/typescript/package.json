@@ -1,0 +1,18 @@
+{
+  "name": "bybit-typescript-quickstart",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "tsc --noEmit",
+    "build": "tsc",
+    "start": "npm run build && node dist/price.mjs",
+    "stream": "npm run build && node dist/stream.mjs"
+  },
+  "dependencies": {
+    "bybit-api": "latest"
+  },
+  "devDependencies": {
+    "typescript": "6.0.3",
+    "@types/node": "24.13.2"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "hyperliquid-bun-quickstart",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "bun price.js",
+    "stream": "bun stream.js"
+  },
+  "dependencies": {
+    "@siebly/hyperliquid-api": "latest"
+  }
+}

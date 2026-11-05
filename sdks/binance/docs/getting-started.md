@@ -31,7 +31,7 @@ node prices.mjs
 BTCUSDT last price: 65000.00
 ```
 
-`getSymbolPriceTicker()` returns one ticker or an array. The example handles both shapes and prints the price string.
+`getSymbolPriceTicker()` returns one ticker or an array. This single-symbol example rejects an unexpected array and prints the price string.
 
 <!--@include: @/.vitepress/shared/getting-started/environments.md-->
 

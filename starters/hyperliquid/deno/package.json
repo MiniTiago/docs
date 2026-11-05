@@ -1,0 +1,8 @@
+{
+  "name": "hyperliquid-deno-quickstart",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@siebly/hyperliquid-api": "latest"
+  }
+}

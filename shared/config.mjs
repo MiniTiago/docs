@@ -4,6 +4,7 @@ import { analyticsAttributes } from './site-services.mjs';
 
 export default function siteConfig(data, docs) {
   const { sdk, siteUrl, originUrl, indexable, catalogue } = data;
+  const sdkId = catalogue.find((entry) => entry.packageName === sdk.packageName).id;
   const site = new URL(siteUrl);
   const analytics = analyticsAttributes(originUrl, indexable, catalogue);
   const groups = [
@@ -36,6 +37,7 @@ export default function siteConfig(data, docs) {
       { text: 'All exports', link: '/api/' },
     ] },
     { text: 'Resources', items: [
+      { text: 'Runnable examples', link: `https://github.com/sieblyio/docs/tree/${process.env.GITHUB_SHA || 'main'}/starters/${sdkId}` },
       { text: `${sdk.name} tutorial`, link: sdk.tutorial }, { text: 'Siebly SDKs', link: 'https://siebly.io/' },
       { text: 'GitHub repository', link: sdk.repository },
     ] },

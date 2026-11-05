@@ -11,7 +11,7 @@ Public prices and order books do not require API keys. These examples use BTCUSD
 
 <<< @/../examples/first-call.ts
 
-`getSymbolPriceTicker()` returns one ticker or an array, with prices as strings. The example handles both response shapes.
+`getSymbolPriceTicker()` returns one ticker or an array, with prices as strings. This single-symbol example rejects an unexpected array.
 
 ## Read an order book
 

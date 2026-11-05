@@ -7,17 +7,15 @@ description: Use the @@SDK@@ API in a React component. Display BTC REST and WebS
 
 Display public BTC REST and WebSocket prices from `@@PACKAGE@@` in a React component. No API key is needed. @@PRICE_KIND@@ This is a React browser app built with Vite; the [plain JavaScript Vite guide](/environments/vite) uses DOM elements directly.
 
+Use Node.js 24 and npm. You can also [view the complete @@SDK@@ React example on GitHub](@@EXAMPLE_URL@@).
+
+See [Runtime compatibility](/compatibility) for tested versions.
+
 ## Create the project
 
-Use Node.js 24 with npm. [Download the complete React starter](/starters/react.tar.gz), or copy every file below.
+@@PROJECT_SETUP@@
 
-@@SETUP@@
-
-The SDK installs from `latest`. This project uses React @@REACT@@, Vite @@VITE@@ and the React plugin @@REACT_PLUGIN@@. @@CONFIG_NOTE@@
-
-## Project files
-
-@@FILES@@
+@@APP_FILES@@
 
 ## Run
 
@@ -41,4 +39,4 @@ npm run preview
 - @@POLYFILL_TROUBLE@@
 - A brief extra connection in development is expected under StrictMode. Repeated updates after **Stop stream** mean cleanup is missing from the component you copied.
 - Keep the SDK import inside this browser app's helper, not a private-key signing flow. API secrets belong on a server. This example covers public market data.
-- For network failures, inspect the browser's HTTPS and WSS requests to the endpoints in `market.js`. Exchange CORS and regional restrictions apply. See [Runtime compatibility](/compatibility) for the underlying browser recipe's recorded evidence and [WebSocket subscriptions](/guides/websockets) for subscription details.
+- For network failures, inspect the browser's HTTPS and WSS requests to the exchange. Exchange CORS and regional restrictions apply. See [Runtime compatibility](/compatibility) for the underlying browser recipe's recorded evidence and [WebSocket subscriptions](/guides/websockets) for subscription details.

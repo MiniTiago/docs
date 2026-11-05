@@ -1,0 +1,8 @@
+{
+  "name": "bybit-deno-quickstart",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "bybit-api": "latest"
+  }
+}

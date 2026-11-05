@@ -1,0 +1,7 @@
+{
+  "nodeModulesDir": "auto",
+  "tasks": {
+    "start": "deno run --allow-net --allow-env --allow-read price.js",
+    "stream": "deno run --allow-net --allow-env --allow-read stream.js"
+  }
+}

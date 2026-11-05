@@ -1,0 +1,8 @@
+{
+  "name": "binance-deno-quickstart",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "binance": "latest"
+  }
+}

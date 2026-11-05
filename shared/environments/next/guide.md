@@ -7,21 +7,21 @@ description: Use the @@SDK@@ API in a Next.js Node.js server Route Handler to re
 
 Serve a public BTC price from a Next.js App Router Route Handler using `@@PACKAGE@@`. No API key is needed. @@PRICE_KIND@@ This example runs in the **Node.js server runtime**.
 
+Use Node.js 24 and npm. You can also [view the complete @@SDK@@ Next.js example on GitHub](@@EXAMPLE_URL@@).
+
+See [Runtime compatibility](/compatibility) for tested versions.
+
 ## Create the project
 
-Use Node.js with npm. [Download the complete Next.js starter](/starters/next.tar.gz), or create an empty directory and copy all files below.
+@@PROJECT_SETUP@@
 
-@@SETUP@@
-
-The SDK installs from `latest`. The starter uses Next.js @@NEXT@@ and React @@REACT@@, matching the server recipe in [Runtime compatibility](/compatibility).
-
-## Project files
-
-@@FILES@@
+@@APP_FILES@@
 
 ## Run
 
-@@RUN@@
+```sh
+npm run dev
+```
 
 Open `http://localhost:3000/api/price`, or request it in a second terminal:
 
@@ -32,7 +32,10 @@ curl --fail http://localhost:3000/api/price
 A successful response contains a positive price string, for example:
 
 ```json
-{"symbol":"BTC","price":"65000.5"}
+{
+  "symbol": "@@SYMBOL@@",
+  "price": "65000.5"
+}
 ```
 
 Check the production server with:
@@ -47,5 +50,5 @@ The handler makes a fresh REST request for each call. It does not open a WebSock
 ## Troubleshooting
 
 - Keep `runtime = 'nodejs'` in the handler. Client Components and the Edge runtime are outside this recipe and its server verification.
-- A `502` means the exchange request failed. Inspect server network access to the HTTPS endpoint in `market.js`, including regional restrictions.
+- A `502` means the SDK request failed. Inspect the server log for the exchange error and check outbound HTTPS access from the server, including regional restrictions.
 - If Next.js reports a missing React package, run `npm install` from the directory containing this starter's `package.json`.

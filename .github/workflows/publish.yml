@@ -42,6 +42,7 @@ jobs:
       - name: Check content, evidence, release selection and CI planning
         run: |
           npm run check:content
+          npm run check:starters
           npm run compat:check-report
           npm run check:releases
           npm run check:ci

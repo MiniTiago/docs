@@ -5,23 +5,23 @@ description: Use the @@SDK@@ API in a plain JavaScript browser page built with V
 
 # Vite (plain JavaScript) quickstart
 
-Build a page that displays a public BTC REST price and live WebSocket updates from `@@PACKAGE@@`. No API key is needed. @@PRICE_KIND@@
+Build a page that displays a public @@SYMBOL@@ REST price and live WebSocket updates from `@@PACKAGE@@`. No API key is needed. @@PRICE_KIND@@
+
+Use Node.js 24 and npm. You can also [view the complete @@SDK@@ Vite example on GitHub](@@EXAMPLE_URL@@).
+
+See [Runtime compatibility](/compatibility) for tested versions.
 
 ## Create the project
 
-Use Node.js with npm. [Download the complete Vite starter](/starters/vite.tar.gz), or create an empty directory and copy all files below.
+@@PROJECT_SETUP@@
 
-@@SETUP@@
-
-The SDK installs from `latest`. Vite @@VITE@@ is the tested build tool. @@CONFIG_NOTE@@ See [Runtime compatibility](/compatibility) for the recorded browser execution results.
-
-## Project files
-
-@@FILES@@
+@@APP_FILES@@
 
 ## Run
 
-@@RUN@@
+```sh
+npm run dev
+```
 
 Open the URL printed by Vite, normally `http://localhost:5173/`. The page shows a REST price and a changing WebSocket price. Click **Stop stream** to close the client. Navigation and Vite hot replacement also close the connection.
 

@@ -56,7 +56,7 @@ export async function generateCompatibility(ctx,root) {
       const deps=c.consumerDependencies;
       lines.push('### Expo and Metro setup','','Install the latest SDK and the required polyfills:','','```sh',`npm install ${ctx.pkg.name} ${Object.entries(deps).map(([name,v])=>`${name}@${v}`).join(' ')}`,'```','',
         'Save this helper as `siebly-sdk.metro.cjs` at your application root:','','```js',recipe.trim(),'```','',
-        'Apply it in `metro.config.cjs`:','','```js',"const {getDefaultConfig} = require('expo/metro-config');", "const configureSdkMetro = require('./siebly-sdk.metro.cjs');",'module.exports = configureSdkMetro(getDefaultConfig(__dirname), __dirname);','```','',
+        'Apply it in `metro.config.cjs`:','','```js',"const { getDefaultConfig } = require('expo/metro-config');", "const configureSdkMetro = require('./siebly-sdk.metro.cjs');",'', 'const config = getDefaultConfig(__dirname);','module.exports = configureSdkMetro(config, __dirname);','```','',
         'Restart Expo with `npx expo start --clear`. SDK imports and client initialization need no changes.','',
         'The HTTPS adapter uses React Native’s HTTP transport. `events` supplies EventEmitter; `buffer` supports the adapter’s stream dependency. The Binance rule selects the package’s browser implementation.','',
         'Tested in Expo Go with an npm `node_modules` layout.','',

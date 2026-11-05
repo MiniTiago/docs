@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "Hyperliquid price screen",
+    "slug": "hyperliquid-price-screen",
+    "version": "1.0.0",
+    "platforms": [
+      "ios",
+      "android"
+    ]
+  }
+}

@@ -10,4 +10,4 @@ Start with the tools you already use. Each guide includes a complete project, se
 - [React Native / Expo](/environments/expo): display prices and stop subscriptions on iOS and Android.
 - [Bun](/environments/bun) and [Deno](/environments/deno): run a price and WebSocket script in your chosen runtime.
 
-Each guide includes a downloadable starter generated from the maintained examples and runtime configuration. [Runtime compatibility](/compatibility) records tested versions and scope.
+Follow each guide from an empty directory, or open its complete runnable example on GitHub. [Runtime compatibility](/compatibility) records tested versions and scope.

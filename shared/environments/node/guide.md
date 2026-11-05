@@ -1,53 +1,52 @@
 ---
 title: @@SDK@@ Node.js JavaScript API quickstart
-description: Use the @@SDK@@ API in Node.js with plain JavaScript. Run import or require examples that read a BTC price, subscribe to WebSockets and close the connection.
+description: Use the @@SDK@@ API in Node.js with plain JavaScript. Create a REST price script, then optionally subscribe to WebSocket prices with import or require.
 ---
 
 # Node.js / JavaScript quickstart
 
-Read a public BTC price and receive a WebSocket update with `@@PACKAGE@@` in Node.js. No API key or TypeScript compiler is needed. @@PRICE_KIND@@
+Read a public @@SYMBOL@@ price with `@@PACKAGE@@`. No API key or TypeScript compiler is needed. @@PRICE_KIND@@
+
+Use Node.js 24 and npm. If you prefer to start from a finished project, [view the complete @@SDK@@ Node.js example on GitHub](@@EXAMPLE_URL@@).
 
 ## Create the project
 
-Use Node.js 24 with npm. [Download the complete Node.js JavaScript starter](/starters/node.tar.gz), or copy the files below.
+@@PROJECT_SETUP@@
 
-@@SETUP@@
+`npm init` creates `package.json`; `npm install` adds the current SDK release. You do not need to edit the package file for these examples.
 
-The SDK installs from `latest`. The archive contains both an `import` example and a `require` example. Choose either command below; both make the same public requests.
+## Read a price
 
-## Project files
+@@PRICE_FILES@@
 
-@@FILES@@
+Run the file you created:
 
-## Run
+@@PRICE_RUN@@
 
-For ES modules with `import`:
-
-```sh
-npm start
-# Equivalent: node prices.js
-```
-
-For CommonJS with `require`:
-
-```sh
-npm run start:require
-# Equivalent: node prices.cjs
-```
-
-Both examples print a REST price and the first valid WebSocket price, close the client in `finally`, then exit. SDK connection logs may also appear.
+The result is a price string, for example:
 
 ```text
-BTC REST price: 65000.5
-BTC WebSocket price: 65001.2
+@@SYMBOL@@ REST price: 65000.5
+```
+
+## Stream a price (optional)
+
+@@STREAM_FILES@@
+
+Run the matching file:
+
+@@STREAM_RUN@@
+
+The script prints the first update, closes its WebSocket and exits. SDK connection logs may also appear:
+
+```text
+@@SYMBOL@@ WebSocket price: 65001.2
 WebSocket closed.
 ```
 
-The `.js` files use `import` because `package.json` sets `"type": "module"`. The `.cjs` files use `require` even in that project. These are [Node.js module rules](https://nodejs.org/api/packages.html#packagejson-and-file-extensions), not a TypeScript requirement.
-
 ## Troubleshooting
 
-- If Node says `require is not defined`, use `prices.cjs` for the CommonJS example. If it rejects `import`, keep `"type": "module"` for the `.js` files.
-- If the SDK cannot be resolved, run `npm install` in the directory containing `package.json`.
-- For a rejected HTTP request or no update within 30 seconds, allow the HTTPS and WSS endpoints in `market.js` or `market.cjs`. Exchange regional restrictions apply.
-- See [Runtime compatibility](/compatibility) for recorded runtime versions and [WebSocket subscriptions](/guides/websockets) for continuous streams and shutdown.
+- Use `.mjs` for `import` and `.cjs` for `require`. These [Node.js module rules](https://nodejs.org/api/packages.html#packagejson-and-file-extensions) let you choose either format without configuring `"type"` in `package.json`.
+- If the SDK cannot be resolved, run the install command from the directory containing your program and `package.json`.
+- A failed request or no update within 30 seconds needs a network check. Exchange regional restrictions apply.
+- See [Runtime compatibility](/compatibility) for tested versions and [WebSocket subscriptions](/guides/websockets) for continuous subscriptions.
