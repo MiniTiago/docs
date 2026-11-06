@@ -33,7 +33,7 @@ BTCUSDT last price: 65000.00
 
 `getTickers()` returns tickers in `result.list`. The example checks `retCode === 0` before reading the first price.
 
-<!--@include: @/.vitepress/shared/getting-started/environments.md-->
+<!--@include: @/.vitepress/shared/getting-started/other-setups.md-->
 
 ## Module formats
 
