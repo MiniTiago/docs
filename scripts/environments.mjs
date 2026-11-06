@@ -3,6 +3,7 @@ import path from 'node:path';
 import { create, list } from 'tar';
 import { root } from './context.mjs';
 import { frameworkVersions, nativeVersions } from '../compatibility/config.mjs';
+import { nativeMetroConfig } from '../compatibility/native-config/recipe.mjs';
 import { programFiles, screenFile } from '../shared/environments/direct/render.mjs';
 import { exchanges } from '../shared/environments/direct/exchanges.mjs';
 import { guideFields } from './environment-guides.mjs';
@@ -152,7 +153,7 @@ export async function environmentFiles(id, sdk, environment) {
     }));
     if (id !== 'hyperliquid') {
       Object.assign(pkg.dependencies, JSON.parse(await source('compatibility/native-config/dependencies.json')));
-      files.set('siebly-sdk.metro.cjs', await source('compatibility/native-config/metro.cjs'));
+      files.set('siebly-sdk.metro.cjs', await nativeMetroConfig(id));
       files.set('metro.config.cjs', "const { getDefaultConfig } = require('expo/metro-config');\nconst configureSdkMetro = require('./siebly-sdk.metro.cjs');\n\nconst config = getDefaultConfig(__dirname);\n\nmodule.exports = configureSdkMetro(config, __dirname);\n");
     }
   }
