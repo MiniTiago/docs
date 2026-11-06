@@ -6,6 +6,7 @@ import {readFile,writeFile,cp,mkdir,access,rm} from 'node:fs/promises';
 import {createRequire} from 'node:module';
 import {root} from '../scripts/context.mjs';
 import {nativeVersions} from './config.mjs';
+import {nativeMetroConfig} from './native-config/recipe.mjs';
 import {npm,run} from './process.mjs';
 import {completeLiveResult} from './live-scenario.mjs';
 
@@ -36,7 +37,7 @@ export async function nativeCheck({id,consumer,evidence,env,packageName,packageV
   if(profile==='configured') {
     const dependencies=JSON.parse(await readFile(path.join(root,'compatibility/native-config/dependencies.json')));
     await npm(['install','--ignore-scripts','--save-exact',...Object.entries(dependencies).map(([name,version])=>`${name}@${version}`)],{cwd:consumer,env,timeout:120000,log:path.join(evidence,`${evidenceId}-polyfills-install.log`)});
-    await cp(path.join(root,'compatibility/native-config/metro.cjs'),path.join(consumer,'siebly-sdk.metro.cjs'));
+    await writeFile(path.join(consumer,'siebly-sdk.metro.cjs'),await nativeMetroConfig(id));
     result.consumerDependencies=dependencies;
   }
   const pkg=JSON.parse(await readFile(path.join(consumer,'package.json')));pkg.main='index.js';

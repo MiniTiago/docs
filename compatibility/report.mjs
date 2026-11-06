@@ -2,6 +2,7 @@ import {readFile,writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {suiteVersion,targets,labels,names} from './config.mjs';
 import {root as projectRoot} from '../scripts/context.mjs';
+import {nativeMetroConfig} from './native-config/recipe.mjs';
 const recordedDate=value=>typeof value==='string' && /^\d{4}-\d{2}-\d{2}T/.test(value) && Number.isFinite(Date.parse(value));
 export function matchingReport(report,packageName) {
   return report?.schemaVersion===1 && report.suiteVersion===suiteVersion && report.traffic==='live-mainnet' && report.source==='npm' && report.packageName===packageName
@@ -52,13 +53,13 @@ export async function generateCompatibility(ctx,root) {
     }
     if(t==='vite')lines.push('Bundling only; see the browser results for runtime checks.','');
     if(t===setupTarget) {
-      const recipe=await readFile(path.join(projectRoot,'compatibility/native-config/metro.cjs'),'utf8');
+      const recipe=await nativeMetroConfig(ctx.id);
       const deps=c.consumerDependencies;
       lines.push('### Expo and Metro setup','','Install the latest SDK and the required polyfills:','','```sh',`npm install ${ctx.pkg.name} ${Object.entries(deps).map(([name,v])=>`${name}@${v}`).join(' ')}`,'```','',
         'Save this helper as `siebly-sdk.metro.cjs` at your application root:','','```js',recipe.trim(),'```','',
         'Apply it in `metro.config.cjs`:','','```js',"const { getDefaultConfig } = require('expo/metro-config');", "const configureSdkMetro = require('./siebly-sdk.metro.cjs');",'', 'const config = getDefaultConfig(__dirname);','module.exports = configureSdkMetro(config, __dirname);','```','',
         'Restart Expo with `npx expo start --clear`. SDK imports and client initialization need no changes.','',
-        'The HTTPS adapter uses React Native’s HTTP transport. `events` supplies EventEmitter; `buffer` supports the adapter’s stream dependency. The Binance rule selects the package’s browser implementation.','',
+        'The HTTPS adapter uses React Native’s HTTP transport. `events` supplies EventEmitter; `buffer` supports the adapter’s stream dependency.'+(ctx.id==='binance'?' The Binance rule selects the package’s browser implementation.':''),'',
         'Tested in Expo Go with an npm `node_modules` layout.','',
         '[Metro resolver documentation](https://metrobundler.dev/docs/configuration/#resolverequest)','');
     }
