@@ -9,7 +9,7 @@ Build an iOS and Android screen that reads a public @@SYMBOL@@ REST price and su
 
 Use Node.js 24 and npm, with an iOS simulator or Android emulator and a matching Expo Go installation. iOS simulators require macOS and Xcode; Android virtual devices can be created with Android Studio or the Android SDK command-line tools. You can also [view the complete @@SDK@@ Expo example on GitHub](@@EXAMPLE_URL@@).
 
-See [Runtime compatibility](/compatibility) for tested versions.
+See [Runtime compatibility](/compatibility) for runtime requirements.
 
 ## Create the project
 
@@ -27,11 +27,11 @@ Press **i** to open the iOS simulator or **a** to open the Android emulator. Kee
 
 Tap **Stop stream**. The price component unmounts, its effect cleanup calls `closeAll()`, and the screen shows **Stream stopped. WebSocket closed.** Tap **Start stream** to create a new subscription. Late REST responses are ignored after unmount.
 
-The accepted runtime checks cover public REST, WebSocket updates and cleanup in Expo Go on an iOS simulator and Android emulator. Physical devices, release builds, background recovery and authenticated trading need separate validation for your app.
+Keep Expo Go in the foreground while following this guide. For background operation, use React Native’s AppState API to stop connections when the app is inactive and reload account or market state before reconnecting.
 
 ## Troubleshooting
 
 - @@POLYFILL_TROUBLE@@
 - If Metro keeps an old resolution error, stop it and run `npx expo start --clear` from the starter directory.
-- If Expo Go rejects the project version, use the Expo Go release that supports the starter's Expo SDK. Check the runtime report for the version used in the recorded checks.
+- If Expo Go rejects the project version, use the Expo Go release that supports the starter's Expo SDK. Match Expo Go to the Expo SDK version in `package.json`.
 - If price fields stay at **Loading** or **Connecting**, check internet access from the simulator or emulator and inspect the error shown on the screen. Exchange regional restrictions apply there too.
