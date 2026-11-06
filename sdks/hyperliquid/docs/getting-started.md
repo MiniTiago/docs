@@ -39,7 +39,7 @@ The request uses Mainnet by default and returns prices as strings.
 
 For import errors, failed requests or a missing BTC price, see [Troubleshooting](/guides/troubleshooting).
 
-<!--@include: @/.vitepress/shared/getting-started/environments.md-->
+<!--@include: @/.vitepress/shared/getting-started/other-setups.md-->
 
 ## Module formats
 
