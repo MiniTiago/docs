@@ -9,7 +9,7 @@ Build a page that displays a public @@SYMBOL@@ REST price and live WebSocket upd
 
 Use Node.js 24 and npm. You can also [view the complete @@SDK@@ Vite example on GitHub](@@EXAMPLE_URL@@).
 
-See [Runtime compatibility](/compatibility) for tested versions.
+See [Runtime compatibility](/compatibility) for runtime requirements.
 
 ## Create the project
 
@@ -23,7 +23,7 @@ See [Runtime compatibility](/compatibility) for tested versions.
 npm run dev
 ```
 
-Open the URL printed by Vite, normally `http://localhost:5173/`. The page shows a REST price and a changing WebSocket price. Click **Stop stream** to close the client. Navigation and Vite hot replacement also close the connection.
+Open the URL printed by Vite, normally `http://localhost:5173/`. The page shows a REST price and a changing WebSocket price. Click **Stop stream** to close the client. Navigation and Vite hot replacement also close the connection. Returning with Back or Forward starts a fresh subscription after a cached-page restoration, unless you clicked Stop stream.
 
 To check the production bundle:
 
