@@ -5,11 +5,19 @@ export default {
   entryPoint: 'src/index.ts',
   tsconfig: 'tsconfig.esm.json',
   clients: ['RestClient', 'WebsocketClient', 'WebsocketAPIClient'],
+  exampleDependencies: ['ethers'],
+  guides: [
+    { text: 'Place and cancel an order', link: '/guides/orders' },
+    { text: 'Account order updates', link: '/guides/private-streams' },
+  ],
   website: 'https://siebly.io/sdk/hyperliquid/javascript',
   tutorial: 'https://siebly.io/sdk/hyperliquid/javascript/tutorial',
   repository: 'https://github.com/sieblyio/hyperliquid-api',
   // References and shared examples only. API contracts stay in SDK source comments.
   referenceHelp: [
+    { client: 'RestClient', method: 'submitLimitOrder', guide: '/guides/orders', title: 'Place and cancel a Testnet order' },
+    { client: 'RestClient', method: 'cancelOrdersByClientOrderId', guide: '/guides/orders', title: 'Cancel an order by client order ID' },
+    { client: 'WebsocketClient', method: 'subscribe', guide: '/guides/private-streams', title: 'Receive account order updates' },
     { client: 'RestClient', method: 'getAllMids', example: 'first-call.ts', guide: '/getting-started', title: 'Quickstart' },
     { client: 'RestClient', method: 'getOrderBook', example: 'order-book.ts', guide: '/guides/market-data#l2-order-book', title: 'Read an order book' },
     { client: 'RestClient', method: 'getCandles', example: 'candles.ts', guide: '/guides/market-data#candle-history', title: 'Read candle history' },
