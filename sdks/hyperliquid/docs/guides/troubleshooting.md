@@ -16,7 +16,7 @@ description: Resolve installation and import errors, missing account data, WebSo
 
 ## Installation and imports
 
-For `ERR_MODULE_NOT_FOUND` or `Cannot find module`, run `npm ls @siebly/hyperliquid-api` in the project that runs your script. Install the package there if it is missing. Check `node --version` against the requirement shown in the [Quickstart](/getting-started#installation).
+For `ERR_MODULE_NOT_FOUND` or `Cannot find module`, run `npm ls @siebly/hyperliquid-api` in the project that runs your script. Install the package there if it is missing. Run `node --version`. The [Quickstart](/getting-started#installation) uses Node.js 24; see [Runtime compatibility](/compatibility) for the versions tested.
 
 For `Cannot use import statement outside a module`, save the Quickstart example as `prices.mjs`, or configure your project to use ES modules with `"type": "module"` in `package.json`. A `.cjs` file uses CommonJS `require()` instead. See [module formats](/getting-started#module-formats).
 

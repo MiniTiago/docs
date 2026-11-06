@@ -40,3 +40,7 @@ Pass `signer` instead of `privateKey` to supply a [`HyperliquidSigner`](/api/int
 `WebsocketAPIClient` accepts the same signing options. `WebsocketClient` subscriptions use account addresses and do not need a private key.
 
 [RestClientOptions](/api/interfaces/RestClientOptions) · [WebsocketAPIClientOptions](/api/type-aliases/WebsocketAPIClientOptions) · [Order results and errors](/guides/errors#order-results)
+
+## Next steps
+
+[Place and cancel a Testnet order](/guides/orders), or [subscribe to account order updates](/guides/private-streams).
