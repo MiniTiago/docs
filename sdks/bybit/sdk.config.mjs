@@ -39,6 +39,53 @@ export default {
       "method": "closeAll",
       "guide": "/guides/production#shut-down-cleanly",
       "title": "Shut down cleanly"
+    },
+    {
+      "client": "RestClientV5",
+      "method": "getWalletBalance",
+      "example": "account-state.ts",
+      "guide": "/guides/authentication#verify-account-access",
+      "title": "Verify Testnet account access"
+    },
+    {
+      "client": "RestClientV5",
+      "method": "submitOrder",
+      "guide": "/guides/orders",
+      "title": "Place and cancel a Testnet order"
+    },
+    {
+      "client": "RestClientV5",
+      "method": "getActiveOrders",
+      "guide": "/guides/orders",
+      "title": "Query and cancel a Testnet order"
+    },
+    {
+      "client": "RestClientV5",
+      "method": "getHistoricOrders",
+      "guide": "/guides/orders",
+      "title": "Query and cancel a Testnet order"
+    },
+    {
+      "client": "RestClientV5",
+      "method": "cancelOrder",
+      "guide": "/guides/orders",
+      "title": "Query and cancel a Testnet order"
+    },
+    {
+      "client": "WebsocketClient",
+      "method": "subscribeV5",
+      "guide": "/guides/private-streams",
+      "title": "Receive private order updates"
+    }
+  ],
+  "guides": [
+    {
+      "text": "Place and cancel an order",
+      "link": "/guides/orders"
+    },
+    {
+      "text": "Private order updates",
+      "link": "/guides/private-streams"
     }
   ]
 };
