@@ -63,7 +63,7 @@ export async function screenFile(id, sdk, setup) {
       UPDATE: indent(exchange.update, 6),
     }).trimEnd();
   }
-  const spacing = setup === 'next' ? 4 : 2;
+  const spacing = setup === 'next' || setup === 'vite' ? 4 : 2;
   return fill(await readFile(new URL(`./${setup}.tpl`, import.meta.url), 'utf8'), {
     ...values,
     REQUEST: indent(exchange.request, spacing),
