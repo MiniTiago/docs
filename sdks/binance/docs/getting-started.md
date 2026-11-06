@@ -33,7 +33,7 @@ BTCUSDT last price: 65000.00
 
 `getSymbolPriceTicker()` returns one ticker or an array. This single-symbol example rejects an unexpected array and prints the price string.
 
-<!--@include: @/.vitepress/shared/getting-started/environments.md-->
+<!--@include: @/.vitepress/shared/getting-started/other-setups.md-->
 
 ## Module formats
 
