@@ -20,11 +20,12 @@ Store credentials in server-side environment variables or a secret manager, outs
 Use credentials created for **Binance Spot Testnet**, with permission to read the account. Store them in your server environment, or create a local `.env` file:
 
 ```dotenv
-BINANCE_API_KEY=replace_with_your_testnet_key
-BINANCE_API_SECRET=replace_with_your_testnet_secret
+# Fictitious values; use your own Spot Testnet credentials.
+BINANCE_API_KEY=example_testnet_key # API key
+BINANCE_API_SECRET=example_testnet_secret # API secret
 ```
 
-Replace both placeholders, add `.env` to `.gitignore`, and never commit or include it in a browser bundle. Keep the file private. This request reads account data; it does not place an order or move funds.
+Add `.env` to `.gitignore`. This server-side request reads account data; it does not place orders.
 
 This example queries a Spot Testnet account. Futures and Portfolio Margin use different clients and account endpoints.
 
@@ -48,7 +49,7 @@ Use keys for the selected Binance product and environment. Check key permissions
 
 ## Place an order
 
-Once account access works, follow [Place and cancel an order](/guides/orders). The guide validates price and quantity, saves a client order ID, and queries the result before cancellation. To receive live status changes, use [Private order updates](/guides/private-streams).
+Once account access works, follow [Place and cancel an order](/guides/orders). The guide shows submission, status queries and cancellation with the SDK. To receive live status changes, use [Private order updates](/guides/private-streams).
 
 ## Signing and timestamps
 

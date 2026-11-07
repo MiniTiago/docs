@@ -9,7 +9,7 @@ Use `WebsocketAPIClient` to receive Spot account and order events through Binanc
 
 ## Connect to Spot Testnet
 
-Use Node.js 24, install `binance`, and configure the Testnet credential variables from [your first order](/guides/orders#set-up). `BINANCE_TESTNET=true` is required. Keep signing credentials on the server and out of browser bundles.
+Use Node.js 24, install `binance`, and configure the Testnet credential variables from [your first order](/guides/orders#set-up). Keep signing credentials on the server and out of browser bundles.
 
 Save this as `private-stream.ts`:
 
@@ -30,7 +30,9 @@ Listeners are registered before subscribing so early messages are not missed. On
 The SDK unwraps the WebSocket API envelope before emitting `message`: inspect `message.e`, not `message.event.e`. With `beautify: false`, an `executionReport` includes:
 
 - `s`: symbol.
-- `c`: client order ID, which you can correlate with the order receipt.
+- `i`: exchange order ID, which stays stable through cancellation.
+- `c`: current client order ID.
+- `C`: original client order ID on cancellation events.
 - `x`: execution type, such as `NEW`, `TRADE` or `CANCELED`.
 - `X`: current order status, such as `NEW`, `PARTIALLY_FILLED` or `FILLED`.
 - `l`: quantity executed in the latest fill.
