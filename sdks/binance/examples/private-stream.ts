@@ -72,9 +72,10 @@ async function main() {
     process.exitCode = 1;
     stop();
   });
-  ws.on('reconnecting', () => {
+  ws.on('reconnecting', (event) => {
     console.error(
       'Connection interrupted. Reconcile orders and balances before restarting.',
+      event,
     );
     process.exitCode = 1;
     stop();
