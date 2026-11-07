@@ -38,7 +38,7 @@ The SDK unwraps the WebSocket API envelope before emitting `message`: inspect `m
 - `l`: quantity executed in the latest fill.
 - `z`: cumulative executed quantity.
 
-The example prints only selected order fields and a notification when balances change. It does not dump credentials, full account messages or transport errors. Consult the [user data stream payloads](https://developers.binance.com/docs/binance-spot-api-docs/user-data-stream) for the complete event definitions.
+The example prints only selected order fields and a notification when balances change. Stream and subscription errors are logged with their error objects. Consult the [user data stream payloads](https://developers.binance.com/docs/binance-spot-api-docs/user-data-stream) for the complete event definitions.
 
 ## Disconnect and recover
 

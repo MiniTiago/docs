@@ -72,7 +72,7 @@ After `cancel`, run `status` again to confirm the outcome. The exchange order ID
 
 ## Resolve failed or interrupted requests
 
-A post-only rejection can mean the price would immediately trade. Other rejections can indicate filters, funds or permissions. A timeout or lost response can also happen after Binance accepts the order. The example does not automatically retry writes or log raw signed-request errors.
+A post-only rejection can mean the price would immediately trade. Other rejections can indicate filters, funds or permissions. A timeout or lost response can also happen after Binance accepts the order. The example logs the error object and does not automatically retry writes.
 
 Use `status` with the saved exchange order ID, or the original client order ID if placement did not return one. An unavailable or not-found response does not establish whether the order was accepted. Reconcile open orders and trade history before submitting again. Use a new client order ID and clear `BINANCE_ORDER_ID` when starting a new order.
 
