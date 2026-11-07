@@ -12,7 +12,7 @@ Use `WebsocketClient` to receive `orderUpdates` and `userFills` for a Hyperliqui
 Use Node.js 24 with `@siebly/hyperliquid-api` installed. Set the account address in a local `.env` file:
 
 ```dotenv
-HYPERLIQUID_ACCOUNT_ADDRESS=replace_with_your_managed_account_address
+HYPERLIQUID_ACCOUNT_ADDRESS=0x1111111111111111111111111111111111111111 # Use your managed account address
 ```
 
 Save this as `account-stream.ts`:
@@ -29,11 +29,11 @@ Wait for `Subscribed to order updates and fills.` before running the [order exam
 
 ## Read updates
 
-`orderUpdates` contains an array of order changes. Each entry includes the order ID, coin, status and status timestamp. Use the order ID or `order.cloid` to correlate an update with your order receipt.
+`orderUpdates` contains an array of order changes. Each entry includes the order ID, coin, status and status timestamp. Use the order ID or `order.cloid` to correlate an update with your client order ID.
 
-`userFills` contains fills and an optional `isSnapshot` flag. The example skips the initial snapshot when printing new fills. In a persistent application, use the snapshot to initialize state and deduplicate later fills using their trade identifiers. Do not count an order-status update as another fill.
+`userFills` contains fills and an optional `isSnapshot` flag. The example skips the initial snapshot when printing new fills. In a persistent application, use the snapshot to initialize state and deduplicate later fills using their trade identifiers. Order-status updates and fills describe different events.
 
-A quiet account may produce no new messages. Read existing orders and fills through REST when starting your application; the absence of a stream event is not proof that an order is closed.
+A quiet account may produce no new messages. Use REST for existing orders and fills; the stream reports subsequent changes.
 
 See the [subscription payloads](https://hyperliquid.gitbook.io/hyperliquid-docs/for-developers/api/websocket/subscriptions) for the complete event fields.
 
