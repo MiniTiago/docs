@@ -1,64 +1,112 @@
 import { WebsocketClient } from 'bybit-api';
 
 function main() {
-  if (process.env.BYBITTRACE) throw new Error('Unset BYBITTRACE to avoid logging signed request headers.');
-  if (process.env.BYBIT_TESTNET_STREAM !== 'I_UNDERSTAND') throw new Error('Set BYBIT_TESTNET_STREAM=I_UNDERSTAND.');
-  const key = process.env.BYBIT_API_KEY, secret = process.env.BYBIT_API_SECRET;
-  if (!key?.trim() || !secret?.trim() || key.includes('replace_') || secret.includes('replace_')) {
-    throw new Error('Set real Testnet BYBIT_API_KEY and BYBIT_API_SECRET values.');
+  if (process.env.BYBITTRACE) {
+    throw new Error('Unset BYBITTRACE to keep signed requests out of logs.');
   }
-  const duration = Number(process.env.BYBIT_STREAM_SECONDS || '60');
-  if (!Number.isInteger(duration) || duration < 5 || duration > 300) throw new Error('BYBIT_STREAM_SECONDS must be 5–300.');
-  // Suppress raw SDK diagnostics, which can contain private payloads.
-  const ws = new WebsocketClient({ key, secret, testnet: true }, { trace() {}, info() {}, error() {} });
-  let stopped = false, subscribed = false;
-  const stop = () => {
-    if (stopped) return;
+  const key = process.env.BYBIT_API_KEY;
+  const secret = process.env.BYBIT_API_SECRET;
+  if (!key || !secret) {
+    throw new Error('Set BYBIT_API_KEY and BYBIT_API_SECRET.');
+  }
+
+  // Log selected fields below, not raw SDK diagnostics or signed requests.
+  const ws = new WebsocketClient(
+    { key, secret, testnet: true },
+    { trace() {}, info() {}, error() {} },
+  );
+  let stopped = false;
+  let subscribed = false;
+
+  function stop() {
+    if (stopped) {
+      return;
+    }
     stopped = true;
     clearTimeout(timer);
-    clearTimeout(startup);
     process.removeListener('SIGINT', stop);
     process.removeListener('SIGTERM', stop);
     ws.closeAll(true);
     console.log('Private stream closed. This does not cancel orders.');
-  };
-  const fail = () => { process.exitCode = 1; stop(); };
-  const timer = setTimeout(stop, duration * 1000);
-  const startup = setTimeout(() => {
-    if (!subscribed) { console.error('No subscription acknowledgement within 10 seconds.'); fail(); }
-  }, 10000);
+  }
+
+  function fail(message: string) {
+    console.error(message);
+    process.exitCode = 1;
+    stop();
+  }
+
+  // Bound the whole example, including connection and authentication time.
+  const timer = setTimeout(() => {
+    if (!subscribed) {
+      fail(
+        'Subscription was not confirmed. Check credentials and connectivity.',
+      );
+    } else {
+      stop();
+    }
+  }, 60_000);
   process.once('SIGINT', stop);
   process.once('SIGTERM', stop);
-  // Install every listener before initiating the connection/subscription.
+
+  // Install listeners before initiating the subscription.
   ws.on('authenticated', () => console.log('Private stream authenticated.'));
-  ws.on('response', message => {
-    if (stopped || message.op !== 'subscribe') return;
+  ws.on('response', (message) => {
+    if (stopped || message.op !== 'subscribe') {
+      return;
+    }
     if (message.success === true) {
       subscribed = true;
-      clearTimeout(startup);
       console.log('Subscribed to order.linear. Waiting for order changes.');
-    } else { console.error('Private subscription rejected.'); fail(); }
-  });
-  ws.on('update', message => {
-    if (stopped || message.topic !== 'order.linear' || !Array.isArray(message.data)) return;
-    for (const order of message.data) {
-      console.log({ orderId: order.orderId, orderLinkId: order.orderLinkId, symbol: order.symbol,
-        orderStatus: order.orderStatus, cumExecQty: order.cumExecQty, leavesQty: order.leavesQty,
-        updatedTime: order.updatedTime });
+    } else {
+      fail('Private subscription rejected.');
     }
   });
-  ws.on('exception', () => { console.error('Private stream failed. Check Testnet credentials and permissions.'); fail(); });
-  // Stop rather than treating a reconnected stream as complete order history.
-  ws.on('reconnect', () => { console.error('Connection interrupted. Reconcile orders with REST before restarting.'); fail(); });
-  ws.on('close', () => { if (!stopped) { console.error('Connection closed unexpectedly.'); fail(); } });
+  ws.on('update', (message) => {
+    if (
+      stopped ||
+      message.topic !== 'order.linear' ||
+      !Array.isArray(message.data)
+    ) {
+      return;
+    }
+    for (const order of message.data) {
+      console.log({
+        orderLinkId: order.orderLinkId,
+        symbol: order.symbol,
+        orderStatus: order.orderStatus,
+        cumExecQty: order.cumExecQty,
+        leavesQty: order.leavesQty,
+      });
+    }
+  });
+  ws.on('exception', () => fail('Private stream failed.'));
+  ws.on('reconnect', () =>
+    fail(
+      'Connection interrupted. Reconcile orders with REST before restarting.',
+    ),
+  );
+  ws.on('close', () => {
+    if (!stopped) {
+      fail('Connection closed unexpectedly.');
+    }
+  });
+
   try {
-    // These promises alone do not prove a fresh connection has subscribed: observe response above.
+    // The response event above confirms subscription, not this promise alone.
     void Promise.all(ws.subscribeV5('order.linear', 'linear')).catch(() => {
-      console.error('Private subscription failed.'); fail();
+      fail('Private subscription failed.');
     });
-  } catch { console.error('Could not start private stream.'); fail(); }
+  } catch {
+    fail('Could not start the private stream.');
+  }
 }
-try { main(); } catch (error) {
-  console.error(error instanceof Error ? error.message : 'Invalid stream configuration.');
+
+try {
+  main();
+} catch {
+  console.error(
+    'Check the Testnet credential variables; leave BYBITTRACE unset.',
+  );
   process.exitCode = 1;
 }
