@@ -17,14 +17,15 @@ Store credentials in server-side environment variables or a secret manager, outs
 
 ## Verify account access
 
-Use credentials created for **Bybit Testnet**, with permission to read the account. Store them in your server environment, or create a local `.env` file:
+Use credentials created for Bybit Testnet, with permission to read the account. Store them in your server environment, or create a local `.env` file:
 
 ```dotenv
-BYBIT_API_KEY=replace_with_your_testnet_key
-BYBIT_API_SECRET=replace_with_your_testnet_secret
+# Use your own Bybit Testnet credentials.
+BYBIT_API_KEY=example_testnet_key
+BYBIT_API_SECRET=example_testnet_secret
 ```
 
-Replace both placeholders, add `.env` to `.gitignore`, and never commit or include it in a browser bundle. Keep the file private. This request reads account data; it does not place an order or move funds.
+Exclude `.env` from version control and leave `BYBITTRACE` unset to avoid logging signed requests. This example only reads account data.
 
 This example queries a Unified Trading Account with `accountType: 'UNIFIED'`. Use an account type supported by your account; see the [wallet-balance endpoint documentation](https://bybit-exchange.github.io/docs/v5/account/wallet-balance).
 
@@ -48,7 +49,7 @@ Live, Testnet and demo use separate credentials. Match the key to the selected e
 
 ## Place an order
 
-Once account access works, follow [Place and cancel an order](/guides/orders). The guide validates price and quantity, saves a client order ID, and queries the result before cancellation. To receive live status changes, use [Private order updates](/guides/private-streams).
+Once account access works, follow [Place and cancel an order](/guides/orders). The guide uses a client order ID saved in your environment to place, query and cancel the same Testnet order. To receive live status changes, use [Private order updates](/guides/private-streams).
 
 ## Signing and timestamps
 
