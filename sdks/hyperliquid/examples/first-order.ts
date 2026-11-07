@@ -1,11 +1,9 @@
 import { RestClient } from '@siebly/hyperliquid-api';
 
-class InputError extends Error {}
-
 function required(name: string): string {
   const value = process.env[name];
   if (!value) {
-    throw new InputError(`Set ${name} in your .env file.`);
+    throw new Error(`Set ${name} in your .env file.`);
   }
   return value;
 }
@@ -33,11 +31,13 @@ async function placeOrder(client: RestClient, clientOrderId: string) {
 
   // Check the individual order result, not just the HTTP response.
   if (result.status !== 'ok') {
-    throw new InputError('Order was not accepted.');
+    console.error(result);
+    throw new Error('Order was not accepted.');
   }
   const order = result.response.data.statuses[0];
   if (!order || 'error' in order) {
-    throw new InputError('Order was rejected.');
+    console.error(result);
+    throw new Error('Order was rejected.');
   }
   console.log('Order result:', 'resting' in order ? 'resting' : 'filled');
 }
@@ -45,11 +45,11 @@ async function placeOrder(client: RestClient, clientOrderId: string) {
 async function main() {
   const action = process.argv[2];
   if (!['place', 'status', 'cancel'].includes(action)) {
-    throw new InputError('Usage: orders.mts place|status|cancel');
+    throw new Error('Usage: orders.mts place|status|cancel');
   }
   const clientOrderId = required('HYPERLIQUID_CLIENT_ORDER_ID');
   if (!/^0x[\da-fA-F]{32}$/.test(clientOrderId)) {
-    throw new InputError(
+    throw new Error(
       'Client order ID must be 0x followed by 32 hexadecimal characters.',
     );
   }
@@ -89,7 +89,8 @@ async function main() {
     result.status !== 'ok' ||
     result.response.data.statuses[0] !== 'success'
   ) {
-    throw new InputError(
+    console.error(result);
+    throw new Error(
       'Cancellation was not confirmed. Run status; the order may already have filled.',
     );
   }
@@ -99,11 +100,9 @@ async function main() {
 }
 
 main().catch((error: unknown) => {
-  // Log a summary rather than raw request details.
+  console.error(error);
   console.error(
-    error instanceof InputError
-      ? error.message
-      : 'Request failed. Query status with the same client order ID.',
+    'Query status with the same client order ID before another order action.',
   );
   process.exitCode = 1;
 });

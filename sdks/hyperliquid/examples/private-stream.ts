@@ -33,16 +33,15 @@ async function main() {
   process.once('SIGTERM', stop);
 
   // Install listeners before subscribing so early messages are not missed.
-  ws.on('exception', () => {
-    console.error(
-      'Account stream failed. Check the connection and account address.',
-    );
+  ws.on('exception', (error) => {
+    console.error('Account stream failed:', error);
     process.exitCode = 1;
     stop();
   });
-  ws.on('reconnecting', () => {
+  ws.on('reconnecting', (event) => {
     console.error(
       'Connection lost. Reload order and fill history before restarting this stream.',
+      event,
     );
     process.exitCode = 1;
     stop();
@@ -97,9 +96,9 @@ async function main() {
       { type: 'orderUpdates', user },
       { type: 'userFills', user },
     ]);
-  } catch {
+  } catch (error) {
     process.exitCode = 1;
-    console.error('Could not subscribe to account updates.');
+    console.error('Could not subscribe to account updates:', error);
     stop();
   } finally {
     // A stop can occur while subscription setup is pending.
@@ -109,9 +108,7 @@ async function main() {
   }
 }
 
-main().catch(() => {
-  console.error(
-    'Set a valid HYPERLIQUID_ACCOUNT_ADDRESS before starting the stream.',
-  );
+main().catch((error) => {
+  console.error(error);
   process.exitCode = 1;
 });
