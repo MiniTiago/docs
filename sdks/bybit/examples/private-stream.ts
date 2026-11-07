@@ -10,10 +10,10 @@ function main() {
     throw new Error('Set BYBIT_API_KEY and BYBIT_API_SECRET.');
   }
 
-  // Log selected fields below, not raw SDK diagnostics or signed requests.
+  // Keep routine SDK logs quiet while preserving errors.
   const ws = new WebsocketClient(
     { key, secret, testnet: true },
-    { trace() {}, info() {}, error() {} },
+    { trace() {}, info() {}, error: console.error },
   );
   let stopped = false;
   let subscribed = false;
@@ -30,8 +30,8 @@ function main() {
     console.log('Private stream closed. This does not cancel orders.');
   }
 
-  function fail(message: string) {
-    console.error(message);
+  function fail(message: string, ...details: unknown[]) {
+    console.error(message, ...details);
     process.exitCode = 1;
     stop();
   }
@@ -59,7 +59,7 @@ function main() {
       subscribed = true;
       console.log('Subscribed to order.linear. Waiting for order changes.');
     } else {
-      fail('Private subscription rejected.');
+      fail('Private subscription rejected:', message);
     }
   });
   ws.on('update', (message) => {
@@ -80,33 +80,34 @@ function main() {
       });
     }
   });
-  ws.on('exception', () => fail('Private stream failed.'));
-  ws.on('reconnect', () =>
+  ws.on('exception', (error) => fail('Private stream failed:', error));
+  ws.on('reconnect', (event) =>
     fail(
       'Connection interrupted. Reconcile orders with REST before restarting.',
+      event,
     ),
   );
-  ws.on('close', () => {
+  ws.on('close', (event) => {
     if (!stopped) {
-      fail('Connection closed unexpectedly.');
+      fail('Connection closed unexpectedly:', event);
     }
   });
 
   try {
     // The response event above confirms subscription, not this promise alone.
-    void Promise.all(ws.subscribeV5('order.linear', 'linear')).catch(() => {
-      fail('Private subscription failed.');
-    });
-  } catch {
-    fail('Could not start the private stream.');
+    void Promise.all(ws.subscribeV5('order.linear', 'linear')).catch(
+      (error) => {
+        fail('Private subscription failed:', error);
+      },
+    );
+  } catch (error) {
+    fail('Could not start the private stream:', error);
   }
 }
 
 try {
   main();
-} catch {
-  console.error(
-    'Check the Testnet credential variables; leave BYBITTRACE unset.',
-  );
+} catch (error) {
+  console.error(error);
   process.exitCode = 1;
 }

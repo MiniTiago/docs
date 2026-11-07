@@ -1,18 +1,17 @@
 import { RestClientV5 } from 'bybit-api';
 
-class GuideError extends Error {}
-
 function required(name: string): string {
   const value = process.env[name];
   if (!value) {
-    throw new GuideError(`Set ${name}.`);
+    throw new Error(`Set ${name}.`);
   }
   return value;
 }
 
 function checked<T>(response: { retCode: number; result: T }): T {
   if (response.retCode !== 0) {
-    throw new GuideError(`Bybit returned retCode ${response.retCode}.`);
+    console.error(response);
+    throw new Error(`Bybit returned retCode ${response.retCode}.`);
   }
   return response.result;
 }
@@ -29,7 +28,7 @@ async function printOrderStatus(client: RestClientV5, orderLinkId: string) {
     );
   }
   if (!order) {
-    throw new GuideError(
+    throw new Error(
       'Order not found. Check Testnet order history before placing another order.',
     );
   }
@@ -43,13 +42,11 @@ async function printOrderStatus(client: RestClientV5, orderLinkId: string) {
 
 async function main() {
   if (process.env.BYBITTRACE) {
-    throw new GuideError(
-      'Unset BYBITTRACE to keep signed requests out of logs.',
-    );
+    throw new Error('Unset BYBITTRACE to keep signed requests out of logs.');
   }
   const action = process.argv[2];
   if (!['place', 'status', 'cancel'].includes(action)) {
-    throw new GuideError('Usage: first-order.ts place|status|cancel');
+    throw new Error('Usage: first-order.ts place|status|cancel');
   }
 
   const client = new RestClientV5(
@@ -91,10 +88,7 @@ async function main() {
 }
 
 main().catch((error: unknown) => {
-  // Raw SDK errors can contain signed request details.
-  console.error(
-    error instanceof GuideError ? error.message : 'Request failed.',
-  );
+  console.error(error);
   console.error(
     'Keep BYBIT_ORDER_ID unchanged and run status before another order action.',
   );

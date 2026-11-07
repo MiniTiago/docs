@@ -13,6 +13,7 @@ async function main() {
   const client = new RestClientV5({ key, secret, testnet: true });
   const response = await client.getWalletBalance({ accountType: 'UNIFIED' });
   if (response.retCode !== 0) {
+    console.error(response);
     throw new Error(`Bybit ${response.retCode}: ${response.retMsg}`);
   }
 
@@ -27,9 +28,7 @@ async function main() {
   console.log('Returned coin records:', account.coin.length);
 }
 
-main().catch(() => {
-  console.error(
-    'Account request failed. Check Testnet credentials, account type and permissions; leave BYBITTRACE unset.',
-  );
+main().catch((error) => {
+  console.error(error);
   process.exitCode = 1;
 });
