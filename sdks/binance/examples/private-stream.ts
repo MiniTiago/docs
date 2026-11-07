@@ -6,7 +6,7 @@ async function main() {
   if (!api_key || !api_secret) {
     throw new Error('Set Spot Testnet credentials.');
   }
-  // Log selected account fields below, not raw SDK diagnostics.
+  // Keep routine SDK logs quiet while preserving errors.
   const api = new WebsocketAPIClient(
     {
       api_key,
@@ -17,7 +17,7 @@ async function main() {
       muteLatencyWarning: true,
       resubscribeUserDataStreamAfterReconnect: false,
     },
-    { trace() {}, info() {}, error() {} },
+    { trace() {}, info() {}, error: console.error },
   );
   const ws = api.getWSClient();
   let stopped = false;
@@ -29,7 +29,8 @@ async function main() {
     clearTimeout(timer);
     process.removeListener('SIGINT', stop);
     process.removeListener('SIGTERM', stop);
-    void api.disconnectAll().catch(() => {
+    void api.disconnectAll().catch((error) => {
+      console.error('Disconnect failed:', error);
       process.exitCode = 1;
     });
   };
@@ -66,10 +67,8 @@ async function main() {
       stop();
     }
   });
-  ws.on('exception', () => {
-    console.error(
-      'Private stream exception. Check credentials, permissions and connectivity.',
-    );
+  ws.on('exception', (error) => {
+    console.error('Private stream exception:', error);
     process.exitCode = 1;
     stop();
   });
@@ -89,16 +88,16 @@ async function main() {
         'Spot Testnet user data subscribed. Waiting for account events.',
       );
     }
-  } catch {
+  } catch (error) {
+    console.error('Private subscription failed:', error);
     if (!stopped) {
-      console.error('Private subscription failed.');
       process.exitCode = 1;
     }
     stop();
   }
 }
 
-main().catch(() => {
-  console.error('Set BINANCE_TESTNET_API_KEY and BINANCE_TESTNET_API_SECRET.');
+main().catch((error) => {
+  console.error(error);
   process.exitCode = 1;
 });

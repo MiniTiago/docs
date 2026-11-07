@@ -1,11 +1,9 @@
 import { MainClient } from 'binance';
 
-class InputError extends Error {}
-
 function required(name: string): string {
   const value = process.env[name];
   if (!value) {
-    throw new InputError(`Set ${name} in .env.`);
+    throw new Error(`Set ${name} in .env.`);
   }
   return value;
 }
@@ -13,7 +11,7 @@ function required(name: string): string {
 function positiveNumber(name: string): number {
   const value = Number(required(name));
   if (!Number.isFinite(value) || value <= 0) {
-    throw new InputError(`${name} must be a positive number.`);
+    throw new Error(`${name} must be a positive number.`);
   }
   return value;
 }
@@ -21,7 +19,7 @@ function positiveNumber(name: string): number {
 async function main() {
   const action = process.argv[2];
   if (!['place', 'status', 'cancel'].includes(action)) {
-    throw new InputError('Usage: first-order.ts place|status|cancel');
+    throw new Error('Usage: first-order.ts place|status|cancel');
   }
 
   const client = new MainClient(
@@ -76,11 +74,9 @@ async function main() {
 }
 
 main().catch((error: unknown) => {
-  // Raw transport errors can contain signed request details.
+  console.error(error);
   console.error(
-    error instanceof InputError
-      ? error.message
-      : 'Request failed. Keep the same order ID and run status before any further order action.',
+    'Keep the same order ID and run status before another order action.',
   );
   process.exitCode = 1;
 });

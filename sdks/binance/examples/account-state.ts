@@ -14,9 +14,7 @@ async function main() {
   console.log('Returned balance records:', account.balances.length);
 }
 
-main().catch(() => {
-  console.error(
-    'Account request failed. Check Spot Testnet credentials, permissions and IP restrictions.',
-  );
+main().catch((error) => {
+  console.error(error);
   process.exitCode = 1;
 });
