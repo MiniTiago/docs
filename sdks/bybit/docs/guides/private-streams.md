@@ -33,7 +33,7 @@ node --env-file=.env private-stream.ts
 
 Wait for `Private stream authenticated.` and `Subscribed to order.linear.` before starting the [Testnet order example](/guides/orders) in another terminal using the same account. Authentication alone does not confirm a subscription.
 
-Each update prints the client order ID, symbol, status, cumulative executed quantity and remaining quantity. Match `orderLinkId` to `BYBIT_ORDER_ID` from your order example. The example logs account data but excludes credentials, signatures and raw request errors.
+Each update prints the client order ID, symbol, status, cumulative executed quantity and remaining quantity. Match `orderLinkId` to `BYBIT_ORDER_ID` from your order example. Stream and subscription errors are logged with their error objects.
 
 The stream emits changes, not an initial snapshot of all orders. Use REST to retrieve existing state; a quiet stream can simply mean no orders have changed.
 
