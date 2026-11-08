@@ -37,31 +37,33 @@ function main() {
   // Install listeners before initiating the subscription.
   ws.on('authenticated', () => console.log('Private stream authenticated.'));
   ws.on('response', (message) => {
-    if (stopped || message.op !== 'subscribe') {
+    if (stopped) {
       return;
     }
-    if (message.success === true) {
+    if (message.op !== 'subscribe') {
+      console.log('Private stream response:', message);
+    } else if (message.success === true) {
       console.log('Subscribed to order.linear. Waiting for order changes.');
     } else {
       console.error('Private subscription rejected:', message);
     }
   });
   ws.on('update', (message) => {
-    if (
-      stopped ||
-      message.topic !== 'order.linear' ||
-      !Array.isArray(message.data)
-    ) {
+    if (stopped) {
       return;
     }
-    for (const order of message.data) {
-      console.log({
-        orderLinkId: order.orderLinkId,
-        symbol: order.symbol,
-        orderStatus: order.orderStatus,
-        cumExecQty: order.cumExecQty,
-        leavesQty: order.leavesQty,
-      });
+    if (message.topic === 'order.linear' && Array.isArray(message.data)) {
+      for (const order of message.data) {
+        console.log({
+          orderLinkId: order.orderLinkId,
+          symbol: order.symbol,
+          orderStatus: order.orderStatus,
+          cumExecQty: order.cumExecQty,
+          leavesQty: order.leavesQty,
+        });
+      }
+    } else {
+      console.log('Private stream update:', message);
     }
   });
   // The SDK reconnects, authenticates and restores subscriptions automatically.
