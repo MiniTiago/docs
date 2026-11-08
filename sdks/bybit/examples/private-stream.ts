@@ -16,7 +16,6 @@ function main() {
     { trace() {}, info() {}, error: console.error },
   );
   let stopped = false;
-  let subscribed = false;
 
   function stop() {
     if (stopped) {
@@ -30,22 +29,8 @@ function main() {
     console.log('Private stream closed. This does not cancel orders.');
   }
 
-  function fail(message: string, ...details: unknown[]) {
-    console.error(message, ...details);
-    process.exitCode = 1;
-    stop();
-  }
-
   // Bound the whole example, including connection and authentication time.
-  const timer = setTimeout(() => {
-    if (!subscribed) {
-      fail(
-        'Subscription was not confirmed. Check credentials and connectivity.',
-      );
-    } else {
-      stop();
-    }
-  }, 60_000);
+  const timer = setTimeout(stop, 60_000);
   process.once('SIGINT', stop);
   process.once('SIGTERM', stop);
 
@@ -56,10 +41,9 @@ function main() {
       return;
     }
     if (message.success === true) {
-      subscribed = true;
       console.log('Subscribed to order.linear. Waiting for order changes.');
     } else {
-      fail('Private subscription rejected:', message);
+      console.error('Private subscription rejected:', message);
     }
   });
   ws.on('update', (message) => {
@@ -80,28 +64,25 @@ function main() {
       });
     }
   });
-  ws.on('exception', (error) => fail('Private stream failed:', error));
-  ws.on('reconnect', (event) =>
-    fail(
-      'Connection interrupted. Reconcile orders with REST before restarting.',
-      event,
-    ),
-  );
-  ws.on('close', (event) => {
-    if (!stopped) {
-      fail('Connection closed unexpectedly:', event);
-    }
+  // The SDK reconnects, authenticates and restores subscriptions automatically.
+  ws.on('exception', (error) => console.error('Private stream error:', error));
+  ws.on('reconnect', (event) => {
+    console.log('Reconnecting:', event);
   });
+  ws.on('reconnected', (event) => {
+    console.log('Reconnected. Reconcile missed order events with REST:', event);
+  });
+  ws.on('close', (event) => console.log('Connection closed:', event));
 
   try {
     // The response event above confirms subscription, not this promise alone.
     void Promise.all(ws.subscribeV5('order.linear', 'linear')).catch(
       (error) => {
-        fail('Private subscription failed:', error);
+        console.error('Private subscription failed:', error);
       },
     );
   } catch (error) {
-    fail('Could not start the private stream:', error);
+    console.error('Could not start the private stream:', error);
   }
 }
 
