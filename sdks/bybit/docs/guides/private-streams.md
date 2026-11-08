@@ -41,10 +41,12 @@ The subscription uses the category-specific `order.linear` topic. To consume all
 
 ## Handle disconnects and shutdown
 
-The example installs listeners before subscribing and waits for a subscription response. It runs for up to 60 seconds, including connection and authentication time, and reports an error if no subscription was confirmed. It stops sooner if authentication/subscription fails or the connection is interrupted. Ctrl+C also closes the socket and clears the timer.
+The example runs for 60 seconds, including connection and authentication time. Its timer and Ctrl+C handler close the socket and clear the timer; network errors do not trigger shutdown.
 
-The SDK can reconnect and restore subscriptions, but reconnecting does not recover missed order events. This example stops on interruption so you can reconcile with REST and then restart. Closing the stream does not cancel open orders.
+The SDK reconnects, authenticates and restores subscriptions automatically. The example logs `reconnect`, `reconnected`, `close` and error events without interrupting that recovery. A `reconnected` event confirms the connection is open; the subsequent subscription response confirms `order.linear` is subscribed again.
 
-In an application that reconnects automatically, reconcile orders after every interruption. Bybit can emit two `Filled` order updates when a fill races with a cancellation. Track cumulative execution by order ID, or use execution records for individual fills.
+Reconnection does not replay missed order events. Reconcile orders with REST after a gap, then continue processing updates. Closing the stream does not cancel open orders.
+
+Bybit can emit two `Filled` order updates when a fill races with a cancellation. Track cumulative execution by order ID, or use execution records for individual fills.
 
 [WebSockets](/guides/websockets) · [Place and cancel an order](/guides/orders) · [Production guidance](/guides/production)
