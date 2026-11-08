@@ -9,16 +9,8 @@ async function main() {
   }
   const ws = new WebsocketClient({ testnet: true });
 
-  // Wait for both server acknowledgements before calling the stream ready.
   let stopped = false;
-  const pending = new Set(['orderUpdates', 'userFills']);
-  const timer = setTimeout(() => {
-    if (pending.size) {
-      console.error('Account subscriptions were not confirmed.');
-      process.exitCode = 1;
-    }
-    stop();
-  }, 60_000);
+  const timer = setTimeout(stop, 60_000);
   function stop() {
     if (stopped) {
       return;
@@ -34,35 +26,16 @@ async function main() {
 
   // Install listeners before subscribing so early messages are not missed.
   ws.on('exception', (error) => {
-    console.error('Account stream failed:', error);
-    process.exitCode = 1;
-    stop();
+    console.error('Account stream exception:', error);
   });
   ws.on('reconnecting', (event) => {
-    console.error(
-      'Connection lost. Reload order and fill history before restarting this stream.',
-      event,
-    );
-    process.exitCode = 1;
-    stop();
+    console.log('Account stream reconnecting:', event);
+  });
+  ws.on('reconnected', (event) => {
+    console.log('Account stream reconnected:', event);
   });
   ws.on('response', (event) => {
-    if (
-      stopped ||
-      event.channel !== 'subscriptionResponse' ||
-      event.data.method !== 'subscribe'
-    ) {
-      return;
-    }
-    const subscription = event.data.subscription;
-    if (
-      'user' in subscription &&
-      subscription.user.toLowerCase() === user.toLowerCase() &&
-      pending.delete(subscription.type) &&
-      pending.size === 0
-    ) {
-      console.log('Subscribed to order updates and fills.');
-    }
+    console.log('Subscription response:', event);
   });
   ws.on('message', (event) => {
     if (stopped) {
@@ -97,9 +70,8 @@ async function main() {
       { type: 'userFills', user },
     ]);
   } catch (error) {
-    process.exitCode = 1;
-    console.error('Could not subscribe to account updates:', error);
-    stop();
+    // Topics remain cached for the SDK's automatic reconnect attempts.
+    console.error('Subscription setup failed:', error);
   } finally {
     // A stop can occur while subscription setup is pending.
     if (stopped) {
