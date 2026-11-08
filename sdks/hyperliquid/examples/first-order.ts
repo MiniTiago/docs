@@ -1,6 +1,6 @@
 import { RestClient } from '@siebly/hyperliquid-api';
 
-function required(name: string): string {
+function requiredEnvVar(name: string): string {
   const value = process.env[name];
   if (!value) {
     throw new Error(`Set ${name} in your .env file.`);
@@ -9,10 +9,10 @@ function required(name: string): string {
 }
 
 function createTestnetClient(action: string): RestClient {
-  const accountAddress = required('HYPERLIQUID_ACCOUNT_ADDRESS');
+  const accountAddress = requiredEnvVar('HYPERLIQUID_ACCOUNT_ADDRESS');
   // Status queries do not require a signing key.
   const privateKey =
-    action === 'status' ? undefined : required('HYPERLIQUID_PRIVATE_KEY');
+    action === 'status' ? undefined : requiredEnvVar('HYPERLIQUID_PRIVATE_KEY');
   return new RestClient(
     { testnet: true, accountAddress, privateKey },
     { timeout: 10_000 },
@@ -23,8 +23,8 @@ async function placeOrder(client: RestClient, clientOrderId: string) {
   const result = await client.submitLimitOrder({
     symbol: 'BTC',
     side: 'buy',
-    price: required('HYPERLIQUID_LIMIT_PRICE'),
-    size: required('HYPERLIQUID_ORDER_SIZE'),
+    price: requiredEnvVar('HYPERLIQUID_LIMIT_PRICE'),
+    size: requiredEnvVar('HYPERLIQUID_ORDER_SIZE'),
     postOnly: true,
     clientOrderId,
   });
@@ -47,7 +47,7 @@ async function main() {
   if (!['place', 'status', 'cancel'].includes(action)) {
     throw new Error('Usage: orders.mts place|status|cancel');
   }
-  const clientOrderId = required('HYPERLIQUID_CLIENT_ORDER_ID');
+  const clientOrderId = requiredEnvVar('HYPERLIQUID_CLIENT_ORDER_ID');
   if (!/^0x[\da-fA-F]{32}$/.test(clientOrderId)) {
     throw new Error(
       'Client order ID must be 0x followed by 32 hexadecimal characters.',
