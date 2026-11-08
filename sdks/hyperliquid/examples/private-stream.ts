@@ -62,6 +62,8 @@ async function main() {
           fill.sz,
         );
       }
+    } else {
+      console.log('Account update:', event);
     }
   });
   try {
