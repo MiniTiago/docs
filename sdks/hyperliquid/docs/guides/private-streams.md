@@ -25,7 +25,7 @@ Run it in a terminal:
 node --env-file=.env account-stream.ts
 ```
 
-Wait for `Subscribed to order updates and fills.` before running the [order example](/guides/orders) in another terminal. The script waits for both server acknowledgements; a resolved `subscribe()` promise only confirms that the request was sent locally.
+The `response` listener logs server subscription acknowledgements for `orderUpdates` and `userFills`. A resolved `subscribe()` promise confirms local sending, not server acceptance. Run the [order example](/guides/orders) in another terminal to produce updates.
 
 ## Read updates
 
@@ -39,8 +39,8 @@ See the [subscription payloads](https://hyperliquid.gitbook.io/hyperliquid-docs/
 
 ## Disconnect and recover
 
-The example closes after 60 seconds, on Ctrl+C/SIGTERM, on an exception, or when reconnection begins. It clears its timer and signal listeners and closes late subscription setup. Closing the stream does not cancel orders.
+The SDK automatically reconnects and restores cached subscriptions. The example logs `reconnecting`, `reconnected` and `exception` events without stopping recovery. It closes after 60 seconds or on Ctrl+C/SIGTERM and clears its timer and signal listeners.
 
-For a long-running application, the SDK reconnects and restores subscriptions by default. After a gap, reload order and fill history and reconcile it with buffered updates before using the stream to make trading decisions. A restored subscription does not replay every missed event.
+After a connection gap, use REST to reconcile order and fill history with streamed updates. `reconnected` reports a restored connection, not a replay of missed events. Closing the stream does not cancel orders.
 
 [WebSocket subscriptions](/guides/websockets) · [Authentication](/guides/authentication) · [Production usage](/guides/production)
