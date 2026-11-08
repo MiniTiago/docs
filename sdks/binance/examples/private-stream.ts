@@ -40,10 +40,12 @@ async function main() {
 
   // Install listeners before subscribing so early events are not missed.
   ws.on('message', (message) => {
-    if (stopped || Array.isArray(message)) {
+    if (stopped) {
       return;
     }
-    if (message.e === 'executionReport') {
+    if (Array.isArray(message)) {
+      console.log('Private stream message:', message);
+    } else if (message.e === 'executionReport') {
       console.log('Order update:', {
         symbol: message.s,
         orderId: message.i,
@@ -58,9 +60,11 @@ async function main() {
       message.e === 'outboundAccountPosition' ||
       message.e === 'balanceUpdate'
     ) {
-      console.log('Account state changed.');
+      console.log('Account state changed:', message);
     } else if (message.e === 'eventStreamTerminated') {
       console.error('User data stream ended:', message);
+    } else {
+      console.log('Private stream message:', message);
     }
   });
   ws.on('exception', (error) => {
