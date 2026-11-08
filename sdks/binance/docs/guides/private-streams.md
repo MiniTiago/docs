@@ -42,9 +42,11 @@ The example prints only selected order fields and a notification when balances c
 
 ## Disconnect and recover
 
-The example closes its connections after 60 seconds, on Ctrl+C/SIGTERM, on a subscription exception or when reconnection begins. Automatic resubscription is disabled so this short-lived process cannot silently resume with missing account updates. Closing the stream does not cancel orders.
+The SDK reconnects automatically after a dropped connection and restores the user data subscription. The example logs `reconnecting` and `reconnected` without closing the client or setting a failure exit code. It keeps the SDK's default `resubscribeUserDataStreamAfterReconnect` behavior enabled; no manual resubscription loop is needed.
 
-For a long-running application, the SDK enables automatic resubscription by default. Track `reconnecting` and `reconnected`, pause decisions based on stale state, and reconcile open orders, fills and balances using REST after a gap. A restored subscription is not a replay of missed events. Use a single owner for subscription recovery rather than competing retry loops.
+`reconnected` confirms the socket is open again. Authentication and resubscription may still be completing. For applications that depend on complete account state, reconcile orders, fills and balances through REST after a gap; a restored subscription does not replay missed updates. Subscription rejections and other errors are logged for diagnosis.
+
+The 60-second timer and Ctrl+C/SIGTERM end this demonstration explicitly. Closing the stream does not cancel orders.
 
 To stop just a user data subscription while keeping a connection, await `unsubscribeUserDataStream(WS_KEY_MAP.mainWSAPI)`. To end all connections owned by this API client, call `disconnectAll()`. A dedicated finite client, as above, can simply close its connections. Remove application timers and signal listeners during shutdown.
 
