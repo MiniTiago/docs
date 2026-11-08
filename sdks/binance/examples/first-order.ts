@@ -1,6 +1,6 @@
 import { MainClient } from 'binance';
 
-function required(name: string): string {
+function requiredEnvVar(name: string): string {
   const value = process.env[name];
   if (!value) {
     throw new Error(`Set ${name} in .env.`);
@@ -9,7 +9,7 @@ function required(name: string): string {
 }
 
 function positiveNumber(name: string): number {
-  const value = Number(required(name));
+  const value = Number(requiredEnvVar(name));
   if (!Number.isFinite(value) || value <= 0) {
     throw new Error(`${name} must be a positive number.`);
   }
@@ -24,17 +24,17 @@ async function main() {
 
   const client = new MainClient(
     {
-      api_key: required('BINANCE_TESTNET_API_KEY'),
-      api_secret: required('BINANCE_TESTNET_API_SECRET'),
+      api_key: requiredEnvVar('BINANCE_TESTNET_API_KEY'),
+      api_secret: requiredEnvVar('BINANCE_TESTNET_API_SECRET'),
       testnet: true,
     },
     { timeout: 10_000 },
   );
-  const symbol = required('BINANCE_SYMBOL');
+  const symbol = requiredEnvVar('BINANCE_SYMBOL');
 
   if (action === 'place') {
     // A client ID lets you look up a submission even if its response is lost.
-    const clientOrderId = required('BINANCE_CLIENT_ORDER_ID');
+    const clientOrderId = requiredEnvVar('BINANCE_CLIENT_ORDER_ID');
     console.log('Submitting client order ID:', clientOrderId);
     const order = await client.submitNewOrder({
       symbol,
@@ -63,7 +63,7 @@ async function main() {
 
   const lookup = process.env.BINANCE_ORDER_ID
     ? { symbol, orderId: positiveNumber('BINANCE_ORDER_ID') }
-    : { symbol, origClientOrderId: required('BINANCE_CLIENT_ORDER_ID') };
+    : { symbol, origClientOrderId: requiredEnvVar('BINANCE_CLIENT_ORDER_ID') };
   const order = await client.getOrder(lookup);
   console.log({
     orderId: order.orderId,
