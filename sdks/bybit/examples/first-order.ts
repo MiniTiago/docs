@@ -1,6 +1,6 @@
 import { RestClientV5 } from 'bybit-api';
 
-function required(name: string): string {
+function requiredEnvVar(name: string): string {
   const value = process.env[name];
   if (!value) {
     throw new Error(`Set ${name}.`);
@@ -51,14 +51,14 @@ async function main() {
 
   const client = new RestClientV5(
     {
-      key: required('BYBIT_API_KEY'),
-      secret: required('BYBIT_API_SECRET'),
+      key: requiredEnvVar('BYBIT_API_KEY'),
+      secret: requiredEnvVar('BYBIT_API_SECRET'),
       testnet: true,
     },
     { timeout: 10_000 },
   );
   // Keep this ID in .env so a later command can find the same order.
-  const orderLinkId = required('BYBIT_ORDER_ID');
+  const orderLinkId = requiredEnvVar('BYBIT_ORDER_ID');
   const query = { category: 'linear' as const, symbol: 'BTCUSDT', orderLinkId };
 
   if (action === 'place') {
@@ -68,8 +68,8 @@ async function main() {
         ...query,
         side: 'Buy',
         orderType: 'Limit',
-        price: required('BYBIT_LIMIT_PRICE'),
-        qty: required('BYBIT_ORDER_QTY'),
+        price: requiredEnvVar('BYBIT_LIMIT_PRICE'),
+        qty: requiredEnvVar('BYBIT_ORDER_QTY'),
         timeInForce: 'PostOnly',
         positionIdx: 0,
       }),
