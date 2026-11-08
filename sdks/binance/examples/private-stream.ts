@@ -15,7 +15,6 @@ async function main() {
       beautify: false,
       attachEventListeners: false,
       muteLatencyWarning: true,
-      resubscribeUserDataStreamAfterReconnect: false,
     },
     { trace() {}, info() {}, error: console.error },
   );
@@ -61,24 +60,19 @@ async function main() {
     ) {
       console.log('Account state changed.');
     } else if (message.e === 'eventStreamTerminated') {
-      console.error(
-        'Subscription ended. Reconcile account state before restarting.',
-      );
-      stop();
+      console.error('User data stream ended:', message);
     }
   });
   ws.on('exception', (error) => {
     console.error('Private stream exception:', error);
-    process.exitCode = 1;
-    stop();
   });
+  // The SDK owns reconnecting and restoring the user data subscription.
   ws.on('reconnecting', (event) => {
-    console.error(
-      'Connection interrupted. Reconcile orders and balances before restarting.',
-      event,
-    );
-    process.exitCode = 1;
-    stop();
+    console.log('WebSocket reconnecting:', event);
+  });
+  ws.on('reconnected', (event) => {
+    console.log('WebSocket reconnected:', event);
+    // Refresh orders and balances via REST here if your app needs missed updates.
   });
   try {
     await api.subscribeUserDataStream(WS_KEY_MAP.mainWSAPI);
@@ -91,10 +85,6 @@ async function main() {
     }
   } catch (error) {
     console.error('Private subscription failed:', error);
-    if (!stopped) {
-      process.exitCode = 1;
-    }
-    stop();
   }
 }
 
