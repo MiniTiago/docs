@@ -8,7 +8,7 @@ function requiredEnvVar(name: string): string {
   return value;
 }
 
-function positiveNumber(name: string): number {
+function getPositiveNumberEnvVar(name: string): number {
   const value = Number(requiredEnvVar(name));
   if (!Number.isFinite(value) || value <= 0) {
     throw new Error(`${name} must be a positive number.`);
@@ -37,8 +37,8 @@ async function main() {
       symbol,
       side: 'BUY',
       type: 'LIMIT_MAKER',
-      price: positiveNumber('BINANCE_PRICE'),
-      quantity: positiveNumber('BINANCE_QUANTITY'),
+      price: getPositiveNumberEnvVar('BINANCE_PRICE'),
+      quantity: getPositiveNumberEnvVar('BINANCE_QUANTITY'),
     });
     console.log(
       'Submission acknowledged. Save BINANCE_ORDER_ID:',
@@ -50,7 +50,7 @@ async function main() {
   if (action === 'cancel') {
     await client.cancelOrder({
       symbol,
-      orderId: positiveNumber('BINANCE_ORDER_ID'),
+      orderId: getPositiveNumberEnvVar('BINANCE_ORDER_ID'),
     });
     console.log('Cancellation acknowledged. Run status to check the result.');
     return;
@@ -58,7 +58,7 @@ async function main() {
 
   const order = await client.getOrder({
     symbol,
-    orderId: positiveNumber('BINANCE_ORDER_ID'),
+    orderId: getPositiveNumberEnvVar('BINANCE_ORDER_ID'),
   });
   console.log({
     orderId: order.orderId,
