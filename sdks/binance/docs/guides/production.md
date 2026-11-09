@@ -9,9 +9,9 @@ description: "Handle Binance retries, uncertain order outcomes, stream recovery 
 
 ## Resolve uncertain order outcomes
 
-Binance may accept an order before a request times out. For Spot, query `getOrder()` with the symbol and `origClientOrderId` (the submitted `newClientOrderId`) or `orderId` before resubmitting. Check fills as needed. For derivatives, use the matching futures client's query methods.
+Binance may accept an order before a request times out. For Spot, query `getOrder()` with the symbol and returned `orderId` when available. If the placement response was lost and no order ID was saved, reconcile open orders, order history and trade history for the same account and symbol before submitting again. For derivatives, use the matching futures client's query methods.
 
-Save order identifiers before submission. Track acknowledgement, acceptance and fills separately.
+Save the returned order ID with the account, network and symbol. Track acknowledgement, acceptance and fills separately.
 
 ## Recover streaming state
 

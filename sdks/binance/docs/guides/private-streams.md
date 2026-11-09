@@ -1,11 +1,11 @@
 ---
 title: "Binance private user data streams"
-description: "Authenticate a Spot Testnet user data subscription and receive order updates with the WebSocket API."
+description: "Receive Spot account and order updates with the WebSocket API, demonstrated on Testnet."
 ---
 
-# Subscribe to private order updates
+# Subscribe to private account updates
 
-Use `WebsocketAPIClient` to receive Spot account and order events through Binance's WebSocket API. This is separate from public market-data subscriptions. Spot's older listen-key workflow is deprecated; use `subscribeUserDataStream()` for new integrations.
+Use `WebsocketAPIClient` to receive Spot account and order events through Binance's WebSocket API. It supports Mainnet and Spot Testnet; this walkthrough uses Testnet. Private account events are separate from public market-data subscriptions. Spot's older listen-key workflow is deprecated; use `subscribeUserDataStream()` for new integrations.
 
 ## Connect to Spot Testnet
 
@@ -31,14 +31,12 @@ The SDK unwraps the WebSocket API envelope before emitting `message`: inspect `m
 
 - `s`: symbol.
 - `i`: exchange order ID, which stays stable through cancellation.
-- `c`: current client order ID.
-- `C`: original client order ID on cancellation events.
 - `x`: execution type, such as `NEW`, `TRADE` or `CANCELED`.
 - `X`: current order status, such as `NEW`, `PARTIALLY_FILLED` or `FILLED`.
 - `l`: quantity executed in the latest fill.
 - `z`: cumulative executed quantity.
 
-The example prints only selected order fields and a notification when balances change. Stream and subscription errors are logged with their error objects. Consult the [user data stream payloads](https://developers.binance.com/docs/binance-spot-api-docs/user-data-stream) for the complete event definitions.
+Match `i` to the `BINANCE_ORDER_ID` returned by the order example. The stream prints selected order fields, balance events and other received messages. Stream and subscription errors are logged with their error objects. Consult the [user data stream payloads](https://developers.binance.com/docs/binance-spot-api-docs/user-data-stream) for the complete event definitions.
 
 ## Disconnect and recover
 
