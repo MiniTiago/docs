@@ -9,7 +9,7 @@ description: "Diagnose Binance installation, authentication, response and WebSoc
 
 | Symptom | What to check |
 | --- | --- |
-| Import or missing method | Install the `binance` package and choose the correct exported client; this is a different package from similarly named Binance libraries. |
+| Import or missing method | Install the [`binance`](https://www.npmjs.com/package/binance) package and choose the correct exported client; this is a different package from similarly named Binance libraries. |
 | Invalid symbol | Check Spot versus USD-M or COIN-M futures, and query that product's exchange information. |
 | Signature or key error | Match the key, market, environment, permissions and IP restrictions. |
 | Timestamp outside receive window | Synchronize the host clock and inspect latency before adjusting `recvWindow`. |
