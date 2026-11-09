@@ -26,7 +26,7 @@ Client methods, parameters and response types exported by `bybit-api`. The same 
 
 Follow [Place and cancel an order](/guides/orders) for a complete Testnet workflow. Use [Private order updates](/guides/private-streams) to receive changes over WebSocket.
 
-Start by [verifying account access](/guides/authentication#verify-account-access) on Testnet. These methods require credentials with the relevant permissions; read the response type and [error handling](/guides/errors) before sending orders.
+Verify account access in your selected environment; the [account-access walkthrough](/guides/authentication#verify-account-access) demonstrates this on Testnet. These methods require credentials with the relevant permissions; read the response type and [error handling](/guides/errors) before sending orders.
 
 | Task | Method |
 | --- | --- |
