@@ -56,7 +56,7 @@ Query the same order:
 node --env-file=.env first-order.ts status
 ```
 
-The status command reads [`getActiveOrders()`](/api/classes/RestClientV5#getactiveorders), then [`getHistoricOrders()`](/api/classes/RestClientV5#gethistoricorders) if the order is absent. Inspect `orderStatus`, `cumExecQty` and `leavesQty`. A `New` or `PartiallyFilled` order can have remaining quantity to cancel:
+The status command reads [`getActiveOrders()`](/api/classes/RestClientV5#getactiveorders), then [`getHistoricOrders()`](/api/classes/RestClientV5#gethistoricorders) if the order is absent. The history fallback explicitly checks `Cancelled`, `Rejected` and `Deactivated`, which Bybit excludes from unfiltered recent history from 3 December 2026. Inspect `orderStatus`, `cumExecQty` and `leavesQty`. A `New` or `PartiallyFilled` order can have remaining quantity to cancel:
 
 ```sh
 node --env-file=.env first-order.ts cancel

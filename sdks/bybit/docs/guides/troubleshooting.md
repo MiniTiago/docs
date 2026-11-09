@@ -12,7 +12,7 @@ description: "Diagnose Bybit installation, authentication, response and WebSocke
 | Promise resolves, but the operation failed | Inspect `retCode` and `retMsg`; default REST behaviour does not throw on nonzero `retCode`. |
 | Empty ticker list | Check the symbol and `category`. Verify the instrument exists in that market and environment. |
 | API key or permission error | Match the key to live, Testnet or demo; check account permissions and IP restrictions. |
-| Timestamp or receive-window error | Synchronize the host clock, check network latency, and review `recv_window`. |
+| Timestamp or receive-window error | Synchronize the host clock, check network latency, and review `recv_window` for REST or `recvWindow` for WebSocket authentication. |
 | HTTP or rate-limit rejection | Inspect HTTP status and exchange code separately; slow down using the current endpoint limits. |
 | No WebSocket market data | Register an `update` listener before subscribing; inspect `exception`, topic and category. |
 | Old data after a reconnect | Reconcile application state and apply the topic's snapshot/delta rules. |
