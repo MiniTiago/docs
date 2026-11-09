@@ -103,7 +103,7 @@ npm run check:public
 
 Set **Settings > Pages > Source** to **GitHub Actions** and allow deployments from `main` in the `github-pages` environment.
 
-Dependabot checks npm daily at 00:19 UTC, including weekends, and opens a grouped PR when SDK versions change. The versions in `releases/package.json` are build inputs; user installation examples still use the latest SDK without pins.
+Dependabot checks npm hourly at 19 minutes past the hour (UTC), including weekends, and opens a grouped PR when SDK versions change. The versions in `releases/package.json` are build inputs; user installation examples still use the latest SDK without pins.
 
 The [publishing workflow](.github/workflows/publish.yml):
 
