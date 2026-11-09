@@ -5,7 +5,7 @@ description: "Install binance and make your first REST request in Node.js. Read 
 
 # Node.js quickstart with JavaScript
 
-Install `binance` and read the BTCUSDT Spot price with one REST request from `MainClient` in Node.js. The example is plain JavaScript and needs no TypeScript compiler or API credentials.
+Install [`binance`](https://www.npmjs.com/package/binance) and read the BTCUSDT Spot price with one REST request from `MainClient` in Node.js. The example is plain JavaScript and needs no TypeScript compiler or API credentials.
 
 ## Installation
 

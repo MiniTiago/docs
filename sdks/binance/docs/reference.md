@@ -5,7 +5,7 @@ description: "Public client methods, parameters and response types for binance."
 
 # API reference
 
-Client methods, parameters and response types exported by `binance`. The same API works in JavaScript and TypeScript.
+Client methods, parameters and response types exported by [`binance`](https://www.npmjs.com/package/binance). The same API works in JavaScript and TypeScript.
 
 ## Clients
 
