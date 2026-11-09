@@ -5,7 +5,7 @@ description: Browse the public clients, request parameters, response types and W
 
 # API reference
 
-Client methods, parameters and response types exported by `@siebly/hyperliquid-api`. The same API works in JavaScript and TypeScript.
+Client methods, parameters and response types exported by [`@siebly/hyperliquid-api`](https://www.npmjs.com/package/@siebly/hyperliquid-api). The same API works in JavaScript and TypeScript.
 
 ## Clients
 

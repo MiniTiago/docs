@@ -5,7 +5,7 @@ description: Install @siebly/hyperliquid-api and make your first REST request in
 
 # Node.js quickstart with JavaScript
 
-Install `@siebly/hyperliquid-api` and retrieve the BTC mid price with one REST request in Node.js. The example is plain JavaScript and needs no TypeScript compiler, wallet or private key.
+Install [`@siebly/hyperliquid-api`](https://www.npmjs.com/package/@siebly/hyperliquid-api) and retrieve the BTC mid price with one REST request in Node.js. The example is plain JavaScript and needs no TypeScript compiler, wallet or private key.
 
 ## Installation
 
