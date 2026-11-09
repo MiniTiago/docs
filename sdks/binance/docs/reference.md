@@ -27,9 +27,9 @@ Client methods, parameters and response types exported by `binance`. The same AP
 
 ## Account and orders
 
-Follow [Place and cancel an order](/guides/orders) for a complete Testnet workflow. Use [Private order updates](/guides/private-streams) to receive changes over WebSocket.
+Use [Authentication](/guides/authentication) to verify account access, [Place and cancel an order](/guides/orders) for submission and order management, and [Private account updates](/guides/private-streams) for streaming changes.
 
-Verify account access in your selected environment; the [account-access walkthrough](/guides/authentication#verify-account-access) demonstrates this on Testnet. These methods require credentials with the relevant permissions; read the response type and [error handling](/guides/errors) before sending orders.
+Select the product and environment in [Configuration](/guides/configuration), with credentials and permissions for that account. Read the response types and [Error handling](/guides/errors) before sending orders.
 
 | Task | Method |
 | --- | --- |
