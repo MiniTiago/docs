@@ -1,0 +1,8 @@
+{
+  "name": "kraken-deno-quickstart",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@siebly/kraken-api": "latest"
+  }
+}
