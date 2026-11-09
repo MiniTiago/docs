@@ -214,7 +214,7 @@ export async function generateEnvironments(ctx) {
     const browser = environment === 'vite' || environment === 'react';
     const substitutions = {
       SDK: ctx.sdk.name, TITLE: environmentTitles[environment], PACKAGE: ctx.sdk.packageName, ENV: environment,
-      PRICE_KIND: ctx.id === 'hyperliquid' ? 'Prices are BTC mid prices.' : 'Prices are BTCUSDT last traded prices.',
+      PRICE_KIND: ctx.id === 'hyperliquid' ? 'Prices are BTC mid prices.' : `Prices are ${exchanges[ctx.id].symbol} last traded prices.`,
       SYMBOL: exchanges[ctx.id].symbol,
       EXAMPLE_URL: `https://github.com/sieblyio/docs/tree/main/starters/${ctx.id}/${environment}`,
       ...guideFields(ctx.id, ctx.sdk, environment, files),
@@ -222,7 +222,7 @@ export async function generateEnvironments(ctx) {
       EXPO: nativeVersions.expo, RN: nativeVersions.reactNative, NATIVE_REACT: nativeVersions.react,
       CONFIG_NOTE: configured
         ? browser ? `Keep the supplied Vite config${environment === 'react' ? ' files' : ''}: it resolves the events polyfill${ctx.id === 'binance' ? ' and selects Binance browser support' : ''}.`
-          : 'Keep both Metro configuration files and the five polyfill dependencies. They are the same resolver configuration used in the native checks.'
+          : 'Keep both Metro configuration files and the five polyfill dependencies. See Runtime compatibility for recorded verification of this configuration.'
         : 'No additional SDK polyfill configuration is needed for this recipe.',
       POLYFILL_TROUBLE: configured
         ? browser ? `An \`events\` resolution error means the dependency or Vite config is missing.${ctx.id === 'binance' ? ' Keep the supplied browser-support selection in the same config.' : ''} Copy the config exactly and restart Vite.`
@@ -233,10 +233,13 @@ export async function generateEnvironments(ctx) {
         : '- Run `bun install` in the directory containing `package.json` if the SDK import cannot be resolved.',
     };
     const guide = await template(`${runtime ? 'runtime' : environment}/guide.md`);
-    const rendered = guide.replace(/@@([A-Z_]+)@@/g, (_, key) => {
+    let rendered = guide.replace(/@@([A-Z_]+)@@/g, (_, key) => {
       if (!(key in substitutions)) throw new Error(`Missing environment template field: ${key}`);
       return substitutions[key];
     });
+    if (ctx.id === 'kraken') {
+      rendered = rendered.replace('## Create the project', 'These setup examples have not yet been verified against the live exchange in this environment. See [Runtime compatibility](/compatibility) for the current verification status.\n\n## Create the project');
+    }
     await writeFile(path.join(output, `${environment}.md`), rendered);
   }
 }
