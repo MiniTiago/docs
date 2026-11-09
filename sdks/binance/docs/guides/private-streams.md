@@ -7,9 +7,9 @@ description: "Receive Spot account and order updates with the WebSocket API, dem
 
 Use `WebsocketAPIClient` to receive Spot account and order events through Binance's WebSocket API. It supports Mainnet and Spot Testnet; this walkthrough uses Testnet. Private account events are separate from public market-data subscriptions. Spot's older listen-key workflow is deprecated; use `subscribeUserDataStream()` for new integrations.
 
-## Connect to Spot Testnet
+## Example: connect to Spot Testnet
 
-Use Node.js 24, install `binance`, and configure the Testnet credential variables from [your first order](/guides/orders#set-up). Keep signing credentials in a secure server-side environment and out of browser bundles.
+To run this example on Spot Testnet, use Node.js 24, install `binance`, and configure the credential variables from [your first order](/guides/orders#set-up). Keep signing credentials in a secure server-side environment and out of browser bundles.
 
 Save this as `private-stream.ts`:
 

@@ -17,7 +17,7 @@ Use Node.js 24 and install the SDK in a server-side project:
 npm install binance
 ```
 
-Create credentials at [Binance Spot Testnet](https://testnet.binance.vision/). Enable the permissions needed to read account state and trade. Use Testnet credentials with this server-side example and keep your system clock synchronized.
+To run this example on Spot Testnet, create credentials at [Binance Spot Testnet](https://testnet.binance.vision/). Enable the permissions needed to read account state and trade. Use Testnet credentials with this server-side example and keep your system clock synchronized.
 
 Create a local `.env` file, exclude it from version control, and fill in your values:
 
