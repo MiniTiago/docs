@@ -66,7 +66,7 @@ export async function generateCompatibility(ctx,root) {
     if(t==='react-native'&&c.status==='failed')lines.push('This is the default configuration. See [Android with polyfills](#react-native-configured) for the consumer setup and its live results.','');
     if(t==='react-native-ios'&&c.status==='failed')lines.push('See [iOS with polyfills](#react-native-ios-configured) for the configured consumer setup and results.','');
     if(t==='react-native-ios-configured'&&setupTarget&&t!==setupTarget)lines.push('Use the shared [Expo and Metro setup](#expo-and-metro-setup) above. The same helper is used for the iOS checks.','');
-    if(t==='next')lines.push('Checked in a Node.js Route Handler. Client Components and Edge execution are untested.','');
+    if(t==='next')lines.push(c.status==='not-run'?'The Next.js recipe uses a Node.js Route Handler. Runtime execution is unverified.':'Checked in a Node.js Route Handler. Client Components and Edge execution are untested.','');
   }
   lines.push(sharedInclude('live-check-scope'),'',sharedInclude('browser-scope'),'',sharedInclude('android-scope'),'',sharedInclude('ios-scope'),'',
     ...(hasReport&&version!==ctx.pkg.version?[`Test metadata: SDK ${version}; API reference source ${ctx.pkg.version}.`,'']:[]),
