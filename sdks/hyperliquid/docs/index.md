@@ -47,5 +47,3 @@ See [Clients](/clients) for setup and cleanup, or the [API reference](/reference
 [Error handling](/guides/errors) covers failed requests and rejected orders. [Production usage](/guides/production) covers retries, recovery and shutdown. Start with [Troubleshooting](/guides/troubleshooting) for a specific failure.
 
 For a longer walkthrough, see the [Hyperliquid JavaScript tutorial on Siebly.io](https://siebly.io/sdk/hyperliquid/javascript/tutorial).
-
-<!--@include: @/.vitepress/shared/getting-started/environments.md-->

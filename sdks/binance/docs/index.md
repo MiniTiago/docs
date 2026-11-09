@@ -37,5 +37,3 @@ Follow the [Node.js quickstart](/getting-started) to read a public BTC price. It
 - [Browse the complete API reference](/reference).
 
 For a longer walkthrough, see the [Binance JavaScript tutorial on Siebly.io](https://siebly.io/sdk/binance/javascript/tutorial).
-
-<!--@include: @/.vitepress/shared/getting-started/environments.md-->
