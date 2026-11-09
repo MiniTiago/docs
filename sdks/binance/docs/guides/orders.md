@@ -13,7 +13,7 @@ This walkthrough uses Spot Testnet and virtual funds to avoid accidental live tr
 
 ## Set up
 
-Use Node.js 24 and install the SDK in a server-side project:
+Use Node.js 24 and install the [`binance`](https://www.npmjs.com/package/binance) npm package in a server-side project:
 
 ```sh
 npm install binance

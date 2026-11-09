@@ -11,7 +11,7 @@ For production Spot, set `testnet: false` (or omit it) and use production creden
 
 ## Example: connect to Spot Testnet
 
-To run this example on Spot Testnet, use Node.js 24, install `binance`, and configure the credential variables from [your first order](/guides/orders#set-up). Keep signing credentials in a secure server-side environment and out of browser bundles.
+To run this example on Spot Testnet, use Node.js 24, install the [`binance`](https://www.npmjs.com/package/binance) npm package with `npm install binance`, and configure the credential variables from [your first order](/guides/orders#set-up). Keep signing credentials in a secure server-side environment and out of browser bundles.
 
 Save this as `private-stream.ts`:
 
