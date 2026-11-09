@@ -1,15 +1,15 @@
 ---
 title: Subscribe to Hyperliquid account order updates
-description: Receive order changes and fills for a Testnet account with WebsocketClient.
+description: Receive account order changes and fills with WebsocketClient on Mainnet or Testnet.
 ---
 
 # Subscribe to account order updates
 
-Use `WebsocketClient` to receive `orderUpdates` and `userFills` for a Hyperliquid account. These subscriptions use the managed account address and do not require a private key or signature.
+Use `WebsocketClient` to receive `orderUpdates` and `userFills` for a Hyperliquid account. These subscriptions work on Mainnet and Testnet, use the managed account address and do not require a private key or signature.
 
-## Connect to Testnet
+## Example: connect to Testnet
 
-Use Node.js 24 with `@siebly/hyperliquid-api` installed. Set the account address in a local `.env` file:
+This example sets `testnet: true`. For Mainnet, omit that option and use the Mainnet account address. Use Node.js 24 with `@siebly/hyperliquid-api` installed. Set the account address in a local `.env` file:
 
 ```dotenv
 HYPERLIQUID_ACCOUNT_ADDRESS=0x1111111111111111111111111111111111111111 # Use your managed account address
@@ -29,7 +29,7 @@ The `response` listener logs server subscription acknowledgements for `orderUpda
 
 ## Read updates
 
-`orderUpdates` contains an array of order changes. Each entry includes the order ID, coin, status and status timestamp. Use the order ID or `order.cloid` to correlate an update with your client order ID.
+`orderUpdates` contains an array of order changes. Each entry includes the order ID, coin, status and status timestamp. Use `order.oid` to correlate an update with the order ID returned when placing the order.
 
 `userFills` contains fills and an optional `isSnapshot` flag. The example skips the initial snapshot when printing new fills. In a persistent application, use the snapshot to initialize state and deduplicate later fills using their trade identifiers. Order-status updates and fills describe different events.
 

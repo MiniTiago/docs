@@ -1,11 +1,11 @@
 ---
 title: Place and cancel a Hyperliquid Testnet order
-description: Submit a post-only BTC perpetual order, query it by client order ID and cancel its remaining quantity.
+description: Submit a post-only BTC perpetual order, query it by order ID and cancel its remaining quantity.
 ---
 
 # Place and cancel a Testnet order
 
-Place a BTC perpetual limit order with `RestClient`, query its status, then cancel any remaining quantity. Each operation runs as a separate command against Testnet.
+Place a BTC perpetual limit order with `RestClient`, query its status, then cancel any remaining quantity. The same methods work on Mainnet and Testnet. This walkthrough sets `testnet: true` and runs each operation as a separate command against Testnet.
 
 A post-only order is rejected if it would immediately take liquidity. Once resting, it can fill before cancellation. Cancelling an order does not reverse fills or close an existing position.
 
@@ -26,20 +26,11 @@ HYPERLIQUID_ACCOUNT_ADDRESS=0x1111111111111111111111111111111111111111 # Example
 HYPERLIQUID_PRIVATE_KEY=0x2222222222222222222222222222222222222222222222222222222222222222 # Public example key; use your API wallet key
 HYPERLIQUID_ORDER_SIZE=0.001 # BTC; illustrative size
 HYPERLIQUID_LIMIT_PRICE=60000 # USD; adjust for the current market
-HYPERLIQUID_CLIENT_ORDER_ID=0x0123456789abcdef0123456789abcdef # Unique per new order
 ```
 
 The address and key above are illustrative. Use the authorized API wallet's key and the account it manages. Signing runs locally in Node.js.
 
 Set a size in BTC and a buy price below the current Testnet BTC best bid. The example passes both values as decimal strings; the exchange applies its current [tick and lot size rules](https://hyperliquid.gitbook.io/hyperliquid-docs/for-developers/api/tick-and-lot-size).
-
-Generate a client order ID once, then paste it into `.env`:
-
-```sh
-node -e "console.log('0x' + require('node:crypto').randomBytes(16).toString('hex'))"
-```
-
-Use the same ID and account address for all three commands. Each new order needs a new ID.
 
 ## Save the example
 
@@ -53,7 +44,11 @@ Save the following as `orders.mts`. Node.js 24 runs this TypeScript file directl
 node --env-file=.env orders.mts place
 ```
 
-The script prints the client order ID and submits one order.
+The script submits one order and prints its exchange-assigned numeric ID. Save the printed `HYPERLIQUID_ORDER_ID` line in `.env` for the following commands, for example:
+
+```dotenv
+HYPERLIQUID_ORDER_ID=123456789 # Use the ID returned by your order
+```
 
 `postOnly: true` selects the exchange's ALO order type. A successful response contains an individual result: `resting`, `filled` or `error`. The script checks that result rather than treating a fulfilled request as proof of acceptance.
 
@@ -65,7 +60,7 @@ Read the same order:
 node --env-file=.env orders.mts status
 ```
 
-The status command calls [`getOrderStatus()`](/api/classes/RestClient#getorderstatus) with the client order ID from `.env`. It requires the account address, but no signing key.
+The status command calls [`getOrderStatus()`](/api/classes/RestClient#getorderstatus) with the order ID from `.env`. It requires the account address, but no signing key.
 
 Cancel remaining open quantity:
 
@@ -78,7 +73,7 @@ Cancellation queries the order first and skips orders that are no longer open. Q
 
 ## Recover an interrupted request
 
-A timeout can occur after the exchange accepts a request. Query `status` with the same client order ID before deciding whether to resubmit. The example does not retry writes.
+A timeout can occur after the exchange accepts a request. If you received the order ID, query `status`. If the submission response was lost before an ID was returned, inspect the account's open orders, order history and fills to identify the outcome before resubmitting. The example does not retry writes.
 
 `unknownOid` means no order was found for that account and ID. Check order and fill history to resolve an uncertain submission. Closing the script or a WebSocket does not cancel an open order.
 

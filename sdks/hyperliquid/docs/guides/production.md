@@ -29,9 +29,9 @@ Hyperliquid may process an action before the request times out. Check its outcom
 
 ### Check an order after a timeout
 
-Save the account, network and client order ID before submitting. If the response is lost, query the order by that identifier.
+Save the numeric order ID returned by the exchange along with the account and network. Query that ID to check a known order. If a submission response was lost before an ID was returned, reconcile open orders, order history and fills before resubmitting.
 
-Set `HYPERLIQUID_ACCOUNT_ADDRESS` and `HYPERLIQUID_CLIENT_ORDER_ID` to the values used for the original order. Save the example as `order-status.mjs` and run `node order-status.mjs`. It uses Mainnet; add `testnet: true` for a Testnet order.
+Set `HYPERLIQUID_ACCOUNT_ADDRESS` and `HYPERLIQUID_ORDER_ID` to the account and numeric ID of the original order. Save the example as `order-status.mts` and run `node --env-file=.env order-status.mts` with Node.js 24. It uses Mainnet; add `testnet: true` for a Testnet order.
 
 <<< @/../examples/order-status.ts
 
