@@ -11,7 +11,7 @@ This walkthrough uses Bybit Testnet and test funds to avoid accidental live trad
 
 ## Before you start
 
-- Use Node.js 24 and install the SDK with `npm install bybit-api`.
+- Use Node.js 24 and install the [`bybit-api`](https://www.npmjs.com/package/bybit-api) npm package with `npm install bybit-api`.
 - To run this example on Testnet, create Bybit Testnet credentials with derivatives trading and account-read permissions, and fund the Testnet account with test assets.
 - Use a Unified Trading Account with BTCUSDT in one-way position mode (`positionIdx: 0`). The example does not change your account's position mode or leverage.
 - Use a private `.env` file excluded from version control for local development, and a secure server-side environment for deployment. Leave `BYBITTRACE` unset to avoid logging signed requests.
