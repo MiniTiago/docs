@@ -16,7 +16,7 @@ const purposes = {
   'sdk.vite.config.js': 'Resolve the SDK imports that need browser support. Keep this configuration when using the SDK in Vite.',
   'vite.config.js': 'Configure the development server and production build.',
   'App.jsx': 'Build the React screen. The effect makes the REST request, subscribes to prices and closes the WebSocket on unmount.',
-  'main.jsx': 'Mount the screen with StrictMode. Unmount the React root when leaving the page or replacing this entry module.',
+  'main.jsx': 'Mount the screen with StrictMode. Pause subscriptions while the browser caches the page, resume them on restoration and clean up when the page or entry module is discarded.',
   'main.js': 'Read the REST price, show WebSocket updates and wire the Stop stream button to connection cleanup.',
   'index.html': 'Create the browser page that loads the application entry module.',
   'app/layout.js': 'Provide the root HTML layout required by the Next.js App Router.',

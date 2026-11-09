@@ -17,6 +17,8 @@ Client methods, parameters and response types exported by `@siebly/hyperliquid-a
 
 ## Common methods
 
+Follow [Place and cancel an order](/guides/orders) for order submission and management, or [Account order updates](/guides/private-streams) for streaming status and fill events. Select the network in [Configuration](/guides/configuration).
+
 | Task | Method |
 | --- | --- |
 | Get mid prices | [`getAllMids()`](/api/classes/RestClient#getallmids) |

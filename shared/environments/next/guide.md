@@ -9,7 +9,7 @@ Serve a public BTC price from a Next.js App Router Route Handler using `@@PACKAG
 
 Use Node.js 24 and npm. You can also [view the complete @@SDK@@ Next.js example on GitHub](@@EXAMPLE_URL@@).
 
-See [Runtime compatibility](/compatibility) for tested versions.
+See [Runtime compatibility](/compatibility) for runtime requirements.
 
 ## Create the project
 
@@ -45,10 +45,10 @@ npm run build
 npm start
 ```
 
-The handler makes a fresh REST request for each call. It does not open a WebSocket. To receive a WebSocket update in a standalone process, use the [Bun](/environments/bun) or [Deno](/environments/deno) example, which closes its subscription explicitly. The [Vite example](/environments/vite) shows browser subscription cleanup.
+The handler makes a fresh REST request for each call. It does not open a WebSocket. To receive a WebSocket update in a standalone process, use the [Node.js](/environments/node), [Bun](/environments/bun) or [Deno](/environments/deno) example. Each closes its subscription explicitly. The [Vite example](/environments/vite) shows browser subscription cleanup.
 
 ## Troubleshooting
 
-- Keep `runtime = 'nodejs'` in the handler. Client Components and the Edge runtime are outside this recipe and its server verification.
+- Keep `runtime = 'nodejs'` in the handler. Run SDK calls in the server Route Handler, not a Client Component or the Edge runtime.
 - A `502` means the SDK request failed. Inspect the server log for the exchange error and check outbound HTTPS access from the server, including regional restrictions.
 - If Next.js reports a missing React package, run `npm install` from the directory containing this starter's `package.json`.

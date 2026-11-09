@@ -19,7 +19,7 @@ description: "Choose a REST or WebSocket client for your Bybit integration."
 
 <<< @/../examples/first-call.ts
 
-`getTickers()` returns an envelope with `retCode` and `result`. Check `retCode === 0` before reading `result.list`.
+`getTickers()` returns tickers in `result.list`. The example enables `throwExceptions: true` to handle API errors in `catch`.
 
 ## WebSocket subscriptions
 

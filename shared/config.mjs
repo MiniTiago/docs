@@ -10,9 +10,18 @@ export default function siteConfig(data, docs) {
   const groups = [
     { text: 'Getting started', items: [
       { text: 'Introduction', link: '/' }, { text: 'Quickstart', link: '/getting-started' }, { text: 'Clients', link: '/clients' },
-      { text: 'Runtime compatibility', link: '/compatibility' },
     ] },
-    { text: 'Choose your setup', items: [
+    { text: 'Guides', items: [
+      { text: 'Market data', link: '/guides/market-data' },
+      { text: 'WebSocket subscriptions', link: '/guides/websockets' },
+      { text: 'Authentication', link: '/guides/authentication' },
+      ...(sdk.guides || []),
+    ] },
+    { text: 'Using the SDK', items: [
+      { text: 'Configuration', link: '/guides/configuration' }, { text: 'Error handling', link: '/guides/errors' },
+      { text: 'Production usage', link: '/guides/production' }, { text: 'Troubleshooting', link: '/guides/troubleshooting' },
+    ] },
+    { text: 'Frameworks and runtimes', collapsed: true, items: [
       { text: 'Node.js / JavaScript', link: '/environments/node' },
       { text: 'Node.js / TypeScript', link: '/environments/typescript' },
       { text: 'React', link: '/environments/react' },
@@ -22,15 +31,6 @@ export default function siteConfig(data, docs) {
       { text: 'Bun', link: '/environments/bun' },
       { text: 'Deno', link: '/environments/deno' },
     ] },
-    { text: 'Guides', items: [
-      { text: 'Market data', link: '/guides/market-data' },
-      { text: 'WebSocket subscriptions', link: '/guides/websockets' },
-      { text: 'Authentication', link: '/guides/authentication' },
-    ] },
-    { text: 'Using the SDK', items: [
-      { text: 'Configuration', link: '/guides/configuration' }, { text: 'Error handling', link: '/guides/errors' },
-      { text: 'Production usage', link: '/guides/production' }, { text: 'Troubleshooting', link: '/guides/troubleshooting' },
-    ] },
     { text: 'API reference', items: [
       { text: 'Overview', link: '/reference' },
       ...sdk.clients.map((name) => ({ text: name, link: `/api/classes/${name}` })),
@@ -38,6 +38,7 @@ export default function siteConfig(data, docs) {
     ] },
     { text: 'Resources', items: [
       { text: 'Runnable examples', link: `https://github.com/sieblyio/docs/tree/${process.env.GITHUB_SHA || 'main'}/starters/${sdkId}` },
+      { text: 'Runtime compatibility', link: '/compatibility' },
       { text: `${sdk.name} tutorial`, link: sdk.tutorial }, { text: 'Siebly SDKs', link: 'https://siebly.io/' },
       { text: 'GitHub repository', link: sdk.repository },
     ] },
@@ -82,6 +83,18 @@ export default function siteConfig(data, docs) {
       footer: { message: 'Built by Siebly. Open source SDKs for exchange APIs.', copyright: sdk.license ? `${sdk.license} licensed SDK` : undefined },
     },
     transformPageData(page) {
+      // Framework recipes are alternatives, not consecutive tutorial steps.
+      if (page.relativePath.startsWith('environments/')) {
+        page.frontmatter.prev = { text: 'Quickstart', link: '/getting-started' };
+        page.frontmatter.next = { text: 'Market data', link: '/guides/market-data' };
+      } else if (page.relativePath === 'compatibility.md') {
+        page.frontmatter.prev = false;
+        page.frontmatter.next = false;
+      } else if (page.relativePath === 'guides/troubleshooting.md') {
+        page.frontmatter.next = { text: 'API reference', link: '/reference' };
+      } else if (page.relativePath === 'reference.md') {
+        page.frontmatter.prev = { text: 'Troubleshooting', link: '/guides/troubleshooting' };
+      }
       if (page.relativePath.startsWith('api/')) {
         const symbol = path.basename(page.relativePath, '.md');
         page.description = symbol === 'index'

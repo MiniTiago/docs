@@ -1,1 +1,1 @@
-See [Runtime compatibility](/compatibility) for Bun, Deno, browser and React Native setup and test results.
+Use Node.js 24 for this quickstart. For other runtimes and required polyfills, see [Runtime compatibility](/compatibility).

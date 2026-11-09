@@ -19,15 +19,9 @@ Build trading bots and automate your strategies in Node.js, or use real-time mar
 
 <!--@include: ./.vitepress/snippets/installation.md-->
 
-<!--@include: @/.vitepress/shared/getting-started/environments.md-->
+## First request {#usage}
 
-## Usage
-
-`RestClient.getAllMids()` reads current mid prices without a wallet or private key.
-
-<<< @/../examples/first-call.ts{js}
-
-The example prints the BTC mid price. Save it as `prices.mjs` and run `node prices.mjs`. See the [Node.js quickstart](/getting-started) for module formats and example output.
+Follow the [Node.js quickstart](/getting-started) to read a public BTC price. It includes the complete JavaScript program, run command and expected output. No credentials are needed.
 
 ## Clients
 
@@ -53,3 +47,5 @@ See [Clients](/clients) for setup and cleanup, or the [API reference](/reference
 [Error handling](/guides/errors) covers failed requests and rejected orders. [Production usage](/guides/production) covers retries, recovery and shutdown. Start with [Troubleshooting](/guides/troubleshooting) for a specific failure.
 
 For a longer walkthrough, see the [Hyperliquid JavaScript tutorial on Siebly.io](https://siebly.io/sdk/hyperliquid/javascript/tutorial).
+
+<!--@include: @/.vitepress/shared/getting-started/environments.md-->

@@ -19,15 +19,9 @@ Build trading bots and automate your Bybit strategies in Node.js, or use real-ti
 
 <!--@include: ./.vitepress/snippets/installation.md-->
 
-<!--@include: @/.vitepress/shared/getting-started/environments.md-->
+## First request {#usage}
 
-## Usage
-
-This request reads the BTCUSDT Spot price and requires no API key.
-
-<<< @/../examples/first-call.ts{js}
-
-The example checks `retCode` and prints the first ticker's price. See the [Node.js quickstart](/getting-started) to run it.
+Follow the [Node.js quickstart](/getting-started) to read a public BTC price. It includes the complete JavaScript program, run command and expected output. No credentials are needed.
 
 ## Choose a client
 
@@ -43,3 +37,5 @@ The example checks `retCode` and prints the first ticker's price. See the [Node.
 - [Browse the complete API reference](/reference).
 
 For a longer walkthrough, see the [Bybit JavaScript tutorial on Siebly.io](https://siebly.io/sdk/bybit/javascript/tutorial).
+
+<!--@include: @/.vitepress/shared/getting-started/environments.md-->

@@ -136,6 +136,7 @@ test('configured iOS can supply the shared Metro recipe without an Android resul
     const ios=await readFile(path.join(work,'compatibility.md'),'utf8');
     assert.match(ios,/### Expo and Metro setup/);
     assert.match(ios,/npm install example events@3.3.0/);
+    assert.doesNotMatch(ios,/Binance|binanceNodeSupport|binance\/lib/);
     fixture.targets={};
     await writeFile(path.join(work,'compatibility/results/bybit.json'),JSON.stringify(fixture));
     await generateCompatibility(ctx,work);

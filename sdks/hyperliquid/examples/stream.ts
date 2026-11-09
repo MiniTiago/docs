@@ -14,6 +14,8 @@ async function main() {
   client.on('message', (event) => {
     if (event.channel === 'allMids') {
       console.log('BTC mid price:', event.data.mids.BTC);
+    } else {
+      console.log('Market update:', event);
     }
   });
   process.once('SIGINT', stop);

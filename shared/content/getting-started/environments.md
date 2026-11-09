@@ -1,6 +1,6 @@
 ## Choose your setup {#environment-quickstarts}
 
-Start with the tools you already use. Each guide includes a complete project, setup commands, expected output and cleanup where applicable.
+Choose one guide for the tools you already use. Each includes a complete project, setup commands, expected output and connection cleanup where needed.
 
 - [Node.js / JavaScript](/environments/node): run plain JavaScript with `import` or `require`, without a TypeScript compiler.
 - [Node.js / TypeScript](/environments/typescript): type-check and compile a Node.js price and subscription script.
@@ -10,4 +10,4 @@ Start with the tools you already use. Each guide includes a complete project, se
 - [React Native / Expo](/environments/expo): display prices and stop subscriptions on iOS and Android.
 - [Bun](/environments/bun) and [Deno](/environments/deno): run a price and WebSocket script in your chosen runtime.
 
-Follow each guide from an empty directory, or open its complete runnable example on GitHub. [Runtime compatibility](/compatibility) records tested versions and scope.
+Follow each guide from an empty directory, or open its complete runnable example on GitHub. [Runtime compatibility](/compatibility) lists runtime requirements and configuration.

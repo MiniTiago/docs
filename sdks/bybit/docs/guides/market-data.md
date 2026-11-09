@@ -11,7 +11,7 @@ Public prices and order books do not require API keys. These examples use BTCUSD
 
 <<< @/../examples/first-call.ts
 
-Check `retCode === 0` before reading `result.list`. Set `category` to select the market; `BTCUSDT` can exist in both Spot and derivatives.
+These examples enable `throwExceptions: true`, so API errors reject the request. Set `category` to select the market; `BTCUSDT` can exist in both Spot and derivatives.
 
 ## Read an order book
 

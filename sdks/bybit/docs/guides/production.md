@@ -9,9 +9,9 @@ description: "Handle Bybit retries, uncertain order outcomes, stream recovery an
 
 ## Resolve uncertain order outcomes
 
-Bybit may accept an order before a request times out. Query `getActiveOrders()` with its category and `orderLinkId` or order ID before resubmitting. If the order is absent, check order history and executions; a filled order may no longer be active.
+Bybit may accept an order before a request times out. If a response returned `orderId`, use it with the category in `getActiveOrders()` and fall back to order history when absent. A filled order may no longer be active.
 
-Save order identifiers before submission. Track acknowledgement, acceptance and fills separately.
+If no order ID was returned, reconcile realtime orders, history, executions and positions using the original symbol, request time, side, price and quantity before resubmitting. Empty or delayed results alone do not establish that submission failed. Save returned order IDs and track acknowledgement, acceptance and fills separately.
 
 ## Recover streaming state
 

@@ -9,11 +9,9 @@ Pass options when constructing a client. Network selection and signing options b
 
 ## Networks
 
-All three clients accept `testnet: true`. Set it on each client so requests and subscriptions use the same network.
+All three clients default to production (Mainnet) when `testnet` is false or omitted. To use Testnet, set `testnet: true` on each client so requests and subscriptions use the same network. Use account addresses for the selected network and, for signed actions, a signer authorized on that network.
 
 <<< @/../examples/testnet.ts
-
-Mainnet is the default. When using a custom endpoint, `RestClientOptions.baseUrl` overrides the HTTP URL and `WebsocketClientOptions.wsUrl` overrides the WebSocket URL. Set `testnet` to match that endpoint so signed actions use the correct network.
 
 ## HTTP requests
 

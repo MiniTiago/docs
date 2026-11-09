@@ -19,6 +19,8 @@ Public prices and order books do not require API keys. These examples use BTCUSD
 
 Each bid and ask contains a price and quantity as decimal strings. The example returns `undefined` for an empty side.
 
+If JavaScript numbers suit your application, the SDK can convert known numeric strings with `beautifyResponses: true`; see [response formatting](/guides/configuration#preserve-decimal-precision). The raw values above remain useful for exact decimal arithmetic.
+
 For a live order book, combine this snapshot with [WebSocket depth updates](/guides/websockets) using Binance's update-ID rules.
 
 ## Choose the correct instrument

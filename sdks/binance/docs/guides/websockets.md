@@ -13,6 +13,20 @@ Save this as `stream.ts` in a TypeScript project. It prints updates for 30 secon
 
 <<< @/../examples/stream.ts
 
+## Optional: readable fields with the SDK beautifier
+
+For descriptive field names and parsed numeric values, enable the SDK beautifier. In the example above, replace the client constructor and raw `message` listener with:
+
+```ts
+const ws = new WebsocketClient({ beautify: true });
+
+ws.on('formattedMessage', (message) => {
+  console.log(message);
+});
+```
+
+Keep the subscription and cleanup code unchanged. A ticker's `s` and `c` fields become `symbol` and `currentClose`. Raw events remain available on `message` if you need the original decimal strings. The [private-stream example](/guides/private-streams#optional-readable-fields-with-the-sdk-beautifier) shows typed handling of formatted order updates.
+
 ## Subscription results and messages
 
 Await the subscription promise and catch failures. Market data arrives on `message`; `response` carries subscription replies.

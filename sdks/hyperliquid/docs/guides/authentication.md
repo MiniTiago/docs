@@ -21,11 +21,11 @@ Account methods resolve addresses in this order: request `user`, `vaultAddress`,
 
 ## Configure a private key
 
-Pass `privateKey` and the managed account address to `RestClient`. This example configures Testnet.
+Pass `privateKey` and the managed account address to `RestClient`. This example configures Testnet. For production (Mainnet), set `testnet: false` (or omit it), use the Mainnet account address and a signer authorized for that account.
 
 <<< @/../examples/authenticated-client.ts
 
-Keep the private key in a server-side environment variable, outside source files and browser bundles.
+Keep the private key in a secure server-side environment, supplied through a protected environment variable or a secret manager, outside source files and browser bundles.
 
 ## API wallets and vaults
 
@@ -40,3 +40,7 @@ Pass `signer` instead of `privateKey` to supply a [`HyperliquidSigner`](/api/int
 `WebsocketAPIClient` accepts the same signing options. `WebsocketClient` subscriptions use account addresses and do not need a private key.
 
 [RestClientOptions](/api/interfaces/RestClientOptions) · [WebsocketAPIClientOptions](/api/type-aliases/WebsocketAPIClientOptions) · [Order results and errors](/guides/errors#order-results)
+
+## Next steps
+
+[Place and cancel a Testnet order](/guides/orders), or [subscribe to account order updates](/guides/private-streams).

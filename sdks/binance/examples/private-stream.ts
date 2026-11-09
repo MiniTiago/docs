@@ -1,0 +1,90 @@
+import { WebsocketAPIClient, WS_KEY_MAP } from 'binance';
+
+async function main() {
+  const api_key = process.env.BINANCE_TESTNET_API_KEY;
+  const api_secret = process.env.BINANCE_TESTNET_API_SECRET;
+  if (!api_key || !api_secret) {
+    throw new Error('Set Spot Testnet credentials.');
+  }
+  const api = new WebsocketAPIClient({
+    api_key,
+    api_secret,
+    testnet: true,
+    beautify: false,
+  });
+  const ws = api.getWSClient();
+  let stopped = false;
+  const stop = () => {
+    if (stopped) {
+      return;
+    }
+    stopped = true;
+    clearTimeout(timer);
+    process.removeListener('SIGINT', stop);
+    process.removeListener('SIGTERM', stop);
+    void api.disconnectAll().catch((error) => {
+      console.error('Disconnect failed:', error);
+      process.exitCode = 1;
+    });
+  };
+  // Includes connection/authentication time, not just the subscribed lifetime.
+  const timer = setTimeout(stop, 60000);
+  process.once('SIGINT', stop);
+  process.once('SIGTERM', stop);
+
+  // Install listeners before subscribing so early events are not missed.
+  ws.on('message', (message) => {
+    if (stopped) {
+      return;
+    }
+    if (Array.isArray(message)) {
+      console.log('Private stream message:', message);
+    } else if (message.e === 'executionReport') {
+      console.log('Order update:', {
+        symbol: message.s,
+        orderId: message.i,
+        executionType: message.x,
+        status: message.X,
+        lastExecutedQuantity: message.l,
+        cumulativeExecutedQuantity: message.z,
+      });
+    } else if (
+      message.e === 'outboundAccountPosition' ||
+      message.e === 'balanceUpdate'
+    ) {
+      console.log('Account state changed:', message);
+    } else if (message.e === 'eventStreamTerminated') {
+      console.error('User data stream ended:', message);
+    } else {
+      console.log('Private stream message:', message);
+    }
+  });
+  ws.on('exception', (error) => {
+    console.error('Private stream exception:', error);
+  });
+  // The SDK owns reconnecting and restoring the user data subscription.
+  ws.on('reconnecting', (event) => {
+    console.log('WebSocket reconnecting:', event);
+  });
+  ws.on('reconnected', (event) => {
+    console.log('WebSocket reconnected:', event);
+    // Refresh orders and balances via REST here if your app needs missed updates.
+  });
+  try {
+    await api.subscribeUserDataStream(WS_KEY_MAP.mainWSAPI);
+    if (stopped) {
+      await api.disconnectAll();
+    } else {
+      console.log(
+        'Spot Testnet user data subscribed. Waiting for account events.',
+      );
+    }
+  } catch (error) {
+    console.error('Private subscription failed:', error);
+  }
+}
+
+main().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});

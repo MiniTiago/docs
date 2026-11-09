@@ -12,7 +12,11 @@ const program = ts.createProgram(examples.map((file) => path.join(content, 'exam
   ...parsed.options,
   ignoreDeprecations: '6.0',
   rootDir: undefined, outDir: undefined, noEmit: true,
-  paths: { [sdk.packageName]: [path.join(sdkRoot, sdk.entryPoint)] },
+  paths: {
+    [sdk.packageName]: [path.join(sdkRoot, sdk.entryPoint)],
+    ...Object.fromEntries((sdk.exampleDependencies || []).map((name) =>
+      [name, [path.join(sdkRoot, 'node_modules', name)]])),
+  },
   typeRoots: [path.join(sdkRoot, 'node_modules/@types')],
 });
 const diagnostics = ts.getPreEmitDiagnostics(program);

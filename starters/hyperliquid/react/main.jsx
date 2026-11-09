@@ -1,24 +1,50 @@
 import { StrictMode } from 'react';
+import { flushSync } from 'react-dom';
 import { createRoot } from 'react-dom/client';
 import App from './App.jsx';
 
 const root = createRoot(document.getElementById('root'));
+let disposed = false;
 
-root.render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-);
+function render(pageActive) {
+  root.render(
+    <StrictMode>
+      <App pageActive={pageActive} />
+    </StrictMode>,
+  );
+}
 
-function stop() {
+function dispose() {
+  if (disposed) {
+    return;
+  }
+
+  disposed = true;
+  window.removeEventListener('pagehide', hide);
+  window.removeEventListener('pageshow', show);
   root.unmount();
 }
 
-window.addEventListener('pagehide', stop, { once: true });
+function hide(event) {
+  if (event.persisted) {
+    // Finish effect cleanup before the browser freezes this page.
+    // Keep App mounted so its Stop/Start choice survives restoration.
+    flushSync(() => render(false));
+  } else {
+    dispose();
+  }
+}
+
+function show(event) {
+  if (event.persisted && !disposed) {
+    render(true);
+  }
+}
+
+render(true);
+window.addEventListener('pagehide', hide);
+window.addEventListener('pageshow', show);
 
 if (import.meta.hot) {
-  import.meta.hot.dispose(() => {
-    window.removeEventListener('pagehide', stop);
-    stop();
-  });
+  import.meta.hot.dispose(dispose);
 }

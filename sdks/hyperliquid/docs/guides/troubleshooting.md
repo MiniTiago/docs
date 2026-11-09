@@ -16,7 +16,7 @@ description: Resolve installation and import errors, missing account data, WebSo
 
 ## Installation and imports
 
-For `ERR_MODULE_NOT_FOUND` or `Cannot find module`, run `npm ls @siebly/hyperliquid-api` in the project that runs your script. Install the package there if it is missing. Check `node --version` against the requirement shown in the [Quickstart](/getting-started#installation).
+For `ERR_MODULE_NOT_FOUND` or `Cannot find module`, run `npm ls @siebly/hyperliquid-api` in the project that runs your script. Install the package there if it is missing. Run `node --version`. The [Quickstart](/getting-started#installation) uses Node.js 24; see [Runtime compatibility](/compatibility) for the versions tested.
 
 For `Cannot use import statement outside a module`, save the Quickstart example as `prices.mjs`, or configure your project to use ES modules with `"type": "module"` in `package.json`. A `.cjs` file uses CommonJS `require()` instead. See [module formats](/getting-started#module-formats).
 
@@ -42,7 +42,7 @@ A missing-address error means the SDK could not resolve an account. Set `account
 
 If the signer is not a Hyperliquid account on this network, check the network and set `accountAddress` to the account managed by the API wallet. The wallet also needs authorization for the action. See [API wallets and vaults](/guides/authentication#api-wallets-and-vaults).
 
-For rejected signed actions, check signer permissions and ensure `testnet` matches any [custom endpoint](/guides/configuration#networks).
+For rejected signed actions, check signer permissions and select the intended [network](/guides/configuration#networks) with `testnet`: `true` for Testnet, or `false` (or omitted) for Mainnet.
 
 ## WebSocket subscriptions
 
