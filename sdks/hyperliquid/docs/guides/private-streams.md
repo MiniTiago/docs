@@ -9,7 +9,7 @@ Use `WebsocketClient` to receive `orderUpdates` and `userFills` for a Hyperliqui
 
 ## Example: connect to Testnet
 
-This example sets `testnet: true`. For Mainnet, omit that option and use the Mainnet account address. Use Node.js 24 with `@siebly/hyperliquid-api` installed. Set the account address in a local `.env` file:
+This example sets `testnet: true`. For production (Mainnet), set `testnet: false` (or omit it) and use the Mainnet account address. Use Node.js 24 with `@siebly/hyperliquid-api` installed. Set the account address in a local `.env` file:
 
 ```dotenv
 HYPERLIQUID_ACCOUNT_ADDRESS=0x1111111111111111111111111111111111111111 # Use your managed account address

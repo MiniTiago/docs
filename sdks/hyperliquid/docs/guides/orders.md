@@ -5,7 +5,9 @@ description: Submit a post-only BTC perpetual order, query it by order ID and ca
 
 # Place and cancel a Testnet order
 
-Place a BTC perpetual limit order with `RestClient`, query its status, then cancel any remaining quantity. The same methods work on Mainnet and Testnet. This walkthrough sets `testnet: true` and runs each operation as a separate command against Testnet.
+Place a BTC perpetual limit order with `RestClient`, query its status, then cancel any remaining quantity. Each operation runs as a separate command.
+
+This walkthrough uses Hyperliquid Testnet and test funds to avoid accidental live trades. The same methods work on Mainnet, Hyperliquid's production markets. Remove `testnet` or set it to `false`, and use the Mainnet account address with an authorized signer to execute against live markets.
 
 A post-only order is rejected if it would immediately take liquidity. Once resting, it can fill before cancellation. Cancelling an order does not reverse fills or close an existing position.
 

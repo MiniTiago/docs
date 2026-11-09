@@ -9,7 +9,7 @@ Pass options when constructing a client. Network selection and signing options b
 
 ## Networks
 
-All three clients default to Mainnet. To use Testnet, set `testnet: true` on each client so requests and subscriptions use the same network.
+All three clients default to production (Mainnet) when `testnet` is false or omitted. To use Testnet, set `testnet: true` on each client so requests and subscriptions use the same network. Use account addresses for the selected network and, for signed actions, a signer authorized on that network.
 
 <<< @/../examples/testnet.ts
 
