@@ -35,6 +35,17 @@ Each folder is a complete project. Open its README for prerequisites and run com
 - [Bun](./binance/bun/)
 - [Deno](./binance/deno/)
 
+## Kraken
+
+- [Node.js / JavaScript](./kraken/node/)
+- [Node.js / TypeScript](./kraken/typescript/)
+- [React](./kraken/react/)
+- [Vite (plain JavaScript)](./kraken/vite/)
+- [Next.js](./kraken/next/)
+- [React Native / Expo](./kraken/expo/)
+- [Bun](./kraken/bun/)
+- [Deno](./kraken/deno/)
+
 ## Maintaining these examples
 
 Edit the maintained sources in `shared/environments/`, then run `npm run starters:generate` from the repository root. Run `npm run check:starters` to check without writing files. Regeneration updates known generated files and never deletes extra files or local build output. The check reports unexpected source files and stale folders for review.
