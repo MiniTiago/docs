@@ -6,18 +6,12 @@ async function main() {
   if (!api_key || !api_secret) {
     throw new Error('Set Spot Testnet credentials.');
   }
-  // Keep routine SDK logs quiet while preserving errors.
-  const api = new WebsocketAPIClient(
-    {
-      api_key,
-      api_secret,
-      testnet: true,
-      beautify: false,
-      attachEventListeners: false,
-      muteLatencyWarning: true,
-    },
-    { trace() {}, info() {}, error: console.error },
-  );
+  const api = new WebsocketAPIClient({
+    api_key,
+    api_secret,
+    testnet: true,
+    beautify: false,
+  });
   const ws = api.getWSClient();
   let stopped = false;
   const stop = () => {
