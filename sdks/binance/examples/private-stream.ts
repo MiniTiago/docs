@@ -49,8 +49,6 @@ async function main() {
       console.log('Order update:', {
         symbol: message.s,
         orderId: message.i,
-        clientOrderId: message.c,
-        originalClientOrderId: message.C,
         executionType: message.x,
         status: message.X,
         lastExecutedQuantity: message.l,

@@ -33,16 +33,12 @@ async function main() {
   const symbol = requiredEnvVar('BINANCE_SYMBOL');
 
   if (action === 'place') {
-    // A client ID lets you look up a submission even if its response is lost.
-    const clientOrderId = requiredEnvVar('BINANCE_CLIENT_ORDER_ID');
-    console.log('Submitting client order ID:', clientOrderId);
     const order = await client.submitNewOrder({
       symbol,
       side: 'BUY',
       type: 'LIMIT_MAKER',
       price: positiveNumber('BINANCE_PRICE'),
       quantity: positiveNumber('BINANCE_QUANTITY'),
-      newClientOrderId: clientOrderId,
     });
     console.log(
       'Submission acknowledged. Save BINANCE_ORDER_ID:',
@@ -52,7 +48,6 @@ async function main() {
   }
 
   if (action === 'cancel') {
-    // The exchange order ID stays stable when cancellation changes the client ID.
     await client.cancelOrder({
       symbol,
       orderId: positiveNumber('BINANCE_ORDER_ID'),
@@ -61,10 +56,10 @@ async function main() {
     return;
   }
 
-  const lookup = process.env.BINANCE_ORDER_ID
-    ? { symbol, orderId: positiveNumber('BINANCE_ORDER_ID') }
-    : { symbol, origClientOrderId: requiredEnvVar('BINANCE_CLIENT_ORDER_ID') };
-  const order = await client.getOrder(lookup);
+  const order = await client.getOrder({
+    symbol,
+    orderId: positiveNumber('BINANCE_ORDER_ID'),
+  });
   console.log({
     orderId: order.orderId,
     status: order.status,
@@ -76,7 +71,7 @@ async function main() {
 main().catch((error: unknown) => {
   console.error(error);
   console.error(
-    'Keep the same order ID and run status before another order action.',
+    'If the outcome is uncertain, check order and trade history before submitting again.',
   );
   process.exitCode = 1;
 });
