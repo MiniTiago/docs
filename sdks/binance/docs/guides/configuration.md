@@ -19,9 +19,11 @@ The example selects Spot Testnet and a ten-second HTTP timeout. `recvWindow` is 
 
 Production is the default when `testnet` and `demoTrading` are false or omitted. Use credentials created for the selected production account, not Testnet keys. Keys and symbols also depend on the product. See the [Binance documentation](https://developers.binance.com/docs/binance-spot-api-docs).
 
-## Preserve decimal precision
+## Response formatting {#preserve-decimal-precision}
 
-Leave `beautifyResponses` disabled to preserve decimal strings. Use decimal arithmetic for exact calculations and apply the instrument's filters when formatting order quantities.
+The SDK beautifier makes responses easier to work with. For WebSockets, set `beautify: true` and listen to `formattedMessage` for descriptive field names and parsed numeric values; see the [streaming example](/guides/websockets#optional-readable-fields-with-the-sdk-beautifier).
+
+For REST, `beautifyResponses: true` in the first constructor argument converts known numeric strings to JavaScript numbers. It is disabled by default. Keep it disabled, or use raw WebSocket `message` events, when you need the original strings for exact decimal arithmetic.
 
 ## Reuse clients
 

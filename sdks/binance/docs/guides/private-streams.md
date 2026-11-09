@@ -40,6 +40,32 @@ The SDK unwraps the WebSocket API envelope before emitting `message`: inspect `m
 
 Match `i` to the `BINANCE_ORDER_ID` returned by the order example. The stream prints selected order fields, balance events and other received messages. Stream and subscription errors are logged with their error objects. Consult the [user data stream payloads](https://developers.binance.com/docs/binance-spot-api-docs/user-data-stream) for the complete event definitions.
 
+## Optional: readable fields with the SDK beautifier
+
+The SDK beautifier turns Binance's short field names into descriptive properties and converts known numeric strings to JavaScript numbers. For example, `e`, `s`, `X` and `z` become `eventType`, `symbol`, `orderStatus` and `accumulatedQuantity`.
+
+In `private-stream.ts`, set `beautify: true` in the existing `WebsocketAPIClient` options. Add `isWsFormattedSpotUserDataExecutionReport` to the existing `binance` import, then replace the raw `message` listener with:
+
+```ts
+ws.on('formattedMessage', (message) => {
+  if (stopped) {
+    return;
+  }
+  if (isWsFormattedSpotUserDataExecutionReport(message)) {
+    console.log('Order update:', {
+      symbol: message.symbol,
+      orderId: message.orderId,
+      status: message.orderStatus,
+      filledQuantity: message.accumulatedQuantity,
+    });
+  } else {
+    console.log('Account update:', message);
+  }
+});
+```
+
+Keep the existing subscription, error, reconnect and shutdown handling. Raw events still arrive on `message`; use those decimal strings when you need exact arithmetic rather than JavaScript floating-point numbers.
+
 ## Disconnect and recover
 
 The SDK reconnects automatically after a dropped connection and restores the user data subscription. The example logs `reconnecting` and `reconnected` without closing the client or setting a failure exit code. It keeps the SDK's default `resubscribeUserDataStreamAfterReconnect` behavior enabled; no manual resubscription loop is needed.
