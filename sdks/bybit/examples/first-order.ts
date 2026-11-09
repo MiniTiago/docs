@@ -10,31 +10,20 @@ function requiredEnvVar(name: string): string {
 
 async function printOrderStatus(client: RestClientV5, orderId: string) {
   const query = { category: 'linear' as const, symbol: 'BTCUSDT', orderId };
-  // Realtime results include recent closed orders; use history if absent.
+  // Realtime results include recent closed orders.
   const activeResponse = await client.getActiveOrders(query);
   let order = activeResponse.result.list.find(
     (item) => item.orderId === orderId,
   );
   if (!order) {
-    // History excludes these terminal states unless requested explicitly.
-    const historyStatuses = [
-      undefined,
-      'Cancelled',
-      'Rejected',
-      'Deactivated',
-    ] as const;
-    for (const orderStatus of historyStatuses) {
-      const historyResponse = await client.getHistoricOrders({
-        ...query,
-        orderStatus,
-      });
-      order = historyResponse.result.list.find(
-        (item) => item.orderId === orderId,
-      );
-      if (order) {
-        break;
-      }
-    }
+    // Confirm cancellation if the order is no longer in realtime results.
+    const historyResponse = await client.getHistoricOrders({
+      ...query,
+      orderStatus: 'Cancelled',
+    });
+    order = historyResponse.result.list.find(
+      (item) => item.orderId === orderId,
+    );
   }
   if (!order) {
     throw new Error(
