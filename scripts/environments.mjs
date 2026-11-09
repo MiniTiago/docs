@@ -216,7 +216,7 @@ export async function generateEnvironments(ctx) {
       SDK: ctx.sdk.name, TITLE: environmentTitles[environment], PACKAGE: ctx.sdk.packageName, ENV: environment,
       PRICE_KIND: ctx.id === 'hyperliquid' ? 'Prices are BTC mid prices.' : 'Prices are BTCUSDT last traded prices.',
       SYMBOL: exchanges[ctx.id].symbol,
-      EXAMPLE_URL: `https://github.com/sieblyio/docs/tree/${process.env.GITHUB_SHA || 'main'}/starters/${ctx.id}/${environment}`,
+      EXAMPLE_URL: `https://github.com/sieblyio/docs/tree/main/starters/${ctx.id}/${environment}`,
       ...guideFields(ctx.id, ctx.sdk, environment, files),
       TYPESCRIPT: JSON.parse(await source('package.json')).devDependencies.typescript, REACT_PLUGIN: reactPluginVersion, VITE: frameworkVersions.vite, NEXT: frameworkVersions.next, REACT: frameworkVersions.react,
       EXPO: nativeVersions.expo, RN: nativeVersions.reactNative, NATIVE_REACT: nativeVersions.react,
