@@ -39,8 +39,6 @@ The request uses Mainnet by default and returns prices as strings.
 
 For import errors, failed requests or a missing BTC price, see [Troubleshooting](/guides/troubleshooting).
 
-<!--@include: @/.vitepress/shared/getting-started/other-setups.md-->
-
 ## Module formats
 
 The `.mjs` extension tells Node.js to use ES modules and `import`. For CommonJS, use a `.cjs` file with `const { RestClient } = require('@siebly/hyperliquid-api')` and keep the async `main()` function. The [complete Node.js project](/environments/node) includes both formats. TypeScript projects can use the same imports and the included type definitions; the [Node.js TypeScript guide](/environments/typescript) adds a compiler configuration and build commands.
