@@ -5,12 +5,12 @@ description: "Submit a PostOnly limit order, query its status and cancel its rem
 
 # Place and cancel a Testnet order
 
-Use `RestClientV5` to place one BTCUSDT perpetual limit order, query it by the returned order ID and cancel any unfilled quantity. Each command runs separately. The client is configured for Bybit Testnet.
+Use `RestClientV5` to place one BTCUSDT perpetual limit order, query it by the returned order ID and cancel any unfilled quantity. Each command runs separately. This example configures the client for Bybit Testnet.
 
 ## Before you start
 
 - Use Node.js 24 and install the SDK with `npm install bybit-api`.
-- Create Testnet API credentials with derivatives trading and account-read permissions. Fund the Testnet account with test assets.
+- To run this example on Testnet, create Bybit Testnet credentials with derivatives trading and account-read permissions, and fund the Testnet account with test assets.
 - Use a Unified Trading Account with BTCUSDT in one-way position mode (`positionIdx: 0`). The example does not change your account's position mode or leverage.
 - Use a private `.env` file excluded from version control for local development, and a secure server-side environment for deployment. Leave `BYBITTRACE` unset to avoid logging signed requests.
 

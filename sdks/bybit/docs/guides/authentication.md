@@ -9,7 +9,7 @@ Public market data needs no credentials. Account queries and trading require an 
 
 ## Configure credentials
 
-Set the environment variables below to configure a Bybit Testnet client.
+The examples below select Bybit Testnet with `testnet: true`. Set the matching credentials through environment variables.
 
 <<< @/../examples/authenticated-client.ts
 
@@ -17,7 +17,7 @@ Keep API credentials in a secure server-side environment, supplied through prote
 
 ## Verify account access
 
-Use credentials created for Bybit Testnet, with permission to read the account. Use that secure environment for deployment; for local development, create a private `.env` file:
+To run these examples on Testnet, use credentials created for Bybit Testnet, with permission to read the account. For local development, create a private `.env` file:
 
 ```dotenv
 # Use your own Bybit Testnet credentials.

@@ -13,7 +13,7 @@ This example uses Testnet and the `order.linear` topic. It prints order changes 
 
 Mainnet is the default. Use `testnet: true` for Testnet, or `demoTrading: true` with `testnet: false` for demo trading. Use credentials for that environment; see [configuration](/guides/configuration#select-an-environment) for supported features.
 
-Use Node.js 24 with `bybit-api` installed. Create a private `.env` file with credentials from Bybit Testnet, with the account permissions needed to read your orders:
+To run this example on Testnet, use Node.js 24 with `bybit-api` installed. Create a private `.env` file with Bybit Testnet credentials and permission to read your orders:
 
 ```dotenv
 # Use your own Bybit Testnet credentials.
