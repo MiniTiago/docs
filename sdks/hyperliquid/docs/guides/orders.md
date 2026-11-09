@@ -15,7 +15,7 @@ A post-only order is rejected if it would immediately take liquidity. Once resti
 
 To run this example on Testnet, use Node.js 24, a funded Hyperliquid Testnet account and an API wallet authorized for that account. See [API wallets and account addresses](/guides/authentication#api-wallets-and-vaults).
 
-Install the SDK:
+Install the [`@siebly/hyperliquid-api`](https://www.npmjs.com/package/@siebly/hyperliquid-api) npm package:
 
 ```sh
 npm install @siebly/hyperliquid-api
