@@ -38,5 +38,5 @@ npm run preview
 
 - @@POLYFILL_TROUBLE@@
 - A brief extra connection in development is expected under StrictMode. Repeated updates after **Stop stream** mean cleanup is missing from the component you copied.
-- This example uses public market data only. Keep private keys and API secrets on a server.
+- This example uses public market data only. Keep private keys and API credentials in a secure server-side environment, outside source files and browser bundles.
 - For network failures, inspect the browser's HTTPS and WSS requests to the exchange. Exchange CORS and regional restrictions apply. See [Runtime compatibility](/compatibility) for browser configuration and [WebSocket subscriptions](/guides/websockets) for subscription details.
