@@ -63,7 +63,7 @@ export default function siteConfig(data, docs) {
       ['meta', { name: 'theme-color', content: '#050505', media: '(prefers-color-scheme: dark)' }],
     ],
     themeConfig: {
-      sdk, siteTitle: false, logoLink: originUrl,
+      sdk, siteTitle: false, logoLink: { link: originUrl, target: '_self' },
       logo: { light: '/brand/siebly-wordmark-light.svg', dark: '/brand/siebly-wordmark-dark.svg', alt: 'Siebly documentation home', width: 98, height: 28 },
       nav: [
         { text: 'Documentation', link: '/', activeMatch: '^/(?!api|reference)' },
