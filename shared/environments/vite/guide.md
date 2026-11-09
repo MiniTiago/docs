@@ -38,4 +38,4 @@ Open the preview URL printed by Vite. Both price fields should contain positive 
 
 - @@POLYFILL_TROUBLE@@
 - Run the page through Vite, rather than opening `index.html` directly. Check the browser network panel for blocked REST or WSS requests. The exchange must permit your origin and region; a successful bundle alone does not prove network access.
-- Keep private keys and API secrets on a server. This page uses public market data. See [WebSocket subscriptions](/guides/websockets) for subscription details.
+- Keep private keys and API credentials in a secure server-side environment, outside source files and browser bundles. This page uses public market data. See [WebSocket subscriptions](/guides/websockets) for subscription details.
