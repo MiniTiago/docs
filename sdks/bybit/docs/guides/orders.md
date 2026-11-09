@@ -7,7 +7,7 @@ description: "Submit a PostOnly limit order, query its status and cancel its rem
 
 Use `RestClientV5` to place one BTCUSDT perpetual limit order, query it by the returned order ID and cancel any unfilled quantity. Each command runs separately.
 
-This walkthrough uses Bybit Testnet and test funds to avoid accidental live trades. The same methods work on Mainnet, Bybit's production markets. Remove `testnet` or set it to `false`, leave `demoTrading` disabled and use Mainnet credentials to execute against live markets.
+This walkthrough uses Bybit Testnet and test funds to avoid accidental live trades. The same methods work on Mainnet, Bybit's production markets. Remove `testnet` or set it to `false`, leave `demoTrading` disabled and use Mainnet credentials to execute against live markets. To test your system with simulated orders instead, set `demoTrading: true`, keep `testnet: false` and use Bybit Demo Trading credentials.
 
 ## Before you start
 

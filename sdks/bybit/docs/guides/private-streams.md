@@ -11,7 +11,7 @@ This example uses Testnet and the `order.linear` topic. It prints order changes 
 
 ## Configure the connection
 
-For production (Mainnet), set `testnet` and `demoTrading` to false or omit both, and use Mainnet credentials. Use `testnet: true` for Testnet, or `demoTrading: true` with `testnet: false` for demo trading. Use credentials for that environment; see [configuration](/guides/configuration#select-an-environment) for supported features.
+For production (Mainnet), set `testnet` and `demoTrading` to false or omit both, and use Mainnet credentials. Use `testnet: true` for Testnet, or `demoTrading: true` with `testnet: false` for demo trading when testing your system with simulated orders. Use credentials for that environment; see [configuration](/guides/configuration#select-an-environment) for supported features.
 
 To run this example on Testnet, use Node.js 24 with `bybit-api` installed. Create a private `.env` file with Bybit Testnet credentials and permission to read your orders:
 

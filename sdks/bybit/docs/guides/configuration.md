@@ -15,7 +15,13 @@ The example selects Testnet and a ten-second HTTP timeout. `recv_window` control
 
 ## Select an environment
 
-Mainnet is the default when `testnet` and `demoTrading` are false or omitted. Use Mainnet credentials for production requests. Set `testnet: true` for Testnet, or `demoTrading: true` with `testnet: false` for demo trading, with credentials for that environment. For REST and private WebSocket connections, `demoTrading` takes precedence if both flags are enabled. [Bybit's demo documentation](https://bybit-exchange.github.io/docs/v5/demo) lists supported endpoints.
+Choose credentials for the environment you want to use:
+
+- **Mainnet:** leave `testnet` and `demoTrading` false or omitted, and use production credentials.
+- **Testnet:** set `testnet: true` and use Testnet credentials.
+- **Demo trading:** set `demoTrading: true` with `testnet: false`, and use credentials from your Bybit Demo Trading account. This supports system testing with live market data and simulated orders.
+
+For REST and private WebSocket connections, `demoTrading` takes precedence if both flags are enabled. Demo trading has its own supported endpoints and rate limits; see [Bybit's demo documentation](https://bybit-exchange.github.io/docs/v5/demo).
 
 ## Rate-limit information
 
