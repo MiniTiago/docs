@@ -1,13 +1,17 @@
 ---
-title: "Subscribe to Bybit private order updates"
-description: "Authenticate a Testnet WebSocket, observe order changes and close the connection cleanly."
+title: "Bybit private account streams"
+description: "Subscribe to private account updates with a Testnet order-stream example."
 ---
 
-# Subscribe to private order updates
+# Subscribe to private account updates
 
-Use `WebsocketClient` to observe changes to your Testnet orders. This example subscribes to `order.linear`, prints selected order fields, and closes after a fixed duration. It does not place or cancel orders.
+Use `WebsocketClient` to receive private account updates, including orders, executions, positions and wallet changes. It supports Mainnet, Testnet and demo trading with credentials and topics supported by the selected environment.
+
+This example uses Testnet and the `order.linear` topic. It prints order changes for 60 seconds without placing or cancelling orders.
 
 ## Configure the connection
+
+Mainnet is the default. Use `testnet: true` for Testnet, or `demoTrading: true` with `testnet: false` for demo trading. Use credentials for that environment; see [configuration](/guides/configuration#select-an-environment) for supported features.
 
 Use Node.js 24 with `bybit-api` installed. Create a private `.env` file with credentials from Bybit Testnet, with the account permissions needed to read your orders:
 
@@ -33,7 +37,7 @@ node --env-file=.env private-stream.ts
 
 Wait for `Private stream authenticated.` and `Subscribed to order.linear.` before starting the [Testnet order example](/guides/orders) in another terminal using the same account. Authentication alone does not confirm a subscription.
 
-Each update prints the client order ID, symbol, status, cumulative executed quantity and remaining quantity. Match `orderLinkId` to `BYBIT_ORDER_ID` from your order example. Stream and subscription errors are logged with their error objects.
+Each update prints the exchange order ID, symbol, status, cumulative executed quantity and remaining quantity. Match `orderId` to the ID returned by the order example. Stream and subscription errors are logged with their error objects.
 
 The stream emits changes, not an initial snapshot of all orders. Use REST to retrieve existing state; a quiet stream can simply mean no orders have changed.
 

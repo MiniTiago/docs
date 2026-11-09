@@ -45,11 +45,11 @@ The response includes `result.list[].coin` for your application to inspect. See 
 
 ## Match the environment and account
 
-Live, Testnet and demo use separate credentials. Match the key to the selected environment and check its permissions and IP restrictions.
+Mainnet, Testnet and demo trading use separate credentials. REST and WebSocket clients default to Mainnet. Select Testnet with `testnet: true`, or demo trading with `demoTrading: true` and `testnet: false`. Match credentials, permissions and IP restrictions to the selected environment; see [configuration](/guides/configuration#select-an-environment).
 
 ## Place an order
 
-Once account access works, follow [Place and cancel an order](/guides/orders). The guide uses a client order ID saved in your environment to place, query and cancel the same Testnet order. To receive live status changes, use [Private order updates](/guides/private-streams).
+Once account access works, follow [Place and cancel an order](/guides/orders). The guide places a Testnet order and uses its returned order ID to query and cancel it. To receive live status changes, use [Private order updates](/guides/private-streams).
 
 ## Signing and timestamps
 
