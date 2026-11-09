@@ -15,7 +15,7 @@ Save this as `stream.ts` in a TypeScript project. It prints updates for 30 secon
 
 ## Subscription results and messages
 
-Await the subscription promise and catch failures. Market data arrives on `update`; `response` carries subscription replies.
+`subscribeV5()` returns an array of promises, so use `Promise.all()` to await them. With the default settings, completion does not mean Bybit accepted the subscription. Successful subscription replies arrive on `response`; rejected requests arrive on `exception`. Market data arrives on `update`.
 
 ## Recover after a disconnect
 
