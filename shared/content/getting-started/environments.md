@@ -1,13 +1,13 @@
 ## Choose your setup {#environment-quickstarts}
 
-Choose one guide for the tools you already use. Each includes a complete project, setup commands, expected output and connection cleanup where needed.
+Follow the guide for your runtime or framework. Each includes a complete project and setup and run commands.
 
-- [Node.js / JavaScript](/environments/node): run plain JavaScript with `import` or `require`, without a TypeScript compiler.
-- [Node.js / TypeScript](/environments/typescript): type-check and compile a Node.js price and subscription script.
-- [React](/environments/react): display live prices in a React component with effect cleanup, using Vite.
-- [Vite (plain JavaScript)](/environments/vite): display prices in a browser page without React.
-- [Next.js](/environments/next): return a price from a Node.js server Route Handler.
-- [React Native / Expo](/environments/expo): display prices and stop subscriptions on iOS and Android.
-- [Bun](/environments/bun) and [Deno](/environments/deno): run a price and WebSocket script in your chosen runtime.
+| Setup | Guides |
+| --- | --- |
+| Node.js | [JavaScript](/environments/node) or [TypeScript](/environments/typescript) |
+| Alternative runtimes | [Bun](/environments/bun) or [Deno](/environments/deno) |
+| Browser apps | [React with Vite](/environments/react) or [Vite with plain JavaScript](/environments/vite) |
+| Next.js | [Node.js server Route Handler](/environments/next) |
+| Mobile apps | [React Native / Expo for iOS and Android](/environments/expo) |
 
-Follow each guide from an empty directory, or open its complete runnable example on GitHub. [Runtime compatibility](/compatibility) lists runtime requirements and configuration.
+Browser and Expo guides include SDK-specific bundler configuration and polyfills where needed. See [Runtime compatibility](/compatibility) for tested versions, required configuration and check scope.
