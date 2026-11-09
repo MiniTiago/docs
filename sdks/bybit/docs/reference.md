@@ -5,7 +5,7 @@ description: "Public client methods, parameters and response types for bybit-api
 
 # API reference
 
-Client methods, parameters and response types exported by `bybit-api`. The same API works in JavaScript and TypeScript.
+Client methods, parameters and response types exported by [`bybit-api`](https://www.npmjs.com/package/bybit-api). The same API works in JavaScript and TypeScript.
 
 ## Clients
 

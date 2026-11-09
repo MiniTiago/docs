@@ -5,7 +5,7 @@ description: "Install bybit-api and make your first REST request in Node.js. Rea
 
 # Node.js quickstart with JavaScript
 
-Install `bybit-api` and read the BTCUSDT Spot price with one REST request from `RestClientV5` in Node.js. The example is plain JavaScript and needs no TypeScript compiler or API credentials.
+Install [`bybit-api`](https://www.npmjs.com/package/bybit-api) and read the BTCUSDT Spot price with one REST request from `RestClientV5` in Node.js. The example is plain JavaScript and needs no TypeScript compiler or API credentials.
 
 ## Installation
 
