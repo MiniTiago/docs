@@ -73,12 +73,55 @@ export default {
       "method": "subscribeUserDataStream",
       "guide": "/guides/private-streams",
       "title": "Receive private order updates"
+    },
+    {
+      "client": "USDMClient",
+      "method": "getAccountInformationV3",
+      "example": "usdm-account.ts",
+      "guide": "/guides/usdm-orders#read-account-state",
+      "title": "Read futures account state"
+    },
+    {
+      "client": "USDMClient",
+      "method": "getBalanceV3",
+      "example": "usdm-account.ts",
+      "guide": "/guides/usdm-orders#read-account-state",
+      "title": "Read futures account state"
+    },
+    {
+      "client": "USDMClient",
+      "method": "getPositionsV3",
+      "example": "usdm-account.ts",
+      "guide": "/guides/usdm-orders#read-account-state",
+      "title": "Read futures account state"
+    },
+    {
+      "client": "USDMClient",
+      "method": "submitNewOrder",
+      "guide": "/guides/usdm-orders",
+      "title": "Place and manage a futures order"
+    },
+    {
+      "client": "USDMClient",
+      "method": "getOrder",
+      "guide": "/guides/usdm-orders",
+      "title": "Place and manage a futures order"
+    },
+    {
+      "client": "USDMClient",
+      "method": "cancelOrder",
+      "guide": "/guides/usdm-orders",
+      "title": "Place and manage a futures order"
     }
   ],
   "guides": [
     {
       "text": "Place and cancel an order",
       "link": "/guides/orders"
+    },
+    {
+      "text": "USD-M futures orders",
+      "link": "/guides/usdm-orders"
     },
     {
       "text": "Private order updates",
