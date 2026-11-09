@@ -37,8 +37,9 @@ export default function siteConfig(data, docs) {
       { text: 'All exports', link: '/api/' },
     ] },
     { text: 'Resources', items: [
-      { text: 'Runnable examples', link: `https://github.com/sieblyio/docs/tree/${process.env.GITHUB_SHA || 'main'}/starters/${sdkId}` },
+      { text: 'Runnable examples', link: `https://github.com/sieblyio/docs/tree/main/starters/${sdkId}` },
       { text: 'Runtime compatibility', link: '/compatibility' },
+      { text: `${sdk.name} JavaScript SDK`, link: `https://www.npmjs.com/package/${sdk.packageName}` },
       { text: `${sdk.name} tutorial`, link: sdk.tutorial }, { text: 'Siebly SDKs', link: 'https://siebly.io/' },
       { text: 'GitHub repository', link: sdk.repository },
     ] },
