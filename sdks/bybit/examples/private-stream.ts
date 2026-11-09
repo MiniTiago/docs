@@ -10,11 +10,7 @@ function main() {
     throw new Error('Set BYBIT_API_KEY and BYBIT_API_SECRET.');
   }
 
-  // Keep routine SDK logs quiet while preserving errors.
-  const ws = new WebsocketClient(
-    { key, secret, testnet: true },
-    { trace() {}, info() {}, error: console.error },
-  );
+  const ws = new WebsocketClient({ key, secret, testnet: true });
   let stopped = false;
 
   function stop() {
