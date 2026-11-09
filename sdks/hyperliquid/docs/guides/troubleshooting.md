@@ -42,7 +42,7 @@ A missing-address error means the SDK could not resolve an account. Set `account
 
 If the signer is not a Hyperliquid account on this network, check the network and set `accountAddress` to the account managed by the API wallet. The wallet also needs authorization for the action. See [API wallets and vaults](/guides/authentication#api-wallets-and-vaults).
 
-For rejected signed actions, check signer permissions and ensure `testnet` matches any [custom endpoint](/guides/configuration#networks).
+For rejected signed actions, check signer permissions and select the intended [network](/guides/configuration#networks) with `testnet`: `true` for Testnet, or `false` (or omitted) for Mainnet.
 
 ## WebSocket subscriptions
 

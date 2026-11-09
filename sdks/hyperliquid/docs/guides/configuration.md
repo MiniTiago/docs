@@ -13,8 +13,6 @@ All three clients default to production (Mainnet) when `testnet` is false or omi
 
 <<< @/../examples/testnet.ts
 
-When using a custom endpoint, `RestClientOptions.baseUrl` overrides the HTTP URL and `WebsocketClientOptions.wsUrl` overrides the WebSocket URL. Set `testnet` to match that endpoint so signed actions use the correct network.
-
 ## HTTP requests
 
 The default HTTP request timeout is 10,000 ms. Change it through the second constructor argument:
