@@ -38,7 +38,23 @@ Select the product and environment in [Configuration](/guides/configuration), wi
 | Check a Spot order | [`getOrder()`](/api/classes/MainClient#getorder) |
 | Cancel a Spot order | [`cancelOrder()`](/api/classes/MainClient#cancelorder) |
 
-For futures or Portfolio Margin, choose the corresponding client above; Spot methods are not interchangeable with those products.
+## USD-M futures
+
+Use `USDMClient` for USD-M futures, separately from Spot and COIN-M. The [futures order walkthrough](/guides/usdm-orders) covers account reads, placement, status and cancellation using Demo Trading, with the corresponding production configuration.
+
+| Task | Method |
+| --- | --- |
+| Read a futures ticker | [`getSymbolPriceTicker()`](/api/classes/USDMClient#getsymbolpriceticker) |
+| Read a futures order book | [`getOrderBook()`](/api/classes/USDMClient#getorderbook) |
+| Read futures account state | [`getAccountInformationV3()`](/api/classes/USDMClient#getaccountinformationv3) |
+| Read futures balances | [`getBalanceV3()`](/api/classes/USDMClient#getbalancev3) |
+| Read futures positions | [`getPositionsV3()`](/api/classes/USDMClient#getpositionsv3) |
+| Check position mode | [`getCurrentPositionMode()`](/api/classes/USDMClient#getcurrentpositionmode) |
+| Place a futures order | [`submitNewOrder()`](/api/classes/USDMClient#submitneworder) |
+| Check a futures order | [`getOrder()`](/api/classes/USDMClient#getorder) |
+| Cancel a futures order | [`cancelOrder()`](/api/classes/USDMClient#cancelorder) |
+
+For COIN-M futures or Portfolio Margin, choose the corresponding client above; Spot and USD-M parameters are not interchangeable with those products.
 
 Search methods and types with **⌘K / Ctrl+K**.
 
