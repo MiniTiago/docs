@@ -9,7 +9,7 @@ import sdk from './.vitepress/generated.json';
 
 # Bybit API SDK
 
-`bybit-api` provides JavaScript and TypeScript clients for Bybit REST and WebSocket APIs, covering market data, account queries and trading.
+[`bybit-api`](https://www.npmjs.com/package/bybit-api) provides JavaScript and TypeScript clients for Bybit REST and WebSocket APIs, covering market data, account queries and trading.
 
 Build trading bots and automate your Bybit strategies in Node.js, or use real-time market data in a dashboard. Start with a public price request, then add authentication and order handling for your trading workflow.
 
