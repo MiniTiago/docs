@@ -7,7 +7,9 @@ description: "Place, query and cancel a post-only Spot Testnet order using the r
 
 Use `MainClient` to place one `LIMIT_MAKER` order, query its status and cancel its remaining quantity. Each operation runs separately so you can inspect the result before continuing.
 
-`LIMIT_MAKER` is post-only: Binance rejects it if it would immediately match as a taker. An accepted resting order can still fill, including before you cancel it. The same Spot methods work on Mainnet; this walkthrough uses Spot Testnet and its virtual funds.
+`LIMIT_MAKER` is post-only: Binance rejects it if it would immediately match as a taker. An accepted resting order can still fill, including before you cancel it.
+
+This walkthrough uses Spot Testnet and virtual funds to avoid accidental live trades. The same Spot methods work on Mainnet, Binance's production markets. Remove `testnet` or set it to `false`, and use production credentials to execute against live markets.
 
 ## Set up
 

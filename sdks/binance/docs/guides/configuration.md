@@ -17,7 +17,7 @@ The example selects Spot Testnet and a ten-second HTTP timeout. `recvWindow` is 
 
 `MainClient` uses Spot endpoints. `USDMClient` and `CoinMClient` target their respective futures products. Select the client first, then choose an environment supported by that product. `testnet: true` selects the supported test endpoint for the client; demo trading uses the separate `demoTrading` setting.
 
-Keys and symbols depend on the product. See the [Binance documentation](https://developers.binance.com/docs/binance-spot-api-docs).
+Production is the default when `testnet` and `demoTrading` are false or omitted. Use credentials created for the selected production account, not Testnet keys. Keys and symbols also depend on the product. See the [Binance documentation](https://developers.binance.com/docs/binance-spot-api-docs).
 
 ## Preserve decimal precision
 

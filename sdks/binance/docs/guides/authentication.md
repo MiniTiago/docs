@@ -9,7 +9,7 @@ Public market data needs no credentials. Account queries and trading require an 
 
 ## Configure credentials
 
-The examples below select Spot Testnet with `testnet: true`. Set the matching credentials through environment variables.
+The examples below select Spot Testnet with `testnet: true`. Set the matching credentials through environment variables. Set `testnet: false` (or omit it) and use production credentials to connect to the production Spot APIs.
 
 <<< @/../examples/authenticated-client.ts
 
