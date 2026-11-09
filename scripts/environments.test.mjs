@@ -44,7 +44,7 @@ test('all walkthroughs match browsable programs, teach setup in order and retain
       const { id, ...siteSdk } = sdk;
       const config = siteConfig({ sdk: siteSdk, siteUrl: `https://example.com/${id}/`, originUrl: 'https://example.com/', indexable: false, catalogue: sdks });
       const examplesLink = config.themeConfig.sidebar.find(group => group.text === 'Resources').items[0].link;
-      assert.equal(examplesLink, `https://github.com/sieblyio/docs/tree/${process.env.GITHUB_SHA || 'main'}/starters/${id}`);
+      assert.equal(examplesLink, `https://github.com/sieblyio/docs/tree/main/starters/${id}`);
       const projectRoot = path.join(work, sdk.id);
       const docs = path.join(projectRoot, 'docs');
       await generateEnvironments({ id: sdk.id, sdk, docs, projectRoot });
@@ -56,7 +56,7 @@ test('all walkthroughs match browsable programs, teach setup in order and retain
         const guide = await readFile(path.join(docs, 'environments', `${environment}.md`), 'utf8');
         assert(!/@@[A-Z_]+@@/.test(guide));
         assert(!/tar -x|\.tar\.gz|Download the complete|copy (?:all|every) file/i.test(guide), 'Archive-first or copy-all guidance remains.');
-        assert(guide.includes(`https://github.com/sieblyio/docs/tree/${process.env.GITHUB_SHA || 'main'}/starters/${sdk.id}/${environment}`));
+        assert(guide.includes(`https://github.com/sieblyio/docs/tree/main/starters/${sdk.id}/${environment}`));
         assert.match(guide, /## Troubleshooting/);
         assert.match(guide, /\/compatibility/);
         assert.equal(JSON.parse(files.get('package.json')).dependencies[sdk.packageName], 'latest');
