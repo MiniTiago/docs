@@ -12,7 +12,7 @@ Use `RestClientV5` to place one BTCUSDT perpetual limit order, query it by the r
 - Use Node.js 24 and install the SDK with `npm install bybit-api`.
 - Create Testnet API credentials with derivatives trading and account-read permissions. Fund the Testnet account with test assets.
 - Use a Unified Trading Account with BTCUSDT in one-way position mode (`positionIdx: 0`). The example does not change your account's position mode or leverage.
-- Store credentials in a server-side `.env` file excluded from version control. Leave `BYBITTRACE` unset to avoid logging signed requests.
+- Use a private `.env` file excluded from version control for local development, and a secure server-side environment for deployment. Leave `BYBITTRACE` unset to avoid logging signed requests.
 
 A PostOnly order is cancelled if it would immediately take liquidity. A resting order can fill before cancellation. Cancelling the remaining quantity does not close a position created by a fill.
 
