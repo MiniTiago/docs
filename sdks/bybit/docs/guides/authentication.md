@@ -9,7 +9,7 @@ Public market data needs no credentials. Account queries and trading require an 
 
 ## Configure credentials
 
-The examples below select Bybit Testnet with `testnet: true`. Set the matching credentials through environment variables.
+The examples below select Bybit Testnet with `testnet: true`. Set the matching credentials through environment variables. For production (Mainnet), set `testnet: false` (or omit it), leave `demoTrading` disabled and use Mainnet credentials.
 
 <<< @/../examples/authenticated-client.ts
 
