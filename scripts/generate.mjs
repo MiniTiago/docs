@@ -103,18 +103,35 @@ await writeFile(path.join(projectRoot, 'docs/.vitepress/generated.json'), JSON.s
 const snippets = path.join(projectRoot, 'docs/.vitepress/snippets');
 await mkdir(snippets, { recursive: true });
 const nodeRequirement = pkg.engines?.node
-  ? `Requires Node.js \`${pkg.engines.node}\`.`
+  ? `Node.js version requirement: \`${pkg.engines.node}\`.`
   : '';
 await writeFile(path.join(snippets, 'installation.md'), [
   '<!-- Generated from SDK package metadata. -->',
   '',
   [nodeRequirement, 'TypeScript definitions are included.'].filter(Boolean).join(' '),
   '',
+  'Install the npm package with your preferred tool:',
+  '',
   '::: code-group',
-  ...[['npm', 'npm install'], ['pnpm', 'pnpm add'], ['yarn', 'yarn add']].flatMap(([name, command]) => [
-    `\`\`\`sh [${name}]`, `${command} ${pkg.name}`, '\`\`\`',
+  ...[
+    ['npm', `npm install ${pkg.name}`],
+    ['pnpm', `pnpm add ${pkg.name}`],
+    ['Yarn', `yarn add ${pkg.name}`],
+    ['Bun', `bun add ${pkg.name}`],
+    ['Deno', `deno add npm:${pkg.name}`],
+  ].flatMap(([name, command]) => [
+    `\`\`\`sh [${name}]`, command, '\`\`\`',
   ]),
-  ':::', '',
+  '\`\`\`text [Other]',
+  `Package: ${pkg.name}`,
+  `npm: https://www.npmjs.com/package/${pkg.name}`,
+  '\`\`\`',
+  ':::',
+  '',
+  'For other npm-compatible tools, use the same package from npm. Runtime-specific setup is covered below.',
+  '',
+  '<!--@include: @/.vitepress/shared/getting-started/environments.md-->',
+  '',
 ].join('\n'));
 console.log(`Generated ${apiFiles.length} reference pages from ${pkg.name}@${pkg.version}.`);
 
