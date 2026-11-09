@@ -12,6 +12,7 @@ function Prices() {
     const ws = new WebsocketClient({});
 
     function showError(error) {
+      console.error(error);
       if (mounted) {
         setError(error instanceof Error ? error.message : String(error));
       }
