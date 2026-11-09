@@ -9,7 +9,7 @@ Use `WebsocketAPIClient` to receive Spot account and order events through Binanc
 
 ## Connect to Spot Testnet
 
-Use Node.js 24, install `binance`, and configure the Testnet credential variables from [your first order](/guides/orders#set-up). Keep signing credentials on the server and out of browser bundles.
+Use Node.js 24, install `binance`, and configure the Testnet credential variables from [your first order](/guides/orders#set-up). Keep signing credentials in a secure server-side environment and out of browser bundles.
 
 Save this as `private-stream.ts`:
 

@@ -13,11 +13,11 @@ Set the environment variables below to configure a Spot Testnet client.
 
 <<< @/../examples/authenticated-client.ts
 
-Store credentials in server-side environment variables or a secret manager, outside source files and browser bundles. Creating the client alone does not verify credentials or permissions.
+Keep API credentials in a secure server-side environment, supplied through protected environment variables or a secret manager, outside source files and browser bundles. Creating the client alone does not verify credentials or permissions.
 
 ## Verify account access
 
-Use credentials created for **Binance Spot Testnet**, with permission to read the account. Store them in your server environment, or create a local `.env` file:
+Use credentials created for **Binance Spot Testnet**, with permission to read the account. Use that secure environment for deployment; for local development, create a private `.env` file:
 
 ```dotenv
 # Fictitious values; use your own Spot Testnet credentials.
