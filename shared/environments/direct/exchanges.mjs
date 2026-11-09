@@ -1,4 +1,21 @@
 export const exchanges = {
+  kraken: {
+    restClient: 'SpotClient',
+    symbol: 'BTC/USD',
+    request: `const client = new SpotClient();
+const response = await client.getTicker({ pair: 'XBTUSD' });
+const ticker = Object.values(response.result)[0];
+const price = ticker?.c[0];`,
+    event: 'message',
+    update: `if (message.channel !== 'ticker') {
+  console.log('WebSocket message:', message);
+  return;
+}
+
+const price = message.data?.[0]?.last;`,
+    websocket: 'new WebsocketClient()',
+    subscription: "Promise.resolve(ws.subscribe({ topic: 'ticker', payload: { symbol: ['BTC/USD'] } }, 'spotPublicV2'))",
+  },
   hyperliquid: {
     restClient: 'RestClient',
     symbol: 'BTC',

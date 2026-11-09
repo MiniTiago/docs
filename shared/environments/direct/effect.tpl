@@ -3,6 +3,7 @@
     const ws = @@WEBSOCKET@@;
 
     function showError(error) {
+      console.error(error);
       if (mounted) {
         setError(error instanceof Error ? error.message : String(error));
       }

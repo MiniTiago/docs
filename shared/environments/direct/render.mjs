@@ -29,7 +29,7 @@ export async function programFiles(id, sdk, format = 'esm', extension = 'mjs') {
     REQUEST: indent(exchange.request, requestIndent),
     INDENT: ' '.repeat(requestIndent),
     SYMBOL: exchange.symbol,
-    CLOSE: commonjs ? `}\n\nmain().catch((error) => {\n  console.error(error instanceof Error ? error.message : String(error));\n  process.exitCode = 1;\n});` : '',
+    CLOSE: commonjs ? `}\n\nmain().catch((error) => {\n  console.error(error);\n  process.exitCode = 1;\n});` : '',
   }).trimEnd() + '\n';
   const stream = fill(await readFile(new URL('./stream.tpl', import.meta.url), 'utf8'), {
     IMPORT: `${importSdk('WebsocketClient')}\n${commonjs ? "const process = require('node:process');" : "import process from 'node:process';"}`,

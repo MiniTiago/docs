@@ -38,6 +38,6 @@ async function main() {
 }
 
 main().catch((error@@ERROR_TYPE@@) => {
-  console.error(error instanceof Error ? error.message : String(error));
+  console.error(error);
   process.exitCode = 1;
 });
