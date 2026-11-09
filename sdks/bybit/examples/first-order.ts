@@ -8,23 +8,17 @@ function requiredEnvVar(name: string): string {
   return value;
 }
 
-function checked<T>(response: { retCode: number; result: T }): T {
-  if (response.retCode !== 0) {
-    console.error(response);
-    throw new Error(`Bybit returned retCode ${response.retCode}.`);
-  }
-  return response.result;
-}
-
-async function printOrderStatus(client: RestClientV5, orderLinkId: string) {
-  const query = { category: 'linear' as const, symbol: 'BTCUSDT', orderLinkId };
+async function printOrderStatus(client: RestClientV5, orderId: string) {
+  const query = { category: 'linear' as const, symbol: 'BTCUSDT', orderId };
   // Realtime results include recent closed orders; use history if absent.
-  let order = checked(await client.getActiveOrders(query)).list.find(
-    (item) => item.orderLinkId === orderLinkId,
+  const activeResponse = await client.getActiveOrders(query);
+  let order = activeResponse.result.list.find(
+    (item) => item.orderId === orderId,
   );
   if (!order) {
-    order = checked(await client.getHistoricOrders(query)).list.find(
-      (item) => item.orderLinkId === orderLinkId,
+    const historyResponse = await client.getHistoricOrders(query);
+    order = historyResponse.result.list.find(
+      (item) => item.orderId === orderId,
     );
   }
   if (!order) {
@@ -33,7 +27,7 @@ async function printOrderStatus(client: RestClientV5, orderLinkId: string) {
     );
   }
   console.log({
-    orderLinkId,
+    orderId,
     orderStatus: order.orderStatus,
     cumExecQty: order.cumExecQty,
     leavesQty: order.leavesQty,
@@ -54,43 +48,42 @@ async function main() {
       key: requiredEnvVar('BYBIT_API_KEY'),
       secret: requiredEnvVar('BYBIT_API_SECRET'),
       testnet: true,
+      throwExceptions: true,
     },
     { timeout: 10_000 },
   );
-  // Keep this ID in .env so a later command can find the same order.
-  const orderLinkId = requiredEnvVar('BYBIT_ORDER_ID');
-  const query = { category: 'linear' as const, symbol: 'BTCUSDT', orderLinkId };
+  const market = { category: 'linear' as const, symbol: 'BTCUSDT' };
 
   if (action === 'place') {
-    console.log('Submitting client order ID:', orderLinkId);
-    checked(
-      await client.submitOrder({
-        ...query,
-        side: 'Buy',
-        orderType: 'Limit',
-        price: requiredEnvVar('BYBIT_LIMIT_PRICE'),
-        qty: requiredEnvVar('BYBIT_ORDER_QTY'),
-        timeInForce: 'PostOnly',
-        positionIdx: 0,
-      }),
-    );
-    console.log('Submission acknowledged. Run status to inspect the order.');
+    const response = await client.submitOrder({
+      ...market,
+      side: 'Buy',
+      orderType: 'Limit',
+      price: requiredEnvVar('BYBIT_LIMIT_PRICE'),
+      qty: requiredEnvVar('BYBIT_ORDER_QTY'),
+      timeInForce: 'PostOnly',
+      positionIdx: 0,
+    });
+    console.log('Order ID:', response.result.orderId);
+    console.log('Set BYBIT_ORDER_ID to this returned ID, then run status.');
     return;
   }
 
+  // Status and cancellation use the ID returned by submitOrder().
+  const orderId = requiredEnvVar('BYBIT_ORDER_ID');
   if (action === 'cancel') {
-    checked(await client.cancelOrder(query));
+    await client.cancelOrder({ ...market, orderId });
     console.log('Cancellation acknowledged. Run status to confirm the result.');
     return;
   }
 
-  await printOrderStatus(client, orderLinkId);
+  await printOrderStatus(client, orderId);
 }
 
 main().catch((error: unknown) => {
   console.error(error);
   console.error(
-    'Keep BYBIT_ORDER_ID unchanged and run status before another order action.',
+    'If the request outcome is uncertain, reconcile orders and fills before resubmitting.',
   );
   process.exitCode = 1;
 });

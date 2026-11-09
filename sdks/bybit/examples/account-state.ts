@@ -10,12 +10,13 @@ async function main() {
     throw new Error('Set BYBIT_API_KEY and BYBIT_API_SECRET.');
   }
 
-  const client = new RestClientV5({ key, secret, testnet: true });
+  const client = new RestClientV5({
+    key,
+    secret,
+    testnet: true,
+    throwExceptions: true,
+  });
   const response = await client.getWalletBalance({ accountType: 'UNIFIED' });
-  if (response.retCode !== 0) {
-    console.error(response);
-    throw new Error(`Bybit ${response.retCode}: ${response.retMsg}`);
-  }
 
   const account = response.result.list[0];
   if (!account) {

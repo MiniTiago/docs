@@ -55,7 +55,7 @@ function main() {
     if (message.topic === 'order.linear' && Array.isArray(message.data)) {
       for (const order of message.data) {
         console.log({
-          orderLinkId: order.orderLinkId,
+          orderId: order.orderId,
           symbol: order.symbol,
           orderStatus: order.orderStatus,
           cumExecQty: order.cumExecQty,
