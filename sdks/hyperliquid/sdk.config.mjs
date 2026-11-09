@@ -16,7 +16,7 @@ export default {
   // References and shared examples only. API contracts stay in SDK source comments.
   referenceHelp: [
     { client: 'RestClient', method: 'submitLimitOrder', guide: '/guides/orders', title: 'Place and cancel a Testnet order' },
-    { client: 'RestClient', method: 'cancelOrdersByClientOrderId', guide: '/guides/orders', title: 'Cancel an order by client order ID' },
+    { client: 'RestClient', method: 'cancelOrders', guide: '/guides/orders', title: 'Cancel an order' },
     { client: 'WebsocketClient', method: 'subscribe', guide: '/guides/private-streams', title: 'Receive account order updates' },
     { client: 'RestClient', method: 'getAllMids', example: 'first-call.ts', guide: '/getting-started', title: 'Quickstart' },
     { client: 'RestClient', method: 'getOrderBook', example: 'order-book.ts', guide: '/guides/market-data#l2-order-book', title: 'Read an order book' },
