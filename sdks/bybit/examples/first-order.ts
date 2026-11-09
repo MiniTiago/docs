@@ -16,10 +16,25 @@ async function printOrderStatus(client: RestClientV5, orderId: string) {
     (item) => item.orderId === orderId,
   );
   if (!order) {
-    const historyResponse = await client.getHistoricOrders(query);
-    order = historyResponse.result.list.find(
-      (item) => item.orderId === orderId,
-    );
+    // History excludes these terminal states unless requested explicitly.
+    const historyStatuses = [
+      undefined,
+      'Cancelled',
+      'Rejected',
+      'Deactivated',
+    ] as const;
+    for (const orderStatus of historyStatuses) {
+      const historyResponse = await client.getHistoricOrders({
+        ...query,
+        orderStatus,
+      });
+      order = historyResponse.result.list.find(
+        (item) => item.orderId === orderId,
+      );
+      if (order) {
+        break;
+      }
+    }
   }
   if (!order) {
     throw new Error(

@@ -36,12 +36,10 @@ function main() {
     if (stopped) {
       return;
     }
-    if (message.op !== 'subscribe') {
-      console.log('Private stream response:', message);
-    } else if (message.success === true) {
+    if (message.op === 'subscribe' && message.success === true) {
       console.log('Subscribed to order.linear. Waiting for order changes.');
     } else {
-      console.error('Private subscription rejected:', message);
+      console.log('Private stream response:', message);
     }
   });
   ws.on('update', (message) => {
