@@ -56,7 +56,7 @@ Query the same order:
 node --env-file=.env first-order.ts status
 ```
 
-The status command reads [`getActiveOrders()`](/api/classes/RestClientV5#getactiveorders). If the order is absent, it makes one [`getHistoricOrders()`](/api/classes/RestClientV5#gethistoricorders) request with `orderStatus: 'Cancelled'` to check for cancellation. Inspect `orderStatus`, `cumExecQty` and `leavesQty`. A `New` or `PartiallyFilled` order can have remaining quantity to cancel:
+The status command makes one [`getActiveOrders()`](/api/classes/RestClientV5#getactiveorders) request using the returned order ID. Despite the method name, this also returns recent closed orders. Inspect `orderStatus`, `cumExecQty` and `leavesQty`. A `New` or `PartiallyFilled` order can have remaining quantity to cancel:
 
 ```sh
 node --env-file=.env first-order.ts cancel
@@ -73,9 +73,9 @@ A timeout or lost response can happen after Bybit accepts a request. The example
 
 If you received an `orderId`, query `status` with that ID and the same account. If submission timed out before returning an ID, inspect realtime orders and order history for BTCUSDT, and reconcile executions and positions using the request time, side, price and quantity. Avoid resubmitting until the outcome is resolved.
 
-The history fallback is specific to cancellation, not a search across every order state. When querying other historical states, set the corresponding `orderStatus`; from 3 December 2026, unfiltered recent history excludes `Cancelled`, `Rejected` and `Deactivated`.
+For older records, or closed orders no longer available after a service restart, use [`getHistoricOrders()`](/api/classes/RestClientV5#gethistoricorders). Set `orderStatus: 'Cancelled'` when looking for a cancelled order; from 3 December 2026, unfiltered recent history excludes `Cancelled`, `Rejected` and `Deactivated`.
 
-An empty result is inconclusive: recent closed orders can disappear from the realtime endpoint after a service restart, and history can lag. See [open and closed orders](https://bybit-exchange.github.io/docs/v5/order/open-order).
+An empty result is inconclusive, and history can lag behind order updates. See [open and closed orders](https://bybit-exchange.github.io/docs/v5/order/open-order).
 
 Stopping the process or closing a WebSocket does not cancel an open order.
 
