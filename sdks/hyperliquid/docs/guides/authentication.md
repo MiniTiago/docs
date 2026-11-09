@@ -25,7 +25,7 @@ Pass `privateKey` and the managed account address to `RestClient`. This example 
 
 <<< @/../examples/authenticated-client.ts
 
-Keep the private key in a server-side environment variable, outside source files and browser bundles.
+Keep the private key in a secure server-side environment, supplied through a protected environment variable or a secret manager, outside source files and browser bundles.
 
 ## API wallets and vaults
 
