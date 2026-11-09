@@ -57,7 +57,7 @@ The `.mjs` extension tells Node.js to use ES modules and `import`. For CommonJS,
 
 - [Read an order book or candle history](/guides/market-data).
 - [Stream prices over WebSocket](/guides/websockets).
-- [Configure Testnet and request timeouts](/guides/configuration).
+- [Choose a network and configure request timeouts](/guides/configuration).
 - [Read account state and configure a signer](/guides/authentication).
 - [Configure retries, recovery and shutdown for production](/guides/production).
 - [Follow the full Hyperliquid JavaScript tutorial on Siebly.io](https://siebly.io/sdk/hyperliquid/javascript/tutorial).
