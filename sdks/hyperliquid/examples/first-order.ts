@@ -19,14 +19,13 @@ function createTestnetClient(action: string): RestClient {
   );
 }
 
-async function placeOrder(client: RestClient, clientOrderId: string) {
+async function placeOrder(client: RestClient) {
   const result = await client.submitLimitOrder({
     symbol: 'BTC',
     side: 'buy',
     price: requiredEnvVar('HYPERLIQUID_LIMIT_PRICE'),
     size: requiredEnvVar('HYPERLIQUID_ORDER_SIZE'),
     postOnly: true,
-    clientOrderId,
   });
 
   // Check the individual order result, not just the HTTP response.
@@ -39,7 +38,9 @@ async function placeOrder(client: RestClient, clientOrderId: string) {
     console.error(result);
     throw new Error('Order was rejected.');
   }
+  const orderId = 'resting' in order ? order.resting.oid : order.filled.oid;
   console.log('Order result:', 'resting' in order ? 'resting' : 'filled');
+  console.log('HYPERLIQUID_ORDER_ID=' + orderId);
 }
 
 async function main() {
@@ -47,24 +48,22 @@ async function main() {
   if (!['place', 'status', 'cancel'].includes(action)) {
     throw new Error('Usage: orders.mts place|status|cancel');
   }
-  const clientOrderId = requiredEnvVar('HYPERLIQUID_CLIENT_ORDER_ID');
-  if (!/^0x[\da-fA-F]{32}$/.test(clientOrderId)) {
-    throw new Error(
-      'Client order ID must be 0x followed by 32 hexadecimal characters.',
-    );
-  }
-
   const client = createTestnetClient(action);
 
-  console.log('Client order ID:', clientOrderId);
   if (action === 'place') {
-    await placeOrder(client, clientOrderId);
+    await placeOrder(client);
     return;
   }
 
-  const status = await client.getOrderStatus({ oid: clientOrderId });
+  const orderId = Number(requiredEnvVar('HYPERLIQUID_ORDER_ID'));
+  if (!Number.isSafeInteger(orderId) || orderId <= 0) {
+    throw new Error(
+      'HYPERLIQUID_ORDER_ID must be the numeric ID returned by the exchange.',
+    );
+  }
+  const status = await client.getOrderStatus({ oid: orderId });
   if (status.status === 'unknownOid') {
-    console.log('Order not found for this account and client order ID.');
+    console.log('Order not found for this account and order ID.');
     process.exitCode = 1;
     return;
   }
@@ -82,8 +81,8 @@ async function main() {
     return;
   }
 
-  const result = await client.cancelOrdersByClientOrderId({
-    cancels: [{ asset: 'BTC', cloid: clientOrderId }],
+  const result = await client.cancelOrders({
+    cancels: [{ a: 'BTC', o: orderId }],
   });
   if (
     result.status !== 'ok' ||
@@ -102,7 +101,7 @@ async function main() {
 main().catch((error: unknown) => {
   console.error(error);
   console.error(
-    'Query status with the same client order ID before another order action.',
+    'Check order status or account order history before resubmitting an uncertain request.',
   );
   process.exitCode = 1;
 });
