@@ -11,7 +11,7 @@ A post-only order is rejected if it would immediately take liquidity. Once resti
 
 ## Set up
 
-Use Node.js 24, a funded Hyperliquid Testnet account and an API wallet authorized for that account. See [API wallets and account addresses](/guides/authentication#api-wallets-and-vaults).
+To run this example on Testnet, use Node.js 24, a funded Hyperliquid Testnet account and an API wallet authorized for that account. See [API wallets and account addresses](/guides/authentication#api-wallets-and-vaults).
 
 Install the SDK:
 
