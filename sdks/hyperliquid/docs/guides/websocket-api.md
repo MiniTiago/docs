@@ -23,4 +23,4 @@ Use the [account access guide](/guides/authentication) to distinguish unsigned a
 
 ## Recover an uncertain outcome
 
-A connection can fail after an exchange processes a request but before the response arrives. Follow [account updates](/guides/private-streams) and [reconcile uncertain outcomes](/guides/production#resolve-uncertain-order-outcomes) before retrying an order.
+A connection can fail after an exchange processes a request but before the response arrives. Follow [account updates](/guides/private-streams) and [reconcile uncertain outcomes](/guides/production#check-an-order-after-a-timeout) before retrying an order.
