@@ -3,7 +3,7 @@ title: "Kraken WebSocket subscriptions"
 description: "Subscribe to Kraken Spot ticker updates with automatic reconnects and default SDK logging."
 ---
 
-# WebSocket subscriptions
+# Public streams (WebSocket) {#websocket-subscriptions}
 
 `WebsocketClient` manages public and private subscriptions for Spot and Futures. This example subscribes to the public Spot v2 ticker for `BTC/USD`, without credentials.
 

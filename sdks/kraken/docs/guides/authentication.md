@@ -3,7 +3,7 @@ title: "Kraken SDK authentication"
 description: "Configure Kraken Spot credentials securely and verify read-only account access."
 ---
 
-# Authentication
+# Account access and balances {#authentication}
 
 Public market data needs no API credentials. Private account queries and trading require credentials with the relevant permissions for the chosen product.
 

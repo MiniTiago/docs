@@ -1,15 +1,23 @@
 ---
-title: "Validate a Kraken Spot order"
-description: "Validate a Kraken Spot limit order without placing it, and understand returned order IDs and uncertain outcomes."
+title: "Kraken order management"
+description: "Read Kraken Spot balances, prepare and submit orders, follow execution updates and cancel orders."
 ---
 
-# Validate a Spot order
+# Order management {#validate-a-spot-order}
+
+Use `SpotClient` to read balances, prepare and submit orders, and cancel open orders. Keep the [private execution stream](/guides/private-streams) connected to follow order changes and fills.
+
+## Read balances and existing orders
+
+Start with the [authenticated account example](/guides/authentication#verify-account-access). [`getAccountBalance()`](/api/classes/SpotClient#getaccountbalance) returns balances keyed by asset in `result`. [`getOpenOrders()`](/api/classes/SpotClient#getopenorders) provides an initial open-order snapshot. Use the query permissions required by those methods before adding trading permissions.
+
+## Prepare an order without placing it
 
 Kraken Spot has no public testnet, and the Futures demo environment has been retired. This example uses Spot's `validate: true` option: Kraken checks the request without submitting an order to the market.
 
 Validation is not a fill simulation. It does not establish what price, liquidity or account state will be available for a later live order.
 
-## Prepare the request
+### Configure the request {#prepare-the-request}
 
 Use the [authentication setup](/guides/authentication) with a Spot key permitted to create orders. Choose a pair, price and volume suitable for your account, using [`getAssetPairs()`](/api/classes/SpotClient#getassetpairs) for current precision and minimums.
 
@@ -32,7 +40,7 @@ node --env-file=.env validate-order.ts
 
 A successful response prints the validation result. Validation does not create an order to query or cancel.
 
-## Live order lifecycle
+## Submit and manage a live order {#live-order-lifecycle}
 
 For a live order, `submitOrder()` accepts the same parameters with `validate` omitted or false. That sends an actual order to Kraken's production market. Connect the [private execution stream](/guides/private-streams) before submitting and confirm the subscription. Save the exchange-returned `result.txid` values and use matching execution events to track order changes and fills. Use [`cancelOrder({ txid })`](/api/classes/SpotClient#cancelorder) to request cancellation.
 

@@ -3,7 +3,7 @@ title: "Kraken market data"
 description: "Read public Kraken Spot order books and Futures tickers without credentials."
 ---
 
-# Market data
+# Public market data (REST) {#market-data}
 
 Public Spot and Futures endpoints need no API credentials.
 
