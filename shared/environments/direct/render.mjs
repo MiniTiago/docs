@@ -31,7 +31,7 @@ export async function programFiles(id, sdk, format = 'esm', extension = 'mjs') {
     SYMBOL: exchange.symbol,
     CLOSE: commonjs ? `}\n\nmain().catch((error) => {\n  console.error(error);\n  process.exitCode = 1;\n});` : '',
   }).trimEnd() + '\n';
-  const stream = fill(await readFile(new URL('./stream.tpl', import.meta.url), 'utf8'), {
+  const stream = fill(await readFile(new URL(exchange.continuous ? './stream-continuous.tpl' : './stream.tpl', import.meta.url), 'utf8'), {
     IMPORT: `${importSdk('WebsocketClient')}\n${commonjs ? "const process = require('node:process');" : "import process from 'node:process';"}`,
     WEBSOCKET: exchange.websocket,
     SYMBOL: exchange.symbol,
@@ -39,8 +39,8 @@ export async function programFiles(id, sdk, format = 'esm', extension = 'mjs') {
     PROMISE_TYPE: typescript ? '<string>' : '',
     ERROR_TYPE: typescript ? ': unknown' : '',
     EVENT: exchange.event,
-    UPDATE: indent((typescript ? exchange.typescriptGuard || '' : '') + exchange.update, 8),
-    SUBSCRIPTION: exchange.subscription,
+    UPDATE: indent((typescript ? exchange.typescriptGuard || '' : '') + exchange.update, exchange.continuous ? 2 : 8),
+    SUBSCRIPTION: exchange.cliSubscription || exchange.subscription,
   });
   return new Map([[`price.${extension}`, price], [`stream.${extension}`, stream]]);
 }
