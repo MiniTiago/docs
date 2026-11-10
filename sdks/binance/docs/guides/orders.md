@@ -7,6 +7,8 @@ description: "Place and cancel a Spot Testnet order through REST, and follow its
 
 Use `MainClient` to place one `LIMIT_MAKER` order and cancel its remaining quantity. Run the private user data stream alongside these REST commands to see the order accepted, filled or cancelled.
 
+The separate CLI commands make each step explicit. A persistent application can call the same SDK methods within one workflow, keeping the user data stream connected and tracking orders in local state. Use scoped REST reads to initialize state or recover gaps and uncertain outcomes, not after every order.
+
 `LIMIT_MAKER` is post-only: Binance rejects it if it would immediately match as a taker. An accepted resting order can still fill, including before you cancel it.
 
 This walkthrough uses Spot Testnet and virtual funds to avoid accidental live trades. The same Spot methods work on Mainnet, Binance's production markets. Remove `testnet` or set it to `false`, and use production credentials to execute against live markets.

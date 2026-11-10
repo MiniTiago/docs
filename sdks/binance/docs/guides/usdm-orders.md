@@ -7,6 +7,8 @@ description: Initialize futures account state, observe private WebSocket events,
 
 Use `USDMClient` for Binance's USD-M futures markets. This walkthrough reads starting account state, follows private WebSocket updates, and uses REST to place and cancel a BTCUSDT perpetual order.
 
+The separate CLI commands make each step explicit. A persistent application can call the same SDK methods within one workflow, keeping the user data stream connected and tracking account and order state locally. Use scoped REST reads to initialize state or recover gaps and uncertain outcomes, not after every order.
+
 The examples use Futures Demo Trading and virtual funds to avoid accidental live trades. The same methods work on Mainnet, Binance's production markets. Remove `demoTrading` or set it to `false`, leave `testnet` disabled and use production credentials to execute against live markets.
 
 ## Set up
