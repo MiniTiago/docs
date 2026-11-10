@@ -8,7 +8,7 @@
     "dev": "node scripts/dev.mjs",
     "verify": "node scripts/verify.mjs",
     "check": "node scripts/check-site.mjs dist",
-    "check:content": "node --test scripts/shared-content.test.mjs scripts/environments.test.mjs scripts/starters.test.mjs",
+    "check:content": "node --test scripts/shared-content.test.mjs scripts/environments.test.mjs scripts/starters.test.mjs scripts/network-guides.test.mjs",
     "compat": "node compatibility/run.mjs",
     "compat:check-report": "node --test compatibility/report.test.mjs",
     "build:checked": "node scripts/build-checked.mjs",
@@ -24,12 +24,15 @@
     "check:starters": "node scripts/starters.mjs check"
   },
   "devDependencies": {
+    "@types/ws": "8.18.1",
+    "https-proxy-agent": "7.0.6",
     "tar": "7.5.22",
     "typedoc": "0.28.20",
     "typedoc-plugin-markdown": "4.14.1",
     "typescript": "6.0.3",
     "vite": "5.4.21",
-    "vitepress": "1.6.4"
+    "vitepress": "1.6.4",
+    "ws": "8.21.1"
   },
   "engines": {
     "node": ">=22"
