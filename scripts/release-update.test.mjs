@@ -5,7 +5,7 @@ import { refreshBranch } from './github-automation.mjs';
 import { readReleaseVersions, releaseVersions, validateReleaseUpdate } from './release-manifest.mjs';
 
 const main = 'a'.repeat(40), head = 'b'.repeat(40);
-const manifest = () => ({ name: 'siebly-sdk-release-inputs', private: true, dependencies: { '@siebly/hyperliquid-api': '1.0.1', 'bybit-api': '4.8.4', binance: '3.6.11', '@siebly/kraken-api': '1.1.10' } });
+const manifest = () => ({ name: 'siebly-sdk-release-inputs', private: true, dependencies: { '@siebly/hyperliquid-api': '1.0.1', 'bybit-api': '4.8.4', binance: '3.6.11', '@siebly/kraken-api': '1.1.10', 'coinbase-api': '1.3.1' } });
 function candidate() {
   const before = manifest(), after = manifest();
   after.dependencies['bybit-api'] = '4.8.5';
@@ -18,7 +18,7 @@ function candidate() {
 }
 
 test('the committed manifest is the exact configured-package build input', async () => {
-  assert.deepEqual(Object.keys(await readReleaseVersions()).sort(), ['@siebly/hyperliquid-api', '@siebly/kraken-api', 'binance', 'bybit-api']);
+  assert.deepEqual(Object.keys(await readReleaseVersions()).sort(), ['@siebly/hyperliquid-api', '@siebly/kraken-api', 'binance', 'bybit-api', 'coinbase-api']);
   for (const version of ['latest', '^4.8.5', '4.8.5-beta.1', '04.8.5']) {
     const value = manifest(); value.dependencies['bybit-api'] = version;
     assert.throws(() => releaseVersions(value));

@@ -1,6 +1,6 @@
 import { readFile, writeFile, mkdir, readdir, cp, rm } from 'node:fs/promises';
 import path from 'node:path';
-import { Application, Comment, CommentTag, ReflectionKind } from 'typedoc';
+import { Application, Comment, CommentTag, Converter, ReflectionKind } from 'typedoc';
 import { context, root, catalogue } from './context.mjs';
 import { compilerConfig } from './compiler.mjs';
 import { generateCompatibility } from '../compatibility/report.mjs';
@@ -12,9 +12,18 @@ await rm(projectRoot, { recursive: true, force: true });
 await mkdir(projectRoot, { recursive: true });
 await cp(path.join(ctx.content, 'docs'), ctx.docs, { recursive: true });
 await copySharedContent(root, ctx.docs);
+if (sdk.compatibilityPage === 'authored') {
+  // Reuse the shared setup table while pointing to this SDK's setup-only page.
+  const setupFragment = path.join(ctx.docs, '.vitepress/shared/getting-started/environments.md');
+  const content = await readFile(setupFragment, 'utf8');
+  await writeFile(setupFragment, content.replace(
+    'See [Runtime compatibility](/compatibility) for tested versions, required configuration and check scope.',
+    'See [Runtime setup](/compatibility) for project recipes and required configuration.',
+  ));
+}
 await cp(path.join(ctx.content, 'examples'), path.join(projectRoot, 'examples'), { recursive: true });
 await cp(path.join(root, 'shared/public'), path.join(ctx.docs, 'public'), { recursive: true });
-await generateCompatibility(ctx, root);
+if (sdk.compatibilityPage !== 'authored') await generateCompatibility(ctx, root);
 await generateEnvironments(ctx);
 
 const pkg = JSON.parse(await readFile(path.join(sdkRoot, 'package.json'), 'utf8'));
@@ -50,10 +59,24 @@ const app = await Application.bootstrapWithPlugins({
   typeAliasPropertiesFormat: 'table',
   validation: { notExported: true, invalidLink: true, notDocumented: false },
 });
+// Filter the documentation model before TypeDoc builds its groups and categories.
+app.converter.on(Converter.EVENT_RESOLVE_BEGIN, ({ project }) => {
+  for (const reflection of Object.values(project.reflections)) {
+    if (reflection.kind === ReflectionKind.Property && sdk.referenceExcludeProperties?.includes(reflection.name)) {
+      project.removeReflection(reflection);
+    }
+  }
+});
 const project = await app.convert();
 if (!project || app.logger.hasErrors()) throw new Error('TypeDoc conversion failed');
 
 // Enrich the documentation model, never the SDK or generated Markdown.
+for (const [name, description] of Object.entries(sdk.referenceDescriptions || {})) {
+  const reflection = project.children.find(child => child.name === name);
+  if (!reflection) throw new Error(`Missing documented export: ${name}`);
+  reflection.comment = new Comment([{ kind: 'text', text: description }]);
+}
+
 // Exact member checks make renamed or removed methods fail the docs build.
 for (const help of sdk.referenceHelp || []) {
   const client = project.children.find((child) => child.name === help.client);

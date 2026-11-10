@@ -4,7 +4,7 @@ import { refreshReleases, updatedManifest, validateRefreshBranch, approveAndMerg
 import { requireMainDispatch, repository, refreshBranch, createGitHubApi } from './github-automation.mjs';
 
 const base = 'a'.repeat(40), proposal = 'b'.repeat(40), newer = 'c'.repeat(40);
-const manifest = (hl = '1.0.1') => ({ name: 'siebly-sdk-release-inputs', private: true, dependencies: { '@siebly/hyperliquid-api': hl, 'bybit-api': '4.8.4', binance: '3.6.11', '@siebly/kraken-api': '1.1.10' } });
+const manifest = (hl = '1.0.1') => ({ name: 'siebly-sdk-release-inputs', private: true, dependencies: { '@siebly/hyperliquid-api': hl, 'bybit-api': '4.8.4', binance: '3.6.11', '@siebly/kraken-api': '1.1.10', 'coinbase-api': '1.3.1' } });
 const pr = (head = proposal) => ({ state: 'open', number: 7, html_url: `https://github.com/${repository}/pull/7`, user: { login: 'github-actions[bot]', type: 'Bot' }, head: { sha: head, ref: refreshBranch, repo: { full_name: repository } }, base: { ref: 'main', repo: { full_name: repository } } });
 const comparison = () => ({ merge_base_commit: { sha: base }, total_commits: 1, files: [{ filename: 'releases/package.json', status: 'modified' }], commits: [{ author: { login: 'github-actions[bot]' } }] });
 

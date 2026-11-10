@@ -29,3 +29,26 @@ test('shared includes resolve privately and fail on missing or circular dependen
     await rm(work, { recursive: true, force: true });
   }
 });
+
+test('Coinbase navigation keeps references scoped and its runtime setups expanded', async () => {
+  const { default: siteConfig } = await import('../shared/config.mjs');
+  const { catalogue } = await import('./context.mjs');
+  const sdks = await catalogue();
+  for (const sdk of sdks) {
+    const config = siteConfig({ sdk, catalogue: sdks, siteUrl: `http://localhost/${sdk.id}/`, originUrl: 'http://localhost/', indexable: false }, '.');
+    const sidebar = config.themeConfig.sidebar;
+    const groups = Array.isArray(sidebar) ? sidebar : sidebar['/'];
+    if (!sdk.productGroups) continue;
+    assert.equal(groups.find(group => group.text.startsWith('Frameworks and runtimes')).collapsed, undefined);
+    const defaultReferences = groups.find(group => group.text === 'API reference').items;
+    for (const product of sdk.productGroups) {
+      const productGroups = sidebar[`/products/${product.slug}`];
+      const references = productGroups.find(group => group.text === 'API reference').items;
+      for (const client of product.clients) {
+        assert(!defaultReferences.some(item => item.link === `/api/classes/${client}`));
+        assert(references.some(item => item.link === `/api/classes/${client}`));
+        assert.equal(sidebar[`/api/classes/${client}`], productGroups);
+      }
+    }
+  }
+});

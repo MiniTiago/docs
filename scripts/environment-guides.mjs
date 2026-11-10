@@ -10,6 +10,7 @@ export function codeBlock(filename, content) {
 
 const command = value => `\`\`\`sh\n${value}\n\`\`\``;
 const purposes = {
+  'coinbase-public-auth.cjs': 'Reject JWT signing in this public-data consumer. Keep credentialed API calls on a Node.js server.',
   'package.json': 'Declare the SDK dependency and the commands used by this project.',
   'tsconfig.json': 'Enable strict type checking and compile the TypeScript programs into `dist/`.',
   'deno.json': 'Tell Deno to install npm dependencies locally and define the price and stream tasks.',
@@ -90,8 +91,15 @@ export function guideFields(id, sdk, environment, files) {
         ? ['package.json', 'install', 'vite.config.js', 'main.js', 'index.html']
         : environment === 'next'
           ? ['package.json', 'install', 'app/layout.js', 'app/api/price/route.js', 'app/page.js']
-          : ['package.json', 'app.json', 'install', 'siebly-sdk.metro.cjs', 'metro.config.cjs', 'App.js', 'index.js'];
+          : ['package.json', 'app.json', 'install', 'coinbase-public-auth.cjs', 'siebly-sdk.metro.cjs', 'metro.config.cjs', 'App.js', 'index.js'];
     app = orderedSteps(names, files);
+  }
+
+  if (id === 'coinbase') {
+    streamFiles = streamFiles
+      .replace('it closes the client after the first price or a failure.', 'it streams prices until you press Ctrl+C. Exceptions and reconnections are logged without stopping the client.')
+      .replace('when you want a live update. Its promise resolves to a price string and its `finally` block closes the client.', 'to stream prices until Ctrl+C. Signal handlers close the client; exceptions and reconnections are logged without stopping it.')
+      .replace('to receive one WebSocket price and close the connection.', 'to stream WebSocket prices until Ctrl+C.');
   }
 
   return {

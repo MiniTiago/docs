@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 
 export const releaseManifestPath = 'releases/package.json';
-export const sdkPackages = ['@siebly/hyperliquid-api', 'bybit-api', 'binance', '@siebly/kraken-api'];
+export const sdkPackages = ['@siebly/hyperliquid-api', 'bybit-api', 'binance', '@siebly/kraken-api', 'coinbase-api'];
 export const stableVersion = (version) => typeof version === 'string' && /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(version);
 
 export function releaseVersions(manifest) {

@@ -154,6 +154,9 @@ export async function environmentFiles(id, sdk, environment) {
     if (id !== 'hyperliquid') {
       Object.assign(pkg.dependencies, JSON.parse(await source('compatibility/native-config/dependencies.json')));
       files.set('siebly-sdk.metro.cjs', await nativeMetroConfig(id));
+      if (id === 'coinbase') {
+        files.set('coinbase-public-auth.cjs', await source('compatibility/native-config/coinbase-public-auth.cjs'));
+      }
       files.set('metro.config.cjs', "const { getDefaultConfig } = require('expo/metro-config');\nconst configureSdkMetro = require('./siebly-sdk.metro.cjs');\n\nconst config = getDefaultConfig(__dirname);\n\nmodule.exports = configureSdkMetro(config, __dirname);\n");
     }
   }
@@ -237,6 +240,21 @@ export async function generateEnvironments(ctx) {
       if (!(key in substitutions)) throw new Error(`Missing environment template field: ${key}`);
       return substitutions[key];
     });
+    if (ctx.id === 'coinbase') {
+      rendered = rendered
+        .replace('The script prints the first update, closes its WebSocket and exits.', 'The script keeps streaming until Ctrl+C. Exceptions and reconnections are logged; signal handlers close the client.')
+        .replace('The script receives one update, closes the client in `finally` and exits.', 'The script keeps streaming until Ctrl+C. Exceptions and reconnections are logged; signal handlers close the client.');
+      rendered = rendered
+        .replace('A failed request or no update within 30 seconds needs a network check.', 'A failed request or a stream without updates needs a network check.')
+        .replace('If a request fails or no update arrives within 30 seconds,', 'If a request fails or no stream updates arrive,');
+      const note = browser || environment === 'expo'
+        ? 'This is a public-market-data recipe only: the supplied configuration disables the SDK’s Node-only JWT signing helper. Keep the configuration and, for Expo, `coinbase-public-auth.cjs`. Run authenticated calls on your Node.js server. Browser REST access also depends on Coinbase CORS policy.'
+        : 'This project uses Advanced Trade public market data. Keep credentialed account and trading calls in a server-side application.';
+      rendered = rendered
+        .replace('## Create the project', note + '\n\n## Create the project')
+        .replace('See Runtime compatibility for recorded verification of this configuration.', 'Keep the public-auth helper alongside the Metro configuration.')
+        .replaceAll('[Runtime compatibility](/compatibility) for tested versions', '[Runtime setup](/compatibility) for the other project recipes');
+    }
     if (ctx.id === 'kraken') {
       const note = browser
         ? 'The public GET client below omits two SDK request headers that trigger a failing Kraken CORS preflight. This is an example-specific setup for public reads, not general browser REST support. See [Browser REST and CORS](/guides/troubleshooting#browser-rest-and-cors) for the limitation and a server-side alternative.'
