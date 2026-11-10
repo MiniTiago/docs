@@ -1,5 +1,8 @@
 import { RestClient } from '@siebly/hyperliquid-api';
 
+// One-shot diagnostic for unresolved state. Use account WebSocket subscriptions
+// for ongoing order and fill updates, rather than calling this after each action.
+
 async function main() {
   const accountAddress = process.env.HYPERLIQUID_ACCOUNT_ADDRESS;
   const savedOrderId = process.env.HYPERLIQUID_ORDER_ID;

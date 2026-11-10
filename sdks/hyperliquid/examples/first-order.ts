@@ -1,5 +1,9 @@
 import { RestClient } from '@siebly/hyperliquid-api';
 
+// Subscribe to the matching account WebSocket stream before submitting orders.
+// Use its order and fill updates for ongoing state. The explicit status command
+// is a one-shot diagnostic for unresolved state, not a post-submit/cancel step.
+
 function requiredEnvVar(name: string): string {
   const value = process.env[name];
   if (!value) {
@@ -61,23 +65,19 @@ async function main() {
       'HYPERLIQUID_ORDER_ID must be the numeric ID returned by the exchange.',
     );
   }
-  const status = await client.getOrderStatus({ oid: orderId });
-  if (status.status === 'unknownOid') {
-    console.log('Order not found for this account and order ID.');
-    process.exitCode = 1;
-    return;
-  }
-  console.log(
-    'Order ID:',
-    status.order.order.oid,
-    'Status:',
-    status.order.status,
-  );
   if (action === 'status') {
-    return;
-  }
-  if (status.order.status !== 'open') {
-    console.log('Order is no longer open; nothing to cancel.');
+    const status = await client.getOrderStatus({ oid: orderId });
+    if (status.status === 'unknownOid') {
+      console.log('Order not found for this account and order ID.');
+      process.exitCode = 1;
+      return;
+    }
+    console.log(
+      'Order ID:',
+      status.order.order.oid,
+      'Status:',
+      status.order.status,
+    );
     return;
   }
 
@@ -90,18 +90,18 @@ async function main() {
   ) {
     console.error(result);
     throw new Error(
-      'Cancellation was not confirmed. Run status; the order may already have filled.',
+      'Cancellation was not confirmed. The order may already have filled; check received account WebSocket updates.',
     );
   }
   console.log(
-    'Cancellation accepted. Run status to confirm the final order state.',
+    'Cancellation accepted. Follow the account WebSocket for order updates.',
   );
 }
 
 main().catch((error: unknown) => {
   console.error(error);
   console.error(
-    'Check order status or account order history before resubmitting an uncertain request.',
+    'Use account WebSocket updates to resolve the outcome. If still unknown, make a targeted REST query before deciding whether to retry.',
   );
   process.exitCode = 1;
 });
