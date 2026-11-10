@@ -1,0 +1,8 @@
+{
+  "name": "coinbase-deno-quickstart",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "coinbase-api": "latest"
+  }
+}
