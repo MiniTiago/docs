@@ -32,6 +32,8 @@ Example payload fields; the full event also includes connection context:
 
 `WebsocketAPIClient` inherits the REST client's methods and sends requests through Hyperliquid's WebSocket POST protocol. Close the client when the work is finished.
 
+<!--@include: @/.vitepress/shared/clients/awaitable-websocket.md-->
+
 <<< @/../examples/ws-request.ts
 
 [WebsocketAPIClient reference](/api/classes/WebsocketAPIClient)
@@ -52,4 +54,4 @@ Call `closeAll()` to close connections and cancel queued reconnects. Clear timer
 
 Stream subscriptions use native coin names. Resolve a readable alias with `nameToCoin()` before subscribing when needed.
 
-See the [Siebly Hyperliquid tutorial](https://siebly.io/sdk/hyperliquid/javascript/tutorial) for account streams, recovery and proxy examples.
+See [Use a proxy](/guides/proxies) for Node.js proxy configuration, and the [Siebly Hyperliquid tutorial](https://siebly.io/sdk/hyperliquid/javascript/tutorial) for more account-stream and recovery examples.
