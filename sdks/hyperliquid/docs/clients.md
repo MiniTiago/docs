@@ -37,6 +37,8 @@ Call `unsubscribe()` to remove a topic while keeping the connection, or `closeAl
 
 `WebsocketAPIClient` extends `RestClient` and sends the same methods through Hyperliquid's WebSocket POST protocol.
 
+<!--@include: @/.vitepress/shared/clients/awaitable-websocket.md-->
+
 <<< @/../examples/ws-request.ts
 
 The first request opens the connection. Close the client when finished. For streaming updates, use `WebsocketClient` subscriptions instead.
