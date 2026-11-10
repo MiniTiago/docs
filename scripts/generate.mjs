@@ -72,7 +72,7 @@ if (!project || app.logger.hasErrors()) throw new Error('TypeDoc conversion fail
 
 // Enrich the documentation model, never the SDK or generated Markdown.
 for (const [name, description] of Object.entries(sdk.referenceDescriptions || {})) {
-  const reflection = project.children.find(child => child.name === name);
+  const reflection = project.getChildByName(name.split('.'));
   if (!reflection) throw new Error(`Missing documented export: ${name}`);
   reflection.comment = new Comment([{ kind: 'text', text: description }]);
 }
