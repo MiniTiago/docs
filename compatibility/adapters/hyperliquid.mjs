@@ -1,4 +1,7 @@
-export const endpoints = {"rest": "https://api.hyperliquid.xyz/info", "websocket": "wss://api.hyperliquid.xyz/ws"};
+export const operations = {
+  rest: 'RestClient.getAllMids()',
+  websocket: 'WebsocketClient.subscribe()',
+};
 export function client(sdk) { return new sdk.RestClient({}, {timeout:15000}); }
 export async function read(client) { return (await client.getAllMids()).BTC; }
 export function stream(sdk, logger) { return new sdk.WebsocketClient({}, logger); }

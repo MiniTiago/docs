@@ -60,13 +60,13 @@ export default {
       "client": "MainClient",
       "method": "getOrder",
       "guide": "/guides/orders",
-      "title": "Query and cancel a Testnet order"
+      "title": "Manage a Testnet order"
     },
     {
       "client": "MainClient",
       "method": "cancelOrder",
       "guide": "/guides/orders",
-      "title": "Query and cancel a Testnet order"
+      "title": "Manage a Testnet order"
     },
     {
       "client": "WebsocketAPIClient",

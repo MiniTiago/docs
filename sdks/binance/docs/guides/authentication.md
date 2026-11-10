@@ -49,7 +49,7 @@ Use keys for the selected Binance product and environment. Check key permissions
 
 ## Place an order
 
-Once account access works, follow [Place and cancel an order](/guides/orders). The guide shows submission, status queries and cancellation with the SDK. To receive live status changes, use [Private order updates](/guides/private-streams).
+Once account access works, follow [Place and cancel an order](/guides/orders). Start [Private order updates](/guides/private-streams) first, then use the order guide to submit and cancel through REST. WebSocket events report the lifecycle changes; REST status queries are available for diagnosis and recovery.
 
 ## Signing and timestamps
 

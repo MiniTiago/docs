@@ -2,7 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdir, mkdtemp, readFile, readdir, rm, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { root } from './context.mjs';
+import { root, ids } from './context.mjs';
+import { environments } from './environments.mjs';
 import { generateStarters, checkStarters } from './starters.mjs';
 
 async function fixture(run) {
@@ -21,7 +22,7 @@ test('checked-in examples are deterministic and checking never writes', async ()
     const file = path.join(directory, 'bybit/node/price.cjs');
     const before = await stat(file);
     const bytes = await readFile(file);
-    assert.equal((await checkStarters(directory)).projects, 24);
+    assert.equal((await checkStarters(directory)).projects, ids.length * environments.length);
     assert.deepEqual(await readFile(file), bytes);
     assert.equal((await stat(file)).mtimeMs, before.mtimeMs);
     await generateStarters(directory);

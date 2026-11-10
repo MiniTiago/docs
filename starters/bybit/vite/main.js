@@ -14,6 +14,7 @@ function startStream() {
   errorOutput.textContent = '';
 
   function showError(error) {
+    console.error(error);
     if (!stopped) {
       errorOutput.textContent = error instanceof Error ? error.message : String(error);
     }

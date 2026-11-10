@@ -5,6 +5,8 @@ description: Set Hyperliquid networks, HTTP and WebSocket timeouts, reconnect de
 
 # Configuration
 
+For HTTP, HTTPS or SOCKS routing in Node.js, see [Use a proxy](/guides/proxies).
+
 Pass options when constructing a client. Network selection and signing options belong in the first argument; `RestClient` accepts HTTP request options in a second argument.
 
 ## Networks

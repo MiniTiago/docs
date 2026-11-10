@@ -1,5 +1,9 @@
 import { RestClientV5 } from 'bybit-api';
 
+// Subscribe to the matching account WebSocket stream before submitting orders.
+// Use its order and fill updates for ongoing state. The explicit status command
+// is a one-shot diagnostic for unresolved state, not a post-submit/cancel step.
+
 function requiredEnvVar(name: string): string {
   const value = process.env[name];
   if (!value) {
@@ -59,7 +63,9 @@ async function main() {
       positionIdx: 0,
     });
     console.log('Order ID:', response.result.orderId);
-    console.log('Set BYBIT_ORDER_ID to this returned ID, then run status.');
+    console.log(
+      'Save this as BYBIT_ORDER_ID. Follow the private WebSocket for order updates.',
+    );
     return;
   }
 
@@ -67,7 +73,9 @@ async function main() {
   const orderId = requiredEnvVar('BYBIT_ORDER_ID');
   if (action === 'cancel') {
     await client.cancelOrder({ ...market, orderId });
-    console.log('Cancellation acknowledged. Run status to confirm the result.');
+    console.log(
+      'Cancellation acknowledged. Follow the private WebSocket for order updates.',
+    );
     return;
   }
 
@@ -77,7 +85,7 @@ async function main() {
 main().catch((error: unknown) => {
   console.error(error);
   console.error(
-    'If the request outcome is uncertain, reconcile orders and fills before resubmitting.',
+    'Use private WebSocket updates to resolve the outcome. If still unknown, make a targeted REST query before deciding whether to retry.',
   );
   process.exitCode = 1;
 });

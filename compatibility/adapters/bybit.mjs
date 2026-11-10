@@ -1,4 +1,7 @@
-export const endpoints = {"rest": "https://api.bybit.com/v5/market/tickers?category=spot&symbol=BTCUSDT", "websocket": "wss://stream.bybit.com/v5/public/spot"};
+export const operations = {
+  rest: 'RestClientV5.getTickers()',
+  websocket: 'WebsocketClient.subscribeV5()',
+};
 export function client(sdk) { return new sdk.RestClientV5({}, {timeout:15000}); }
 export async function read(client) {
   const response = await client.getTickers({ category: 'spot', symbol: 'BTCUSDT' });

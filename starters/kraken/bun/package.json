@@ -1,0 +1,12 @@
+{
+  "name": "kraken-bun-quickstart",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "bun price.js",
+    "stream": "bun stream.js"
+  },
+  "dependencies": {
+    "@siebly/kraken-api": "latest"
+  }
+}

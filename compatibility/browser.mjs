@@ -24,10 +24,9 @@ export async function browserCheck({id,consumer,evidence,env,packageName,package
     try {await cp(path.join(consumer,'node_modules',packageName,'dist',browserGlobal+'.js'),path.join(consumer,'public/sdk-bundle.js'));}
     catch(error) {if(error.code==='ENOENT')return {status:'not-run',checks:[],reason:'This npm package does not contain the expected standalone browser bundle.'};throw error;}
   }
-  const adapter=await import(`./adapters/${id}.mjs`);
   let server,timer;
   try {
-    const config={sdk:id,packageName,packageVersion,runId,profile,endpoints:adapter.endpoints};
+    const config={sdk:id,packageName,packageVersion,runId,profile};
     await cp(path.join(root,'compatibility/live-scenario.mjs'),path.join(consumer,'live-scenario.mjs'));
     await writeFile(path.join(consumer,'index.html'),'<!doctype html><html><meta charset="utf-8"><title>SDK browser compatibility</title><style>body{font:16px system-ui;max-width:900px;margin:3rem auto;padding:1rem}pre{white-space:pre-wrap}li{margin:.5rem 0}</style><h1>SDK browser compatibility</h1><p id="identity"></p><p id="status">Running checks…</p><ul id="checks"></ul><pre id="details"></pre><script type="module" src="/browser-entry.mjs"></script></html>');
     await writeFile(path.join(consumer,'browser-entry.mjs'),`
@@ -38,7 +37,7 @@ document.getElementById('identity').textContent=config.packageName+'@'+config.pa
 const render=checks=>{const list=document.getElementById('checks');list.replaceChildren(...checks.map(c=>{const li=document.createElement('li');li.textContent=c.id+': '+c.status;return li;}));};
 let checks;
 const loadSdk=${profile!=='published-bundle'?`()=>import(${JSON.stringify(packageName)})`:`()=>new Promise((resolve,reject)=>{const script=document.createElement('script');script.src='/sdk-bundle.js';script.onload=()=>resolve(window[${JSON.stringify(browserGlobal)}]);script.onerror=()=>reject(Error('Published browser bundle did not load'));document.head.append(script);})`};
-try {checks=await liveScenario({loadSdk,adapter,config,onCheck:render});}
+try {checks=await liveScenario({loadSdk,adapter,onCheck:render});}
 catch(error){checks=[{id:'execution',status:'failed',detail:String(error.stack||error)}];}
 render(checks);
 document.getElementById('details').textContent=checks.filter(c=>c.detail).map(c=>c.id+': '+c.detail).join('\\n');
@@ -83,7 +82,7 @@ document.getElementById('status').textContent=response.ok?'Complete. Results sav
     const report=await result;
     clearTimeout(timer);
     if(!report)return {status:'not-run',checks:[{id:'bundle',status:'passed'}],reason:'The browser test page was not completed before the deadline.'};
-    await writeFile(path.join(evidence,`${evidenceName}.json`),JSON.stringify({report,warnings,profile,endpoints:adapter.endpoints},null,2));
+    await writeFile(path.join(evidence,`${evidenceName}.json`),JSON.stringify({report,warnings,profile},null,2));
     const passed=completeBrowserResult(report.checks);
     const version=/Chrome\/([\d.]+)/.exec(report.userAgent)?.[1];
     const description=profile==='vite'?'The default Vite consumer':profile==='configured'?'The Vite consumer with an events polyfill'+(id==='binance'?' and the SDK browser-signing alias':''):'The standalone browser bundle shipped in this npm package';

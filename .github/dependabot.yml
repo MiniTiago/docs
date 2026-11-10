@@ -11,14 +11,17 @@ updates:
       - dependency-name: '@siebly/hyperliquid-api'
       - dependency-name: bybit-api
       - dependency-name: binance
+      - dependency-name: '@siebly/kraken-api'
     groups:
       sdk-releases:
         patterns:
           - '@siebly/hyperliquid-api'
           - bybit-api
           - binance
+          - '@siebly/kraken-api'
     cooldown:
       exclude:
         - '@siebly/hyperliquid-api'
         - bybit-api
         - binance
+        - '@siebly/kraken-api'

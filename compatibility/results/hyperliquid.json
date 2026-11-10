@@ -25,7 +25,7 @@
           "id": "rest",
           "status": "passed",
           "price": "78543.5",
-          "endpoint": "https://api.hyperliquid.xyz/info",
+          "operation": "RestClient.getAllMids()",
           "observedAt": "2026-11-04T11:05:06.569Z",
           "elapsedMs": 553
         },
@@ -33,7 +33,7 @@
           "id": "websocket",
           "status": "passed",
           "price": "78551.5",
-          "endpoint": "wss://api.hyperliquid.xyz/ws",
+          "operation": "WebsocketClient.subscribe()",
           "observedAt": "2026-11-04T11:05:10.424Z",
           "elapsedMs": 3854
         },
@@ -69,7 +69,7 @@
           "id": "rest",
           "status": "passed",
           "price": "78620.5",
-          "endpoint": "https://api.hyperliquid.xyz/info",
+          "operation": "RestClient.getAllMids()",
           "observedAt": "2026-11-04T11:12:31.099Z",
           "elapsedMs": 331
         },
@@ -77,7 +77,7 @@
           "id": "websocket",
           "status": "passed",
           "price": "78615.5",
-          "endpoint": "wss://api.hyperliquid.xyz/ws",
+          "operation": "WebsocketClient.subscribe()",
           "observedAt": "2026-11-04T11:12:34.133Z",
           "elapsedMs": 3034
         },
@@ -113,7 +113,7 @@
           "id": "rest",
           "status": "passed",
           "price": "78609.5",
-          "endpoint": "https://api.hyperliquid.xyz/info",
+          "operation": "RestClient.getAllMids()",
           "observedAt": "2026-11-04T11:12:38.616Z",
           "elapsedMs": 554
         },
@@ -121,7 +121,7 @@
           "id": "websocket",
           "status": "passed",
           "price": "78610.5",
-          "endpoint": "wss://api.hyperliquid.xyz/ws",
+          "operation": "WebsocketClient.subscribe()",
           "observedAt": "2026-11-04T11:12:44.374Z",
           "elapsedMs": 5757
         },
@@ -168,7 +168,7 @@
           "id": "rest",
           "status": "passed",
           "price": "78568.5",
-          "endpoint": "https://api.hyperliquid.xyz/info",
+          "operation": "RestClient.getAllMids()",
           "observedAt": "2026-11-04T11:06:08.279Z",
           "elapsedMs": 566
         },
@@ -176,7 +176,7 @@
           "id": "websocket",
           "status": "passed",
           "price": "78565.5",
-          "endpoint": "wss://api.hyperliquid.xyz/ws",
+          "operation": "WebsocketClient.subscribe()",
           "observedAt": "2026-11-04T11:06:10.683Z",
           "elapsedMs": 2404
         },
@@ -247,7 +247,7 @@
           "id": "rest",
           "status": "passed",
           "price": "78565.5",
-          "endpoint": "https://api.hyperliquid.xyz/info",
+          "operation": "RestClient.getAllMids()",
           "observedAt": "2026-11-04T11:07:02.868Z",
           "elapsedMs": 1127
         },
@@ -255,7 +255,7 @@
           "id": "websocket",
           "status": "passed",
           "price": "78565.5",
-          "endpoint": "wss://api.hyperliquid.xyz/ws",
+          "operation": "WebsocketClient.subscribe()",
           "observedAt": "2026-11-04T11:07:06.374Z",
           "elapsedMs": 3505
         },
@@ -291,7 +291,7 @@
           "id": "rest",
           "status": "passed",
           "price": "78653.5",
-          "endpoint": "https://api.hyperliquid.xyz/info",
+          "operation": "RestClient.getAllMids()",
           "observedAt": "2026-11-04T14:37:21.980Z",
           "elapsedMs": 817
         },
@@ -299,7 +299,7 @@
           "id": "websocket",
           "status": "passed",
           "price": "78623.5",
-          "endpoint": "wss://api.hyperliquid.xyz/ws",
+          "operation": "WebsocketClient.subscribe()",
           "observedAt": "2026-11-04T14:37:29.814Z",
           "elapsedMs": 7834
         },

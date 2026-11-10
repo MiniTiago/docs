@@ -1,4 +1,36 @@
 export const exchanges = {
+  kraken: {
+    restClient: 'SpotClient',
+    symbol: 'BTC/USD',
+    request: `const client = new SpotClient();
+const response = await client.getTicker({ pair: 'XBTUSD' });
+const ticker = Object.values(response.result)[0];
+const price = ticker?.c[0];`,
+    browserRequest: `// Public GET requests only. Keep credentials on your server.
+const client = new SpotClient({}, {
+  transformRequest: [function (data, headers) {
+    if (this.method !== 'get') {
+      throw new Error('This browser client supports public GET requests only.');
+    }
+    // These SDK defaults trigger a preflight Kraken does not accept.
+    headers.delete('UserAgent');
+    headers.delete('locale');
+    return data;
+  }],
+});
+const response = await client.getTicker({ pair: 'XBTUSD' });
+const ticker = Object.values(response.result)[0];
+const price = ticker?.c[0];`,
+    event: 'message',
+    update: `if (message.channel !== 'ticker') {
+  console.log('WebSocket message:', message);
+  return;
+}
+
+const price = message.data?.[0]?.last;`,
+    websocket: 'new WebsocketClient()',
+    subscription: "Promise.resolve(ws.subscribe({ topic: 'ticker', payload: { symbol: ['BTC/USD'] } }, 'spotPublicV2'))",
+  },
   hyperliquid: {
     restClient: 'RestClient',
     symbol: 'BTC',

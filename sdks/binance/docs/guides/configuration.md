@@ -5,6 +5,8 @@ description: "Select Binance environments and configure request timeouts and cli
 
 # Configuration
 
+For HTTP, HTTPS or SOCKS routing in Node.js, see [Use a proxy](/guides/proxies).
+
 ## Configure a REST client
 
 <<< @/../examples/configure-rest.ts

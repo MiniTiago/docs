@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "Kraken price screen",
+    "slug": "kraken-price-screen",
+    "version": "1.0.0",
+    "platforms": [
+      "ios",
+      "android"
+    ]
+  }
+}

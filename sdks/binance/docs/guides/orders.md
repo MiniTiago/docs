@@ -1,11 +1,13 @@
 ---
 title: "Place your first Binance Spot Testnet order"
-description: "Place, query and cancel a post-only Spot Testnet order using the returned order ID."
+description: "Place and cancel a Spot Testnet order through REST, and follow its lifecycle through private WebSocket events."
 ---
 
 # Place your first Spot Testnet order
 
-Use `MainClient` to place one `LIMIT_MAKER` order, query its status and cancel its remaining quantity. Each operation runs separately so you can inspect the result before continuing.
+Use `MainClient` to place one `LIMIT_MAKER` order and cancel its remaining quantity. Run the private user data stream alongside these REST commands to see the order accepted, filled or cancelled.
+
+The separate CLI commands make each step explicit. A persistent application can call the same SDK methods within one workflow, keeping the user data stream connected and tracking orders in local state. Use scoped REST reads to initialize state or recover gaps and uncertain outcomes, not after every order.
 
 `LIMIT_MAKER` is post-only: Binance rejects it if it would immediately match as a taker. An accepted resting order can still fill, including before you cancel it.
 
@@ -44,9 +46,11 @@ Save this as `first-order.ts`. Node.js 24 can run it directly:
 
 The example uses the SDK's numeric price and quantity fields and a post-only buy order. It makes one request per command, with no automatic retries, polling or cancellation.
 
-## Place, query and cancel
+## Place and observe the order {#place-query-and-cancel}
 
-First place the order:
+Start the [private user data stream](/guides/private-streams) in another terminal with the same Testnet account. Wait for `Spot Testnet user data subscribed.` before continuing. The demonstration stops after 60 seconds; keep it running while you try the commands.
+
+Place the order:
 
 ```sh
 node --env-file=.env first-order.ts place
@@ -62,25 +66,29 @@ Use the same Testnet account and symbol throughout.
 
 Submission acknowledgement means Binance accepted the request, not that the order filled. A resting order normally reports `NEW`; an order that has traded may report `PARTIALLY_FILLED` or `FILLED`.
 
-Query the order using the saved `BINANCE_ORDER_ID`:
+Follow the stream's `executionReport` events for the saved order ID. They report status changes and fills without additional REST requests.
 
-```sh
-node --env-file=.env first-order.ts status
-```
+## Cancel remaining quantity
 
-After saving `BINANCE_ORDER_ID`, cancel any remaining quantity:
+If the order still has open quantity, request cancellation using the saved `BINANCE_ORDER_ID`:
 
 ```sh
 node --env-file=.env first-order.ts cancel
 ```
 
-After `cancel`, run `status` again to confirm the outcome. Use the same exchange order ID throughout. Expect `CANCELED` if cancellation wins the race with execution. `FILLED` means there is nothing left to cancel. A canceled order may still have a nonzero executed quantity from earlier partial fills; cancellation does not reverse those trades.
+Watch the private stream for the cancellation or fill. Use the same exchange order ID throughout. Expect `CANCELED` if cancellation wins the race with execution. `FILLED` means there is nothing left to cancel. A canceled order may still have a nonzero executed quantity from earlier partial fills; cancellation does not reverse those trades.
 
 ## Resolve failed or interrupted requests
 
 A post-only rejection can mean the price would immediately trade. Other rejections can indicate filters, funds or permissions. A timeout or lost response can also happen after Binance accepts the order. The example logs the error object and does not automatically retry writes.
 
-If you have the exchange order ID, use `status`. If the placement response was lost and no ID was saved, inspect open orders, order history and trade history for the same account and symbol before submitting again. An unavailable or not-found response does not establish whether the order was accepted. Save the confirmed order ID for subsequent status and cancellation commands.
+Check matching private events first. If the outcome remains unclear and you have the exchange order ID, use the one-shot `status` command:
+
+```sh
+node --env-file=.env first-order.ts status
+```
+
+This is a diagnostic read, not a step to repeat after every order. If neither the response nor the stream provides an ID, inspect open orders, order history and trade history for the same account and symbol before submitting again. An unavailable or not-found response does not establish whether the order was accepted. Save the confirmed order ID for subsequent status and cancellation commands.
 
 A connection failure or process exit does not cancel an open order. Keep the saved identifiers for subsequent `status` and `cancel` commands. Testnet resets can remove account and order history; see [Spot Testnet information](https://developers.binance.com/docs/binance-spot-api-docs/testnet).
 

@@ -25,6 +25,7 @@ if (process.env.SDK_VERSION && pkg.version !== process.env.SDK_VERSION) {
 const out = path.join(projectRoot, 'docs/api');
 const app = await Application.bootstrapWithPlugins({
   entryPoints: [path.join(sdkRoot, sdk.entryPoint)],
+  exclude: (sdk.referenceExclude || []).map((file) => path.join(sdkRoot, file)),
   tsconfig: path.join(sdkRoot, sdk.tsconfig),
   plugin: ['typedoc-plugin-markdown'],
   useCustomAnchors: true,

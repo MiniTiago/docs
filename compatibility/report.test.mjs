@@ -21,7 +21,10 @@ test('generated pages retain recorded results and tested versions across patch, 
   try {
     await mkdir(path.join(work,'compatibility/results'),{recursive:true});
     const comparison={...report,selection:{kind:'explicit',requestedVersion:'latest',documentationVersion:'1.0.1'},targets:{
-      bun:{status:'passed',runtimeVersion:'1.4.4',checkedAt:'2026-11-03T12:00:00Z',checks:[]},
+      bun:{status:'passed',runtimeVersion:'1.4.4',checkedAt:'2026-11-03T12:00:00Z',checks:[
+        {id:'rest',status:'passed',price:'123',observedAt:'2026-11-03T12:00:00Z',operation:'ExampleClient.getTicker()'},
+        {id:'websocket',status:'passed',price:'124',observedAt:'2026-11-03T12:00:01Z'},
+      ]},
       node:{status:'failed',checks:[]}, next:{status:'build-only',checks:[]}, deno:{status:'not-run',checks:[]},
     }};
     await writeFile(path.join(work,'compatibility/results/bybit.json'),JSON.stringify(comparison));
@@ -35,6 +38,8 @@ test('generated pages retain recorded results and tested versions across patch, 
       assert.match(page,/Last run: \*\*2026-11-04/);
       assert.match(page,/Checked 2026-11-03/);
       assert.match(page,/1\.4\.4 \| Live checks passed/);
+      assert.match(page,/Observed BTC price: \*\*123\*\*, received 2026-11-03T12:00:00Z via ExampleClient\.getTicker\(\)\./);
+      assert.match(page,/Observed BTC price: \*\*124\*\*, received 2026-11-03T12:00:01Z via the SDK\./);
       for(const label of ['Checks failed','Build only','Not verified'])assert.ok(page.includes(label));
       assert.doesNotMatch(page,/No recorded live exchange results|npm install example@1\.0\.0/);
     }

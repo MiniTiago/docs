@@ -4,6 +4,7 @@
   "dependencies": {
     "@siebly/hyperliquid-api": "1.0.3",
     "bybit-api": "4.8.5",
-    "binance": "3.6.12"
+    "binance": "3.6.12",
+    "@siebly/kraken-api": "1.1.10"
   }
 }

@@ -30,7 +30,7 @@
           "id": "rest",
           "status": "passed",
           "price": "78572.1",
-          "endpoint": "https://api.bybit.com/v5/market/tickers?category=spot&symbol=BTCUSDT",
+          "operation": "RestClientV5.getTickers()",
           "observedAt": "2026-11-04T11:07:47.750Z",
           "elapsedMs": 589
         },
@@ -38,7 +38,7 @@
           "id": "websocket",
           "status": "passed",
           "price": "78572.1",
-          "endpoint": "wss://stream.bybit.com/v5/public/spot",
+          "operation": "WebsocketClient.subscribeV5()",
           "observedAt": "2026-11-04T11:07:48.510Z",
           "elapsedMs": 759
         },
@@ -74,7 +74,7 @@
           "id": "rest",
           "status": "passed",
           "price": "78576.4",
-          "endpoint": "https://api.bybit.com/v5/market/tickers?category=spot&symbol=BTCUSDT",
+          "operation": "RestClientV5.getTickers()",
           "observedAt": "2026-11-04T11:07:54.045Z",
           "elapsedMs": 242
         },
@@ -82,7 +82,7 @@
           "id": "websocket",
           "status": "passed",
           "price": "78576.4",
-          "endpoint": "wss://stream.bybit.com/v5/public/spot",
+          "operation": "WebsocketClient.subscribeV5()",
           "observedAt": "2026-11-04T11:07:54.767Z",
           "elapsedMs": 722
         },
@@ -118,7 +118,7 @@
           "id": "rest",
           "status": "passed",
           "price": "78576.4",
-          "endpoint": "https://api.bybit.com/v5/market/tickers?category=spot&symbol=BTCUSDT",
+          "operation": "RestClientV5.getTickers()",
           "observedAt": "2026-11-04T11:07:59.107Z",
           "elapsedMs": 278
         },
@@ -126,7 +126,7 @@
           "id": "websocket",
           "status": "passed",
           "price": "78576.4",
-          "endpoint": "wss://stream.bybit.com/v5/public/spot",
+          "operation": "WebsocketClient.subscribeV5()",
           "observedAt": "2026-11-04T11:07:59.861Z",
           "elapsedMs": 754
         },
@@ -196,7 +196,7 @@
           "id": "rest",
           "status": "passed",
           "price": "78601.4",
-          "endpoint": "https://api.bybit.com/v5/market/tickers?category=spot&symbol=BTCUSDT",
+          "operation": "RestClientV5.getTickers()",
           "observedAt": "2026-11-04T11:08:23.012Z",
           "elapsedMs": 410
         },
@@ -204,7 +204,7 @@
           "id": "websocket",
           "status": "passed",
           "price": "78601.4",
-          "endpoint": "wss://stream.bybit.com/v5/public/spot",
+          "operation": "WebsocketClient.subscribeV5()",
           "observedAt": "2026-11-04T11:08:23.734Z",
           "elapsedMs": 721
         },
@@ -300,7 +300,7 @@
           "id": "rest",
           "status": "passed",
           "price": "78623.2",
-          "endpoint": "https://api.bybit.com/v5/market/tickers?category=spot&symbol=BTCUSDT",
+          "operation": "RestClientV5.getTickers()",
           "observedAt": "2026-11-04T11:21:53.479Z",
           "elapsedMs": 576
         },
@@ -308,7 +308,7 @@
           "id": "websocket",
           "status": "passed",
           "price": "78623.2",
-          "endpoint": "wss://stream.bybit.com/v5/public/spot",
+          "operation": "WebsocketClient.subscribeV5()",
           "observedAt": "2026-11-04T11:21:54.810Z",
           "elapsedMs": 1331
         },
@@ -350,7 +350,7 @@
           "id": "rest",
           "status": "passed",
           "price": "79398.5",
-          "endpoint": "https://api.bybit.com/v5/market/tickers?category=spot&symbol=BTCUSDT",
+          "operation": "RestClientV5.getTickers()",
           "observedAt": "2026-11-04T14:45:13.397Z",
           "elapsedMs": 598
         },
@@ -358,7 +358,7 @@
           "id": "websocket",
           "status": "passed",
           "price": "79395.5",
-          "endpoint": "wss://stream.bybit.com/v5/public/spot",
+          "operation": "WebsocketClient.subscribeV5()",
           "observedAt": "2026-11-04T14:45:14.526Z",
           "elapsedMs": 1129
         },

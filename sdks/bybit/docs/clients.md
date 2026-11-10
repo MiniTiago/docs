@@ -27,7 +27,11 @@ Register listeners before subscribing with `WebsocketClient`. The [subscription 
 
 ## WebSocket API requests
 
-`WebsocketAPIClient` returns promises for supported Bybit WebSocket API operations. Its [method list](/api/classes/WebsocketAPIClient) differs from the REST clients.
+`WebsocketAPIClient` returns promises for supported Bybit WebSocket API operations.
+
+<!--@include: @/.vitepress/shared/clients/awaitable-websocket.md-->
+
+Its [method list](/api/classes/WebsocketAPIClient) differs from the REST clients.
 
 ## Full reference
 

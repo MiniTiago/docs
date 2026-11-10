@@ -7,6 +7,8 @@ description: Read Hyperliquid mid prices, L2 order books and candle history, and
 
 Use `RestClient` for public HTTP requests. These examples do not need account credentials.
 
+These REST examples read a snapshot or historical data. Use [WebSocket subscriptions](/guides/websockets) for ongoing price and order-book updates instead of polling REST.
+
 ## Mid prices
 
 <<< @/../examples/first-call.ts

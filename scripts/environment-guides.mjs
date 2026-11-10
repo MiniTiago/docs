@@ -23,7 +23,7 @@ const purposes = {
   'app/api/price/route.js': 'Handle the request on the Node.js server. This file creates the SDK client and requests the current price directly.',
   'app/page.js': 'Add a page with a link to the price endpoint.',
   'app.json': 'Name the Expo app and enable iOS and Android.',
-  'siebly-sdk.metro.cjs': 'Resolve Node-style HTTP imports to the tested React Native polyfills.',
+  'siebly-sdk.metro.cjs': 'Resolve Node-style HTTP imports to the configured React Native polyfills.',
   'metro.config.cjs': 'Apply the SDK resolver to Expo’s default Metro configuration.',
   'App.js': 'Build the native screen. Its effect reads the price, subscribes to updates and closes the connection when the price panel unmounts.',
   'index.js': 'Register the native app entry point with Expo.',

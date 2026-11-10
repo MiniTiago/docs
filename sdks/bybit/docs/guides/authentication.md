@@ -49,7 +49,7 @@ Mainnet, Testnet and demo trading use separate credentials. REST and WebSocket c
 
 ## Place an order
 
-Once account access works, follow [Place and cancel an order](/guides/orders). The guide places a Testnet order and uses its returned order ID to query and cancel it. To receive live status changes, use [Private order updates](/guides/private-streams).
+Once account access works, follow [Place and cancel an order](/guides/orders). Start [Private order updates](/guides/private-streams) first, then submit and cancel through REST. Follow lifecycle changes through the stream and use REST status queries when an outcome remains unclear.
 
 ## Signing and timestamps
 

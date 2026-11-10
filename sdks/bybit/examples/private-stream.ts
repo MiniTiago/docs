@@ -66,7 +66,9 @@ function main() {
     console.log('Reconnecting:', event);
   });
   ws.on('reconnected', (event) => {
-    console.log('Reconnected. Reconcile missed order events with REST:', event);
+    console.log('Reconnected:', event);
+    // If missed events leave state unresolved, use a targeted REST recovery query.
+    // Do not query after each order event or submission.
   });
   ws.on('close', (event) => console.log('Connection closed:', event));
 

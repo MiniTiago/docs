@@ -44,7 +44,7 @@ export async function generateCompatibility(ctx,root) {
     if(c.checks?.length)lines.push('| Check | Result |','| --- | --- |',...c.checks.map(ch=>`| ${safe(names[ch.id]||ch.id)} | ${ch.status==='passed'?'Passed':ch.status==='failed'?'Failed':'Not run'} |`),'');
     for(const ch of c.checks||[]){
       if(ch.status==='failed'&&ch.detail)lines.push(`**${safe(names[ch.id]||ch.id)}:** ${detail(ch.detail)}`,'');
-      if(ch.price)lines.push(`Observed BTC price: **${safe(ch.price)}**, received ${safe(ch.observedAt)} from ${safe(ch.endpoint)}.`,'');
+      if(ch.price)lines.push(`Observed BTC price: **${safe(ch.price)}**, received ${safe(ch.observedAt)} via ${safe(ch.operation||'the SDK')}.`,'');
     }
     if(c.observation)lines.push(`The server route received BTC price **${safe(c.observation.price)}** at ${safe(c.observation.observedAt)}.`,'');
     if(t==='browser-configured'&&c.status==='passed'){
@@ -66,7 +66,7 @@ export async function generateCompatibility(ctx,root) {
     if(t==='react-native'&&c.status==='failed')lines.push('This is the default configuration. See [Android with polyfills](#react-native-configured) for the consumer setup and its live results.','');
     if(t==='react-native-ios'&&c.status==='failed')lines.push('See [iOS with polyfills](#react-native-ios-configured) for the configured consumer setup and results.','');
     if(t==='react-native-ios-configured'&&setupTarget&&t!==setupTarget)lines.push('Use the shared [Expo and Metro setup](#expo-and-metro-setup) above. The same helper is used for the iOS checks.','');
-    if(t==='next')lines.push('Checked in a Node.js Route Handler. Client Components and Edge execution are untested.','');
+    if(t==='next')lines.push(c.status==='not-run'?'The Next.js recipe uses a Node.js Route Handler. Runtime execution is unverified.':'Checked in a Node.js Route Handler. Client Components and Edge execution are untested.','');
   }
   lines.push(sharedInclude('live-check-scope'),'',sharedInclude('browser-scope'),'',sharedInclude('android-scope'),'',sharedInclude('ios-scope'),'',
     ...(hasReport&&version!==ctx.pkg.version?[`Test metadata: SDK ${version}; API reference source ${ctx.pkg.version}.`,'']:[]),

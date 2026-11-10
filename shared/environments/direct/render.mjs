@@ -29,7 +29,7 @@ export async function programFiles(id, sdk, format = 'esm', extension = 'mjs') {
     REQUEST: indent(exchange.request, requestIndent),
     INDENT: ' '.repeat(requestIndent),
     SYMBOL: exchange.symbol,
-    CLOSE: commonjs ? `}\n\nmain().catch((error) => {\n  console.error(error instanceof Error ? error.message : String(error));\n  process.exitCode = 1;\n});` : '',
+    CLOSE: commonjs ? `}\n\nmain().catch((error) => {\n  console.error(error);\n  process.exitCode = 1;\n});` : '',
   }).trimEnd() + '\n';
   const stream = fill(await readFile(new URL('./stream.tpl', import.meta.url), 'utf8'), {
     IMPORT: `${importSdk('WebsocketClient')}\n${commonjs ? "const process = require('node:process');" : "import process from 'node:process';"}`,
@@ -48,6 +48,8 @@ export async function programFiles(id, sdk, format = 'esm', extension = 'mjs') {
 
 export async function screenFile(id, sdk, setup) {
   const exchange = exchanges[id];
+  const browser = setup === 'react' || setup === 'vite';
+  const request = browser && exchange.browserRequest ? exchange.browserRequest : exchange.request;
   const values = {
     PACKAGE: sdk.packageName,
     REST_CLIENT: exchange.restClient,
@@ -59,13 +61,13 @@ export async function screenFile(id, sdk, setup) {
   if (setup === 'react' || setup === 'expo') {
     values.EFFECT = fill(await readFile(new URL('./effect.tpl', import.meta.url), 'utf8'), {
       ...values,
-      REQUEST: indent(exchange.request, 6),
+      REQUEST: indent(request, 6),
       UPDATE: indent(exchange.update, 6),
     }).trimEnd();
   }
   return fill(await readFile(new URL(`./${setup}.tpl`, import.meta.url), 'utf8'), {
     ...values,
-    REQUEST: indent(exchange.request, 4),
+    REQUEST: indent(request, 4),
     UPDATE: indent(exchange.update, 4),
   });
 }

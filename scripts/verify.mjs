@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { cp, mkdir, mkdtemp, readFile, writeFile, readdir, symlink, stat, appendFile } from 'node:fs/promises';
 import { spawn } from 'node:child_process';
 import path from 'node:path';
-import { root, context } from './context.mjs';
+import { root, context, ids } from './context.mjs';
 import { checkSite } from './check-site.mjs';
 
 const verification = path.join(root, 'verification');
@@ -38,7 +38,7 @@ await checkSite(dist);
 const ctx = await context('hyperliquid');
 assert.equal(ctx.indexable, false, 'Run verification from the default local preview configuration.');
 const before = await snapshot(dist);
-const otherSites = new Map(['bybit', 'binance'].map((id) => [id, new Map([...before].filter(([name]) => name.startsWith(`${id}/`)).map(([name, value]) => [name.slice(id.length + 1), value]))]));
+const otherSites = new Map(ids.filter(id => id !== ctx.id).map((id) => [id, new Map([...before].filter(([name]) => name.startsWith(`${id}/`)).map(([name, value]) => [name.slice(id.length + 1), value]))]));
 const source = path.join(runDir, 'source-fixture');
 await mkdir(source);
 await cp(path.join(ctx.sdkRoot, 'src'), path.join(source, 'src'), { recursive: true });

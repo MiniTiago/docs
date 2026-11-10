@@ -19,7 +19,7 @@ export async function liveScenario({loadSdk,adapter,onCheck,importCheck='import'
   await check('rest',async()=>{
     const price=await adapter.read(adapter.client(sdk));
     if(!positivePrice(price))throw Error('Exchange did not return a positive market price');
-    return {price:String(price),endpoint:adapter.endpoints.rest,observedAt:new Date().toISOString()};
+    return {price:String(price),operation:adapter.operations.rest,observedAt:new Date().toISOString()};
   });
   let ws;
   try {
@@ -30,7 +30,7 @@ export async function liveScenario({loadSdk,adapter,onCheck,importCheck='import'
       try {
         ws=adapter.stream(sdk,logger);
         ws.on('exception',error=>{lastError=error?.message||String(error);});
-        ws.on(adapter.event,event=>{const price=adapter.value(event);if(positivePrice(price))settle({price:String(price),endpoint:adapter.endpoints.websocket,observedAt:new Date().toISOString()});});
+        ws.on(adapter.event,event=>{const price=adapter.value(event);if(positivePrice(price))settle({price:String(price),operation:adapter.operations.websocket,observedAt:new Date().toISOString()});});
         // Subscription promises may wait for a server acknowledgement. Bound the
         // entire operation with the live-update deadline, even if it is rejected.
         Promise.resolve(adapter.subscribe(ws)).catch(error=>{lastError=error?.message||String(error);});

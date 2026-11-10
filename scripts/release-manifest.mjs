@@ -1,13 +1,13 @@
 import { readFile } from 'node:fs/promises';
 
 export const releaseManifestPath = 'releases/package.json';
-export const sdkPackages = ['@siebly/hyperliquid-api', 'bybit-api', 'binance'];
+export const sdkPackages = ['@siebly/hyperliquid-api', 'bybit-api', 'binance', '@siebly/kraken-api'];
 export const stableVersion = (version) => typeof version === 'string' && /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(version);
 
 export function releaseVersions(manifest) {
   if (!manifest || manifest.name !== 'siebly-sdk-release-inputs' || manifest.private !== true || Object.keys(manifest).sort().join(',') !== 'dependencies,name,private') throw new Error('Unexpected release manifest structure');
   const versions = manifest.dependencies;
-  if (!versions || Object.keys(versions).sort().join(',') !== [...sdkPackages].sort().join(',') || sdkPackages.some((name) => !stableVersion(versions[name]))) throw new Error('Release inputs must contain exactly the three SDKs at exact stable versions');
+  if (!versions || Object.keys(versions).sort().join(',') !== [...sdkPackages].sort().join(',') || sdkPackages.some((name) => !stableVersion(versions[name]))) throw new Error('Release inputs must contain exactly the configured SDKs at exact stable versions');
   return { ...versions };
 }
 

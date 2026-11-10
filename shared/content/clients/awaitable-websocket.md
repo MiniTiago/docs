@@ -1,0 +1,1 @@
+Use `await` and `try`/`catch` just as you would with a REST API call. The SDK matches responses to requests and manages the WebSocket connection for you. Requests over a persistent WebSocket can offer lower overhead and latency, depending on the exchange, network and workload.
