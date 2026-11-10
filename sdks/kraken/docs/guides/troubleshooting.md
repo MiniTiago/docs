@@ -33,11 +33,11 @@ Use credentials for the correct product, check permissions and IP restrictions, 
 
 ## No private stream updates
 
-Check the key's WebSocket access and channel permissions. Register listeners for `response` and `exception` before subscribing. A subscription request is not confirmation of acceptance. The SDK manages the Spot token automatically.
+Check the key's WebSocket access and channel permissions. Register listeners for `response` and `exception` before subscribing. A subscription request is not confirmation of acceptance. The SDK manages the Spot token automatically. See the [private account updates example](/guides/private-streams#observe-spot-executions).
 
 ## No ticker messages
 
-Check subscription replies and use the correct connection key and symbol format. Ticker updates depend on market activity and channel options. Log unmatched messages while diagnosing the connection.
+Check subscription replies and use the correct connection key and symbol format shown in the [ticker subscription example](/guides/websockets#subscribe-to-a-ticker). Ticker updates depend on market activity and channel options. Log unmatched messages while diagnosing the connection.
 
 ## An order request timed out
 

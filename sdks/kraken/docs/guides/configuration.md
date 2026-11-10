@@ -25,6 +25,6 @@ Use public market-data reads or [Spot order validation](/guides/orders) when dev
 
 Use Spot credentials with `SpotClient` and private Spot streams; use Futures credentials with `DerivativesClient` and private Futures streams. The [authentication guide](/guides/authentication) shows secure configuration for Spot.
 
-For streaming, pass a connection key from `WS_KEY_MAP` to `subscribe()`. For example, `spotPublicV2` selects public Spot v2 data and `spotPrivateV2` selects private Spot v2 data.
+For [streaming](/guides/websockets#subscribe-to-a-ticker), pass a connection key from `WS_KEY_MAP` to `subscribe()`. For example, `spotPublicV2` selects public Spot v2 data and `spotPrivateV2` selects [private Spot v2 data](/guides/private-streams#observe-spot-executions).
 
 [Production usage](/guides/production) · [Error handling](/guides/errors)
