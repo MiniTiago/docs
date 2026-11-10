@@ -27,7 +27,7 @@ Client methods, parameters and response types exported by [`binance`](https://ww
 
 ## Account and orders
 
-Use [Authentication](/guides/authentication) to verify account access, [Place and cancel an order](/guides/orders) for submission and order management, and [Private account updates](/guides/private-streams) for streaming changes.
+Use [Authentication](/guides/authentication) to verify account access, [Order management](/guides/orders) for submission and order management, and [Private account updates](/guides/private-streams) for streaming changes.
 
 Select the product and environment in [Configuration](/guides/configuration), with credentials and permissions for that account. Read the response types and [Error handling](/guides/errors) before sending orders.
 
