@@ -5,6 +5,8 @@ description: "Configure Kraken REST timeouts and select the appropriate market a
 
 # Configuration
 
+For HTTP, HTTPS or SOCKS routing in Node.js, see [Use a proxy](/guides/proxies).
+
 ## Configure a REST client
 
 <<< @/../examples/configure-rest.ts
