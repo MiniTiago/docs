@@ -7,15 +7,16 @@ export default {
   clients: ['RestClient', 'WebsocketClient', 'WebsocketAPIClient'],
   exampleDependencies: ['ethers'],
   guides: [
-    { text: 'Place and cancel an order', link: '/guides/orders' },
-    { text: 'Account order updates', link: '/guides/private-streams' },
+    { text: 'Order management', link: '/guides/orders' },
+    { text: 'Account updates (WebSocket)', link: '/guides/private-streams' },
+    { text: 'WebSocket API requests', link: '/guides/websocket-api' },
   ],
   website: 'https://siebly.io/sdk/hyperliquid/javascript',
   tutorial: 'https://siebly.io/sdk/hyperliquid/javascript/tutorial',
   repository: 'https://github.com/sieblyio/hyperliquid-api',
   // References and shared examples only. API contracts stay in SDK source comments.
   referenceHelp: [
-    { client: 'RestClient', method: 'submitLimitOrder', guide: '/guides/orders', title: 'Place and cancel a Testnet order' },
+    { client: 'RestClient', method: 'submitLimitOrder', guide: '/guides/orders', title: 'Order management' },
     { client: 'RestClient', method: 'cancelOrders', guide: '/guides/orders', title: 'Cancel an order' },
     { client: 'WebsocketClient', method: 'subscribe', guide: '/guides/private-streams', title: 'Receive account order updates' },
     { client: 'RestClient', method: 'getAllMids', example: 'first-call.ts', guide: '/getting-started', title: 'Quickstart' },
