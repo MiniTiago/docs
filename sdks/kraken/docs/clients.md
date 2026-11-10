@@ -28,6 +28,10 @@ Register event listeners before calling `subscribe()`. Choose the connection wit
 
 ## WebSocket requests
 
-Use [`WebsocketAPIClient`](/api/classes/WebsocketAPIClient) when a supported Spot operation should return a promise instead of being handled as a stream. A lost connection can reject an in-flight request even if the exchange processed it; [reconcile uncertain outcomes](/guides/production#resolve-uncertain-order-outcomes) before retrying an order.
+Use [`WebsocketAPIClient`](/api/classes/WebsocketAPIClient) when a supported Spot operation should return a promise instead of being handled as a stream.
+
+<!--@include: @/.vitepress/shared/clients/awaitable-websocket.md-->
+
+A lost connection can reject an in-flight request even if the exchange processed it; [reconcile uncertain outcomes](/guides/production#resolve-uncertain-order-outcomes) before retrying an order.
 
 [Reference index](/api/) · [API reference](/reference)
