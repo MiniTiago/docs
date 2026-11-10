@@ -57,19 +57,19 @@ export default {
       "client": "RestClientV5",
       "method": "getActiveOrders",
       "guide": "/guides/orders",
-      "title": "Query and cancel a Testnet order"
+      "title": "Manage a Testnet order"
     },
     {
       "client": "RestClientV5",
       "method": "getHistoricOrders",
       "guide": "/guides/orders",
-      "title": "Query and cancel a Testnet order"
+      "title": "Manage a Testnet order"
     },
     {
       "client": "RestClientV5",
       "method": "cancelOrder",
       "guide": "/guides/orders",
-      "title": "Query and cancel a Testnet order"
+      "title": "Manage a Testnet order"
     },
     {
       "client": "WebsocketClient",
