@@ -5,6 +5,8 @@ description: "Select Bybit environments and configure request timeouts and clien
 
 # Configuration
 
+For HTTP, HTTPS or SOCKS routing in Node.js, see [Use a proxy](/guides/proxies).
+
 ## Configure a REST client
 
 <<< @/../examples/configure-rest.ts
