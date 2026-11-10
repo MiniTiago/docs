@@ -58,6 +58,10 @@ Wait for the user data connection to open before placing an order. `ORDER_TRADE_
 
 In a persistent application, subscribe before loading the initial account data, account for events received during that read, and recover missed state after a connection gap. See [account state](/guides/production#keep-account-state-up-to-date).
 
+The position changes in `ACCOUNT_UPDATE` can trigger follow-up logic, such as placing or resizing SL/TP orders when a position opens or increases. Merge the reported positions into local state rather than treating each event as a full account snapshot. Compare position size by symbol and position side, then use a [throttled debounce with a maximum wait](/guides/production#trigger-follow-up-work-from-position-changes) so partial fills do not cause a burst of API calls or delay adjustments indefinitely.
+
+The stream emits `reconnecting` when connection recovery starts and `reconnected` when the socket reopens. Use the latter to trigger REST reconciliation of missed account and order state before making dependent order adjustments; see [stream recovery](/guides/production#recover-streaming-state).
+
 ## Place a post-only order
 
 The order example assumes **one-way mode**, using `positionSide: 'BOTH'`. Check the account output before using it. The program does not change position mode, margin mode or leverage.
