@@ -7,6 +7,8 @@ description: "Receive Spot account and order updates with the WebSocket API, dem
 
 Use `WebsocketAPIClient` to receive Spot account and order events through Binance's WebSocket API. It supports Mainnet and Spot Testnet; this walkthrough uses Testnet. Private account events are separate from public market-data subscriptions. Spot's older listen-key workflow is deprecated; use `subscribeUserDataStream()` for new integrations.
 
+Use these events to keep local order and balance state up to date after REST submissions. There is no need to query each order after placing or cancelling it when the required updates have arrived. See [account state](/guides/production#keep-account-state-up-to-date) for startup and recovery.
+
 For production Spot, set `testnet: false` (or omit it) and use production credentials.
 
 ## Example: connect to Spot Testnet

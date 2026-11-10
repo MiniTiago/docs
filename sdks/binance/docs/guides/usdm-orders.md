@@ -1,11 +1,11 @@
 ---
 title: Place and manage a Binance USD-M futures order
-description: Read futures account state, place a post-only order, query its status and cancel remaining quantity with USDMClient.
+description: Initialize futures account state, observe private WebSocket events, and place or cancel orders with USDMClient.
 ---
 
 # Place and manage a USD-M futures order
 
-Use `USDMClient` for Binance's USD-M futures markets. This walkthrough reads account state, then places, queries and cancels a BTCUSDT perpetual order. Each operation runs separately.
+Use `USDMClient` for Binance's USD-M futures markets. This walkthrough reads starting account state, follows private WebSocket updates, and uses REST to place and cancel a BTCUSDT perpetual order.
 
 The examples use Futures Demo Trading and virtual funds to avoid accidental live trades. The same methods work on Mainnet, Binance's production markets. Remove `demoTrading` or set it to `false`, leave `testnet` disabled and use production credentials to execute against live markets.
 
@@ -44,6 +44,20 @@ node --env-file=.env usdm-account.ts
 
 This prints the account's trading permission and margin balances, balance records, BTCUSDT positions and position mode. It uses the current V3 account methods and makes no account changes. No open BTCUSDT position may mean an empty positions list.
 
+## Follow account changes
+
+Save the following as `usdm-private-stream.ts` and run it in another terminal with the same Demo Trading credentials:
+
+<<< @/../examples/usdm-private-stream.ts
+
+```sh
+node --env-file=.env usdm-private-stream.ts
+```
+
+Wait for the user data connection to open before placing an order. `ORDER_TRADE_UPDATE` reports order changes and fills; `ACCOUNT_UPDATE` reports balance and position changes. Apply these events to local state instead of repeatedly reading the account through REST. The demonstration prints events for 60 seconds and does not maintain a complete state store.
+
+In a persistent application, subscribe before loading the initial account data, account for events received during that read, and recover missed state after a connection gap. See [account state](/guides/production#keep-account-state-up-to-date).
+
 ## Place a post-only order
 
 The order example assumes **one-way mode**, using `positionSide: 'BOTH'`. Check the account output before using it. The program does not change position mode, margin mode or leverage.
@@ -64,21 +78,15 @@ Save the returned exchange order ID in `.env`:
 BINANCE_USDM_ORDER_ID=123456789 # Use the orderId printed by your submission
 ```
 
-## Query and cancel
+## Cancel remaining quantity {#query-and-cancel}
 
-Query that order:
-
-```sh
-node --env-file=.env usdm-order.ts status
-```
-
-The output shows the order status, executed quantity and original quantity. To cancel any remaining open quantity:
+Follow matching `ORDER_TRADE_UPDATE` events for the saved order ID. If the order still has open quantity, request cancellation:
 
 ```sh
 node --env-file=.env usdm-order.ts cancel
 ```
 
-The cancellation response includes the executed quantity so partial fills remain visible. Run `status` again to inspect the order. Cancelling an order does not undo fills or close a position.
+The cancellation response can include executed quantity from partial fills. Continue following user data events for the resulting order and position state. Cancelling an order does not undo fills or close a position.
 
 ## Position mode and fills
 
@@ -90,6 +98,12 @@ Hedge mode uses `positionSide: 'LONG'` or `'SHORT'` explicitly. Choose both `sid
 
 The example logs the actual error and does not retry automatically. A timeout or ambiguous server error does not prove that an order failed.
 
-If you received an order ID, query it with `getOrder()`. If submission returned no ID, reconcile [`getAllOpenOrders()`](/api/classes/USDMClient#getallopenorders), [`getAllOrders()`](/api/classes/USDMClient#getallorders), [`getAccountTrades()`](/api/classes/USDMClient#getaccounttrades) and [`getPositionsV3()`](/api/classes/USDMClient#getpositionsv3) using the symbol, request time, side, price and quantity. Resolve the outcome before sending another order. An order missing from the open list may already have filled or been cancelled.
+Check matching user data events first. If the outcome remains unclear, use `getOrder()` through the one-shot status command:
+
+```sh
+node --env-file=.env usdm-order.ts status
+```
+
+Use this for diagnosis or recovery, not after every order. If no ID is available, reconcile [`getAllOpenOrders()`](/api/classes/USDMClient#getallopenorders), [`getAllOrders()`](/api/classes/USDMClient#getallorders), [`getAccountTrades()`](/api/classes/USDMClient#getaccounttrades) and [`getPositionsV3()`](/api/classes/USDMClient#getpositionsv3) using the symbol, request time, side, price and quantity. Resolve the outcome before sending another order. An order missing from the open list may already have filled or been cancelled.
 
 [USD-M reference](/api/classes/USDMClient) · [Error handling](/guides/errors) · [Production usage](/guides/production)

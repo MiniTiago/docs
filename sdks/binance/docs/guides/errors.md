@@ -21,6 +21,6 @@ Log the operation, symbol, HTTP status and Binance error code when available. Wh
 
 ## Decide what to retry
 
-Correct validation, signature and permission failures before retrying. Limit retries for reads and apply backoff. A timeout after submitting an order does not prove rejection; query the order before deciding whether to resubmit.
+Correct validation, signature and permission failures before retrying. Limit retries for reads and apply backoff. A timeout after submitting an order does not prove rejection. Use matching private events to resolve it, and fall back to a targeted REST query if the outcome remains unclear. See [order recovery](/guides/production#resolve-uncertain-order-outcomes) before resubmitting.
 
 See [Production usage](/guides/production) and [Binance's error reference](https://developers.binance.com/docs/binance-spot-api-docs/errors).
