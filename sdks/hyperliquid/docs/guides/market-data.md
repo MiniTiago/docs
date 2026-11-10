@@ -3,7 +3,7 @@ title: Hyperliquid market data in JavaScript
 description: Read Hyperliquid mid prices, L2 order books and candle history, and resolve Spot and perpetual asset names.
 ---
 
-# Market data
+# Public market data (REST) {#market-data}
 
 Use `RestClient` for public HTTP requests. These examples do not need account credentials.
 

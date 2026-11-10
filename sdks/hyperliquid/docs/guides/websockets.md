@@ -3,7 +3,7 @@ title: Hyperliquid WebSocket subscriptions in Node.js
 description: Stream Hyperliquid prices with WebsocketClient, handle events and close connections cleanly. Compare streaming subscriptions with awaitable WebSocket API requests.
 ---
 
-# WebSocket subscriptions
+# Public streams (WebSocket) {#websocket-subscriptions}
 
 The SDK provides two WebSocket clients. Use `WebsocketClient` to subscribe to updates, or `WebsocketAPIClient` to await individual request responses.
 

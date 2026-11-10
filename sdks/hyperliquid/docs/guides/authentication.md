@@ -3,7 +3,7 @@ title: Hyperliquid SDK authentication and account addresses
 description: Query Hyperliquid accounts by address and configure private keys, API wallets, vaults or custom signers for signed actions.
 ---
 
-# Authentication
+# Account access and balances {#authentication}
 
 Public market data and account queries do not require a signature. Exchange actions, such as placing or cancelling an order, require a private key or signer.
 
@@ -43,4 +43,4 @@ Pass `signer` instead of `privateKey` to supply a [`HyperliquidSigner`](/api/int
 
 ## Next steps
 
-[Place and cancel a Testnet order](/guides/orders), or [subscribe to account order updates](/guides/private-streams).
+[Order management](/guides/orders), or [subscribe to account order updates](/guides/private-streams).

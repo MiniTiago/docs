@@ -1,9 +1,9 @@
 ---
-title: Place and cancel a Hyperliquid Testnet order
+title: "Hyperliquid order management"
 description: Submit and cancel a post-only BTC perpetual order through REST, and follow order updates and fills over WebSocket.
 ---
 
-# Place and cancel a Testnet order
+# Order management {#place-and-cancel-a-testnet-order}
 
 Place a BTC perpetual limit order with `RestClient` and cancel any remaining quantity. Run the account stream alongside these REST commands to follow order updates and fills.
 
@@ -12,6 +12,8 @@ The separate CLI commands make each step explicit. A persistent application can 
 This walkthrough uses Hyperliquid Testnet and test funds to avoid accidental live trades. The same methods work on Mainnet, Hyperliquid's production markets. Remove `testnet` or set it to `false`, and use the Mainnet account address with an authorized signer to execute against live markets.
 
 A post-only order is rejected if it would immediately take liquidity. Once resting, it can fill before cancellation. Cancelling an order does not reverse fills or close an existing position.
+
+Before placing orders, use the [authenticated account read](/guides/authentication) to check balances and account access.
 
 ## Set up
 
