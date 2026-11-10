@@ -33,7 +33,9 @@ The `response` listener logs server subscription acknowledgements for `orderUpda
 
 `userFills` contains fills and an optional `isSnapshot` flag. The example skips the initial snapshot when printing new fills. In a persistent application, use the snapshot to initialize state and deduplicate later fills using their trade identifiers. Order-status updates and fills describe different events.
 
-A quiet account may produce no new messages. Use REST for existing orders and fills; the stream reports subsequent changes.
+Load existing orders and any state not covered by the stream snapshots at startup. Account for events received during that read, then use WebSocket updates to maintain local state. Do not follow every submission or cancellation with a REST query. A quiet account may produce no new messages.
+
+These two subscriptions cover orders and fills. Add the account-state subscriptions needed for your balances or positions; a fill event alone does not provide a complete account view. See [account state](/guides/production#keep-account-state-up-to-date).
 
 See the [subscription payloads](https://hyperliquid.gitbook.io/hyperliquid-docs/for-developers/api/websocket/subscriptions) for the complete event fields.
 

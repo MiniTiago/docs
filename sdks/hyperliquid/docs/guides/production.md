@@ -13,6 +13,8 @@ description: Configure request timeouts, handle uncertain order outcomes, recove
 | WebSocket requests | Pending requests reject on connection failure; they are not replayed. | Check the outcome of a signed action before resubmitting it. |
 | Order responses | A fulfilled request can contain rejected individual orders. | Inspect every entry in the result. |
 
+<!--@include: @/.vitepress/shared/production/account-state.md-->
+
 ## Reuse clients
 
 Reuse a client for each network and signing configuration to retain HTTP connections, metadata caches and WebSocket subscriptions.
@@ -29,7 +31,7 @@ Hyperliquid may process an action before the request times out. Check its outcom
 
 ### Check an order after a timeout
 
-Save the numeric order ID returned by the exchange along with the account and network. Query that ID to check a known order. If a submission response was lost before an ID was returned, reconcile open orders, order history and fills before resubmitting.
+Save the numeric order ID returned by the exchange along with the account and network. Use matching `orderUpdates` and `userFills` events to resolve the outcome first. If neither the response nor the stream settles it, use the one-shot REST query below. If no ID is available, use open orders, order history and fills to resolve the request before resubmitting.
 
 Set `HYPERLIQUID_ACCOUNT_ADDRESS` and `HYPERLIQUID_ORDER_ID` to the account and numeric ID of the original order. Save the example as `order-status.mts` and run `node --env-file=.env order-status.mts` with Node.js 24. It uses Mainnet; add `testnet: true` for a Testnet order.
 
@@ -41,13 +43,13 @@ Set `HYPERLIQUID_ACCOUNT_ADDRESS` and `HYPERLIQUID_ORDER_ID` to the account and 
 
 ## Rate limits
 
-Hyperliquid applies IP-based and address-based limits, with different weights for different operations. Bound concurrent requests and polling frequency across all workers that share an IP or account. Prefer subscriptions for continuously changing market data.
+Hyperliquid applies IP-based and address-based limits, with different weights for different operations. Limit concurrent requests across workers that share an IP or account. Use WebSocket subscriptions for ongoing market and account updates. Reserve REST reads for initial data, explicit lookups and recovery.
 
 Reduce request volume after rate-limit responses and delay retries. Set request budgets using [Hyperliquid's limits](https://hyperliquid.gitbook.io/hyperliquid-docs/for-developers/api/rate-limits-and-user-limits).
 
 ## Recover after a disconnect
 
-The SDK restores subscriptions after a disconnect. Use `reconnecting` to mark a possible data gap. After `reconnected`, reload affected state and account for updates received during recovery before using it for decisions. See [subscription recovery](/guides/websockets#reconnection) and [WebSocket errors](/guides/errors#websocket-requests-and-subscriptions).
+The SDK restores subscriptions after a disconnect. Use `reconnecting` to mark a possible data gap. After `reconnected`, confirm the subscriptions and combine their snapshots with REST reads for missing state. Account for updates received during recovery before using the affected state for decisions, then continue from WebSocket updates. See [subscription recovery](/guides/websockets#reconnection) and [WebSocket errors](/guides/errors#websocket-requests-and-subscriptions).
 
 ## Logging and monitoring
 
