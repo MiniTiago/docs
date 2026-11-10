@@ -12,6 +12,7 @@ updates:
       - dependency-name: bybit-api
       - dependency-name: binance
       - dependency-name: '@siebly/kraken-api'
+      - dependency-name: coinbase-api
     groups:
       sdk-releases:
         patterns:
@@ -19,9 +20,11 @@ updates:
           - bybit-api
           - binance
           - '@siebly/kraken-api'
+          - coinbase-api
     cooldown:
       exclude:
         - '@siebly/hyperliquid-api'
         - bybit-api
         - binance
         - '@siebly/kraken-api'
+        - coinbase-api
