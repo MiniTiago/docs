@@ -62,7 +62,7 @@ module.exports=${profile==='configured'?"require('./siebly-sdk.metro.cjs')(confi
   let collector,metro,timer;
   const log=[];
   try {
-    const config={sdk:id,packageName,packageVersion,runId,profile,endpoints:(await import(`./adapters/${id}.mjs`)).endpoints};
+    const config={sdk:id,packageName,packageVersion,runId,profile};
     let resolveResult;const received=new Promise(resolve=>{resolveResult=resolve;});
     collector=http.createServer(async(req,res)=>{
       try {const chunks=[];let bytes=0;for await(const c of req){bytes+=c.length;if(bytes>65536)throw Error('Oversized report');chunks.push(c);}
@@ -84,7 +84,7 @@ export default function App(){
  const [checks,setChecks]=useState([]),[status,setStatus]=useState('Running checks'),started=useRef(false);
  useEffect(()=>{if(started.current)return;started.current=true;(async()=>{
   let result;
-  try {result=await liveScenario({loadSdk:async()=>require(${JSON.stringify(packageName)}),adapter,config,importCheck:'native-import',onCheck:value=>setChecks([...value])});}
+  try {result=await liveScenario({loadSdk:async()=>require(${JSON.stringify(packageName)}),adapter,importCheck:'native-import',onCheck:value=>setChecks([...value])});}
   catch(error){result=[{id:'native-execution',status:'failed',detail:String(error.stack||error)}];}
   const hermes=!!global.HermesInternal;
   const report={runId:config.runId,packageName:config.packageName,packageVersion:config.packageVersion,profile:config.profile,platform:Platform.OS,osVersion:Platform.Version,hermes,checks:result};

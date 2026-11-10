@@ -44,7 +44,7 @@ export async function generateCompatibility(ctx,root) {
     if(c.checks?.length)lines.push('| Check | Result |','| --- | --- |',...c.checks.map(ch=>`| ${safe(names[ch.id]||ch.id)} | ${ch.status==='passed'?'Passed':ch.status==='failed'?'Failed':'Not run'} |`),'');
     for(const ch of c.checks||[]){
       if(ch.status==='failed'&&ch.detail)lines.push(`**${safe(names[ch.id]||ch.id)}:** ${detail(ch.detail)}`,'');
-      if(ch.price)lines.push(`Observed BTC price: **${safe(ch.price)}**, received ${safe(ch.observedAt)} from ${safe(ch.endpoint)}.`,'');
+      if(ch.price)lines.push(`Observed BTC price: **${safe(ch.price)}**, received ${safe(ch.observedAt)} via ${safe(ch.operation||'the SDK')}.`,'');
     }
     if(c.observation)lines.push(`The server route received BTC price **${safe(c.observation.price)}** at ${safe(c.observation.observedAt)}.`,'');
     if(t==='browser-configured'&&c.status==='passed'){
