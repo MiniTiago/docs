@@ -1,4 +1,5 @@
 import path from 'node:path';
+import { coinbaseSidebar } from './coinbase-sidebar.mjs';
 import { sourceCommentMarkup } from './markdown.mjs';
 import { analyticsAttributes } from './site-services.mjs';
 
@@ -77,7 +78,7 @@ export default function siteConfig(data, docs) {
       ],
       // Full symbol catalogues live in All exports and search. Repeating every
       // type in every page's sidebar makes large SDK output grow quadratically.
-      sidebar: groups,
+      sidebar: sdk.productGroups ? coinbaseSidebar(sdk, groups) : groups,
       search: { provider: 'local', options: { detailedView: true } },
       socialLinks: [{ icon: 'github', link: sdk.repository }],
       outline: { level: [2, 3], label: 'On this page' },
