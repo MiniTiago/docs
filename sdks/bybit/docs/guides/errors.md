@@ -23,6 +23,6 @@ Log the operation, category, symbol, HTTP status and exchange error code. Whole 
 
 ## Decide what to retry
 
-Fix invalid parameters and permissions before retrying. Use bounded backoff for retryable read failures. A timeout on a state-changing request leaves the outcome uncertain; check the order before submitting another request.
+Fix invalid parameters and permissions before retrying. Use bounded backoff for retryable read failures. If a state-changing request times out, use matching private events to determine what happened. Use REST only if the outcome remains unclear, and resolve it before resubmitting. See [order recovery](/guides/production#resolve-uncertain-order-outcomes).
 
 See [Production usage](/guides/production) and the [Bybit error-code reference](https://bybit-exchange.github.io/docs/v5/error).

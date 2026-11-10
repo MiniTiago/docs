@@ -39,7 +39,9 @@ Wait for `Private stream authenticated.` and `Subscribed to order.linear.` befor
 
 Each update prints the exchange order ID, symbol, status, cumulative executed quantity and remaining quantity. Match `orderId` to the ID returned by the order example. Stream and subscription errors are logged with their error objects.
 
-The stream emits changes, not an initial snapshot of all orders. Use REST to retrieve existing state; a quiet stream can simply mean no orders have changed.
+The stream emits changes, not an initial snapshot of all orders. Use REST once at startup to load existing state, accounting for events that arrive during that read. Then apply stream updates locally instead of querying REST after each submission or cancellation. A quiet stream can simply mean no orders have changed.
+
+This example subscribes only to orders. Subscribe to the execution, position and wallet topics your application needs as well; an order update alone does not provide all account state. See [account state](/guides/production#keep-account-state-up-to-date).
 
 The subscription uses the category-specific `order.linear` topic. To consume all supported categories, use `order` instead; do not combine it with category-specific order topics in the same subscription request. See Bybit's [private order stream](https://bybit-exchange.github.io/docs/v5/websocket/private/order).
 

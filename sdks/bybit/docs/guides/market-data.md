@@ -7,6 +7,8 @@ description: "Read Bybit Spot prices and order-book snapshots with bybit-api."
 
 Public prices and order books do not require API keys. These examples use BTCUSDT in the Spot market.
 
+These REST examples read a snapshot or historical data. Use [WebSocket subscriptions](/guides/websockets) for ongoing price and order-book updates instead of polling REST.
+
 ## Read a ticker
 
 <<< @/../examples/first-call.ts

@@ -1,11 +1,11 @@
 ---
 title: "Place and cancel a Bybit Testnet order"
-description: "Submit a PostOnly limit order, query its status and cancel its remaining quantity."
+description: "Submit and cancel a PostOnly limit order through REST, and follow order changes through a private WebSocket stream."
 ---
 
 # Place and cancel a Testnet order
 
-Use `RestClientV5` to place one BTCUSDT perpetual limit order, query it by the returned order ID and cancel any unfilled quantity. Each command runs separately.
+Use `RestClientV5` to place one BTCUSDT perpetual limit order and cancel any unfilled quantity. Run the private order stream alongside these REST commands to follow its status.
 
 This walkthrough uses Bybit Testnet and test funds to avoid accidental live trades. The same methods work on Mainnet, Bybit's production markets. Remove `testnet` or set it to `false`, leave `demoTrading` disabled and use Mainnet credentials to execute against live markets. To test your system with simulated orders instead, set `demoTrading: true`, keep `testnet: false` and use Bybit Demo Trading credentials.
 
@@ -32,11 +32,13 @@ BYBIT_ORDER_QTY=0.001 # Illustrative BTC quantity; current symbol filters apply.
 
 Set the buy price below the current Testnet BTCUSDT best bid and specify quantity in BTC. Use decimal strings that satisfy the current price increments, quantity increments and minimum order value from [`getInstrumentsInfo()`](/api/classes/RestClientV5#getinstrumentsinfo). This example sends your values unchanged; Bybit validates them, account margin and dynamic price limits. Prices can move before submission.
 
-## Place, query and cancel
+## Place and observe the order {#place-query-and-cancel}
 
 Save this as `first-order.ts`:
 
 <<< @/../examples/first-order.ts
+
+Start the [private order stream](/guides/private-streams) in another terminal using the same Testnet account. Wait for `Private stream authenticated.` and `Subscribed to order.linear.` before continuing. Keep the stream running while you try the commands; the demonstration stops after 60 seconds.
 
 Place the order:
 
@@ -50,28 +52,31 @@ The response supplies `orderId`. Copy the ID printed by the script into `.env` b
 BYBIT_ORDER_ID=a1b2c3d4-5678-4abc-9def-0123456789ab # Use the returned orderId.
 ```
 
-Query the same order:
+Follow the stream's matching `orderId` updates. Inspect `orderStatus`, `cumExecQty` and `leavesQty` as they change.
 
-```sh
-node --env-file=.env first-order.ts status
-```
+## Cancel remaining quantity
 
-The status command makes one [`getActiveOrders()`](/api/classes/RestClientV5#getactiveorders) request using the returned order ID. Despite the method name, this also returns recent closed orders. Inspect `orderStatus`, `cumExecQty` and `leavesQty`. A `New` or `PartiallyFilled` order can have remaining quantity to cancel:
+A `New` or `PartiallyFilled` order can have remaining quantity to cancel:
 
 ```sh
 node --env-file=.env first-order.ts cancel
-node --env-file=.env first-order.ts status
 ```
 
-Submission and cancellation responses acknowledge requests, not the final order state. Query `status` again if the result has not yet updated. `cumExecQty` includes earlier fills even when the final status is `Cancelled`; resulting positions are separate from the remaining order quantity.
+Submission and cancellation responses acknowledge requests. Follow the private stream to see the resulting order state; cancellation can race with a fill. `cumExecQty` includes earlier fills even when the final status is `Cancelled`; resulting positions are separate from the remaining order quantity.
 
-See Bybit's [create-order](https://bybit-exchange.github.io/docs/v5/order/create-order) and [cancel-order](https://bybit-exchange.github.io/docs/v5/order/cancel-order) contracts. You can also run the [private order stream](/guides/private-streams) in another terminal.
+See Bybit's [create-order](https://bybit-exchange.github.io/docs/v5/order/create-order) and [cancel-order](https://bybit-exchange.github.io/docs/v5/order/cancel-order) contracts. Use the execution and position topics as well when your application needs fills and position changes, rather than repeatedly querying them through REST.
 
 ## Recover an interrupted request
 
 A timeout or lost response can happen after Bybit accepts a request. The example does not retry submissions or cancellations automatically.
 
-If you received an `orderId`, query `status` with that ID and the same account. If submission timed out before returning an ID, inspect realtime orders and order history for BTCUSDT, and reconcile executions and positions using the request time, side, price and quantity. Avoid resubmitting until the outcome is resolved.
+Check matching private events first. If the outcome is still unclear, the `status` command makes one [`getActiveOrders()`](/api/classes/RestClientV5#getactiveorders) request with the saved `orderId` and the same account:
+
+```sh
+node --env-file=.env first-order.ts status
+```
+
+Use this for diagnosis or recovery, not after every order. Despite its name, the method also returns recent closed orders. If no ID is available, use realtime orders, order history, executions and positions for BTCUSDT to resolve the request using its time, side, price and quantity. Avoid resubmitting until the outcome is resolved.
 
 For older records, or closed orders no longer available after a service restart, use [`getHistoricOrders()`](/api/classes/RestClientV5#gethistoricorders). Set `orderStatus: 'Cancelled'` when looking for a cancelled order; from 3 December 2026, unfiltered recent history excludes `Cancelled`, `Rejected` and `Deactivated`.
 
