@@ -1,5 +1,9 @@
 import { MainClient } from 'binance';
 
+// Subscribe to the matching account WebSocket stream before submitting orders.
+// Use its order and fill updates for ongoing state. The explicit status command
+// is a one-shot diagnostic for unresolved state, not a post-submit/cancel step.
+
 function requiredEnvVar(name: string): string {
   const value = process.env[name];
   if (!value) {
@@ -52,7 +56,9 @@ async function main() {
       symbol,
       orderId: getPositiveNumberEnvVar('BINANCE_ORDER_ID'),
     });
-    console.log('Cancellation acknowledged. Run status to check the result.');
+    console.log(
+      'Cancellation acknowledged. Follow the account WebSocket for order updates.',
+    );
     return;
   }
 
@@ -71,7 +77,7 @@ async function main() {
 main().catch((error: unknown) => {
   console.error(error);
   console.error(
-    'If the outcome is uncertain, check order and trade history before submitting again.',
+    'Use account WebSocket updates to resolve the outcome. If still unknown, make a targeted REST query before deciding whether to retry.',
   );
   process.exitCode = 1;
 });

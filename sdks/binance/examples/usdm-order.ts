@@ -1,5 +1,9 @@
 import { USDMClient } from 'binance';
 
+// Subscribe to the matching account WebSocket stream before submitting orders.
+// Use its order and fill updates for ongoing state. The explicit status command
+// is a one-shot diagnostic for unresolved state, not a post-submit/cancel step.
+
 function requiredEnvVar(name: string): string {
   const value = process.env[name];
   if (!value) {
@@ -73,7 +77,7 @@ async function main() {
 main().catch((error) => {
   console.error(error);
   console.error(
-    'If the outcome is uncertain, check order and trade history before another order action.',
+    'Use account WebSocket updates to resolve the outcome. If still unknown, make a targeted REST query before another order action.',
   );
   process.exitCode = 1;
 });

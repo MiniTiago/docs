@@ -68,7 +68,8 @@ async function main() {
   });
   ws.on('reconnected', (event) => {
     console.log('WebSocket reconnected:', event);
-    // Refresh orders and balances via REST here if your app needs missed updates.
+    // If a gap leaves state unresolved, use a targeted REST recovery query.
+    // Do not query after each order event or submission.
   });
   try {
     await api.subscribeUserDataStream(WS_KEY_MAP.mainWSAPI);
