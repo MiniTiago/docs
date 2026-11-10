@@ -48,6 +48,8 @@ export async function programFiles(id, sdk, format = 'esm', extension = 'mjs') {
 
 export async function screenFile(id, sdk, setup) {
   const exchange = exchanges[id];
+  const browser = setup === 'react' || setup === 'vite';
+  const request = browser && exchange.browserRequest ? exchange.browserRequest : exchange.request;
   const values = {
     PACKAGE: sdk.packageName,
     REST_CLIENT: exchange.restClient,
@@ -59,13 +61,13 @@ export async function screenFile(id, sdk, setup) {
   if (setup === 'react' || setup === 'expo') {
     values.EFFECT = fill(await readFile(new URL('./effect.tpl', import.meta.url), 'utf8'), {
       ...values,
-      REQUEST: indent(exchange.request, 6),
+      REQUEST: indent(request, 6),
       UPDATE: indent(exchange.update, 6),
     }).trimEnd();
   }
   return fill(await readFile(new URL(`./${setup}.tpl`, import.meta.url), 'utf8'), {
     ...values,
-    REQUEST: indent(exchange.request, 4),
+    REQUEST: indent(request, 4),
     UPDATE: indent(exchange.update, 4),
   });
 }

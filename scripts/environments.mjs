@@ -238,7 +238,10 @@ export async function generateEnvironments(ctx) {
       return substitutions[key];
     });
     if (ctx.id === 'kraken') {
-      rendered = rendered.replace('## Create the project', 'These setup examples have not yet been verified against the live exchange in this environment. See [Runtime compatibility](/compatibility) for the current verification status.\n\n## Create the project');
+      const note = browser
+        ? 'The public GET client below omits two SDK request headers that trigger a failing Kraken CORS preflight. This is an example-specific setup for public reads, not general browser REST support. See [Browser REST and CORS](/guides/troubleshooting#browser-rest-and-cors) for the limitation and a server-side alternative.'
+        : 'See [Runtime compatibility](/compatibility) for recorded verification coverage. Successful imports and builds alone do not verify live exchange access.';
+      rendered = rendered.replace('## Create the project', note + '\n\n## Create the project');
     }
     await writeFile(path.join(output, `${environment}.md`), rendered);
   }

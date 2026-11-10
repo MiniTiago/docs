@@ -9,6 +9,16 @@ description: "Diagnose Kraken package selection, symbols, authentication, enviro
 
 Install [`@siebly/kraken-api`](https://www.npmjs.com/package/@siebly/kraken-api). The unscoped `kraken-api` package is a different library. Import public clients from the package root, not internal file paths.
 
+## Browser REST and CORS
+
+In `@siebly/kraken-api@1.1.10`, a default `SpotClient` adds `UserAgent` and `locale` request headers. Chrome sends an OPTIONS preflight before the public ticker GET. Kraken returns 404 without the required CORS response headers, so Axios reports `ERR_NETWORK` even though public WebSocket updates work. An `events` alias fixes bundling, not this network failure.
+
+The [Vite](/environments/vite) and [React](/environments/react) public-price examples use the SDK's second constructor argument, `AxiosRequestConfig`, with `transformRequest` to remove just those headers before the public GET. Passing `headers` alone does not work in this version because the SDK overwrites that option. The transform is deliberately limited to GET requests and replaces Axios's usual request-body transform. Do not reuse it for POST requests or authenticated calls.
+
+This setup was checked with the published 1.1.10 package in Chrome using a public Spot ticker and WebSocket subscription. It does not establish support for every REST endpoint, browser or region. Kraken must still allow the browser's origin; never disable browser security or use `no-cors`, which prevents reading the response.
+
+For a server-side path, use the [Next.js API route](/environments/next): it constructs an ordinary `SpotClient` on the Node.js server and exposes the public price at `/api/price`. A browser application can request that same-origin route instead of calling Kraken REST directly. In production, expose only the operations your app needs, with suitable validation, rate limits and authentication. Keep API credentials on the server. Do not create an unrestricted forwarding proxy.
+
 ## Testnet is unavailable
 
 Spot has no public testnet. Kraken retired its Futures demo on 14 July 2026, and `testnet: true` throws in the current SDK. Use public reads or [Spot order validation](/guides/orders) for non-trading development; do not treat a beta API endpoint as simulated trading.

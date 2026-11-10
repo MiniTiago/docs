@@ -20,7 +20,9 @@ function readme(sdk, environment) {
   const controls = ['react', 'vite', 'expo'].includes(environment) ? '\nUse **Stop stream** to close the price subscription.\n' : '';
   const optionalStream = streaming ? `\nTo receive one WebSocket price and close the connection:\n\n\`\`\`sh\n${stream}\n\`\`\`\n` : '';
   const commonjs = environment === 'node' ? '\nFor CommonJS instead, run `node price.cjs` or `node stream.cjs`.\n' : '';
-  return `# ${sdk.name}: ${environmentTitles[environment]}\n\nA runnable public-price example using \`${sdk.packageName}\`. No API key is required.\n\n${prerequisite}\n\n## Run\n\nFrom this folder:\n\n\`\`\`sh\n${install}\n${start}\n\`\`\`\n${native}${controls}${optionalStream}${commonjs}\n[Follow the complete step-by-step guide](https://sieblyio.github.io/docs/${sdk.id}/environments/${environment}.html).\n`;
+  const browserNote = sdk.id === 'kraken' && ['react', 'vite'].includes(environment)
+    ? '\nThe public GET client removes the SDK’s `UserAgent` and `locale` headers to avoid Kraken’s failing CORS preflight. Keep this configuration for these public reads only. Run authenticated REST calls on your server, never in a browser bundle. See the guide for the server-side alternative.\n' : '';
+  return `# ${sdk.name}: ${environmentTitles[environment]}\n\nA runnable public-price example using \`${sdk.packageName}\`. No API key is required.\n\n${prerequisite}\n\n## Run\n\nFrom this folder:\n\n\`\`\`sh\n${install}\n${start}\n\`\`\`\n${native}${controls}${optionalStream}${commonjs}${browserNote}\n[Follow the complete step-by-step guide](https://sieblyio.github.io/docs/${sdk.id}/environments/${environment}.html).\n`;
 }
 
 export async function starterFiles(id, sdk, environment) {

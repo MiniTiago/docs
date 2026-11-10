@@ -163,3 +163,32 @@ for (const outcome of ['resolve', 'reject']) {
     assert.deepEqual(fixture.counts(), { closed: 2, subscriptions: 1, errors: 0 });
   });
 }
+
+test('Kraken browser examples use a public GET transform without changing other runtimes', async () => {
+  const sdk = (await catalogue()).find(sdk => sdk.id === 'kraken');
+  for (const environment of environments) {
+    const files = await environmentFiles(sdk.id, sdk, environment);
+    const browser = environment === 'vite' || environment === 'react';
+    const code = [...files.values()].join('\n');
+    assert.equal(code.includes('transformRequest:'), browser, environment);
+    if (browser) {
+      const source = files.get(environment === 'vite' ? 'main.js' : 'App.jsx');
+      const parsed = ts.createSourceFile('browser.js', source, ts.ScriptTarget.Latest, true, ts.ScriptKind.JSX);
+      let transform;
+      function visit(node) {
+        if (ts.isPropertyAssignment(node) && node.name.getText(parsed) === 'transformRequest') {
+          transform = node.initializer.elements[0].getText(parsed);
+        }
+        ts.forEachChild(node, visit);
+      }
+      visit(parsed);
+      assert(transform);
+      const fn = vm.runInNewContext(`(${transform})`);
+      const headers = new Map([['UserAgent', 'sdk'], ['locale', 'en-US'], ['Accept', 'application/json']]);
+      assert.equal(fn.call({ method: 'get' }, undefined, headers), undefined);
+      assert.deepEqual([...headers], [['Accept', 'application/json']]);
+      assert.throws(() => fn.call({ method: 'post' }, 'body', headers), /public GET requests only/);
+      assert(!/apiKey:|apiSecret:|baseUrl:|no-cors/.test(source));
+    }
+  }
+});
