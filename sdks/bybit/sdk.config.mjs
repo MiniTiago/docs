@@ -51,7 +51,7 @@ export default {
       "client": "RestClientV5",
       "method": "submitOrder",
       "guide": "/guides/orders",
-      "title": "Place and cancel a Testnet order"
+      "title": "Order management"
     },
     {
       "client": "RestClientV5",
@@ -80,12 +80,16 @@ export default {
   ],
   "guides": [
     {
-      "text": "Place and cancel an order",
+      "text": "Order management",
       "link": "/guides/orders"
     },
     {
-      "text": "Private order updates",
+      "text": "Private account updates (WebSocket)",
       "link": "/guides/private-streams"
+    },
+    {
+      "text": "WebSocket API requests",
+      "link": "/guides/websocket-api"
     }
   ]
 };
