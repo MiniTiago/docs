@@ -1,3 +1,5 @@
+const websocketSecretDescription = 'API signing secret for the selected product. For CDP authentication, pass the complete private key, including its original PEM header, footer and newlines when applicable.';
+
 export default {
   name: 'Coinbase',
   sourceDirectory: 'coinbase-api',
@@ -33,6 +35,8 @@ export default {
   ],
   referenceDescriptions: {
     CBCommerceClient: 'REST client for Coinbase Commerce charges and checkouts.',
+    'WSClientConfigurableOptions.apiSecret': websocketSecretDescription,
+    'WebsocketClientOptions.apiSecret': websocketSecretDescription,
   },
   referenceExcludeProperties: ['affiliate_promotion_fee', 'referrer_id'],
   guides: [
