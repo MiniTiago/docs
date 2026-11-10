@@ -19,12 +19,14 @@ The SDK obtains and manages the Spot WebSocket authentication token. Do not fetc
 
 ## Interpret updates
 
-The channel sends snapshots and subsequent updates. Read the event's execution type and order status when updating application state; a successful subscription or authentication reply is not an order acknowledgement.
+The channel sends snapshots and subsequent updates. Apply these events to local order and fill state as they arrive. Read each event's execution type and order status to follow an order from acceptance through fills or cancellation. Subscription and authentication replies describe the connection, not an order's outcome.
+
+Use the balance channel when your application also needs balance changes. Load any starting state not covered by the snapshots, then let private events keep it up to date. Do not query REST after every order. See [account state](/guides/production#keep-account-state-up-to-date).
 
 The example logs all messages for inspection, including messages your application does not yet handle. Follow the [executions channel schema](https://docs.kraken.com/api/docs/websocket-v2/executions/) when adding typed handlers.
 
 ## Recover after a gap
 
-The client reconnects and resubscribes. Reconcile orders and executions after a disconnect before relying on local state for new decisions. A reconnect event alone does not prove your application has accounted for every fill.
+The client reconnects and resubscribes. After a disconnect, process the new snapshots and updates and use REST to repair any missing order, execution or balance state. Account for events received during recovery before relying on that state for new decisions. A reconnect event alone does not prove your application has accounted for every fill.
 
 [Production usage](/guides/production) · [WebsocketClient reference](/api/classes/WebsocketClient)

@@ -19,7 +19,7 @@ Keep `KRAKENTRACE` unset for authenticated requests. Before forwarding logs to a
 
 ## Retry decisions
 
-Correct invalid parameters, signatures and permissions before retrying. Apply bounded backoff to transient read failures. A timeout during an order submission leaves its outcome uncertain; reconcile the account rather than automatically submitting again.
+Correct invalid parameters, signatures and permissions before retrying. Apply bounded backoff to transient read failures. If an order submission times out, check matching private execution events. Use REST to recover missing state only if the outcome remains unclear; do not automatically submit again. See [order recovery](/guides/production#resolve-uncertain-order-outcomes).
 
 WebSocket subscription failures arrive on `exception`. Use [subscription responses](/guides/websockets#messages-and-acknowledgements) and stream data for their distinct purposes.
 
