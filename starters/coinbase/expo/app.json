@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "Coinbase price screen",
+    "slug": "coinbase-price-screen",
+    "version": "1.0.0",
+    "platforms": [
+      "ios",
+      "android"
+    ]
+  }
+}
