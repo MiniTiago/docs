@@ -3,7 +3,7 @@ title: "Binance market data with JavaScript"
 description: "Read Binance Spot prices and order-book snapshots with binance."
 ---
 
-# Market data
+# Public market data (REST) {#market-data}
 
 Public prices and order books do not require API keys. These examples use BTCUSDT in the Spot market.
 

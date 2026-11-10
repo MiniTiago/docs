@@ -1,9 +1,9 @@
 ---
-title: Place and manage a Binance USD-M futures order
+title: Binance USD-M futures order management
 description: Initialize futures account state, observe private WebSocket events, and place or cancel orders with USDMClient.
 ---
 
-# Place and manage a USD-M futures order
+# USD-M futures order management {#place-and-manage-a-usd-m-futures-order}
 
 Use `USDMClient` for Binance's USD-M futures markets. This walkthrough reads starting account state, follows private WebSocket updates, and uses REST to place and cancel a BTCUSDT perpetual order.
 

@@ -3,7 +3,7 @@ title: "Binance WebSocket subscriptions"
 description: "Subscribe to Binance ticker updates, handle connection events and close the client."
 ---
 
-# WebSocket subscriptions
+# Public streams (WebSocket) {#websocket-subscriptions}
 
 Subscribe to BTCUSDT Spot ticker updates. This public stream requires no API key.
 
