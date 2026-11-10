@@ -24,7 +24,7 @@ KRAKEN_API_KEY=kraken_example_key_7e2a9c # Your Spot API key
 KRAKEN_API_SECRET=ZXhhbXBsZS1vbmx5LW5vdC1hLXJlYWwta2V5 # Your base64 API secret
 ```
 
-Exclude `.env` from version control. Leave `KRAKENTRACE` unset because HTTP tracing can log signed requests.
+Exclude `.env` from version control.
 
 Save this plain JavaScript example as `account.mjs`:
 
