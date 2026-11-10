@@ -1,6 +1,6 @@
-export const endpoints = {
-  rest: 'https://api.kraken.com/0/public/Ticker?pair=XBTUSD',
-  websocket: 'wss://ws.kraken.com/v2',
+export const operations = {
+  rest: 'SpotClient.getTicker()',
+  websocket: 'WebsocketClient.subscribe()',
 };
 export function client(sdk) {
   return new sdk.SpotClient({}, { timeout: 15000 });

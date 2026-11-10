@@ -1,4 +1,7 @@
-export const endpoints = {"rest": "https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT", "websocket": "wss://stream.binance.com:9443"};
+export const operations = {
+  rest: 'MainClient.getSymbolPriceTicker()',
+  websocket: 'WebsocketClient.subscribeSpotSymbol24hrTicker()',
+};
 export function client(sdk) { return new sdk.MainClient({}, {timeout:15000}); }
 export async function read(client) {
   const response = await client.getSymbolPriceTicker({ symbol: 'BTCUSDT' });
