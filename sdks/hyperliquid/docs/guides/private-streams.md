@@ -37,6 +37,8 @@ Load existing orders and any state not covered by the stream snapshots at startu
 
 These two subscriptions cover orders and fills. Add the account-state subscriptions needed for your balances or positions; a fill event alone does not provide a complete account view. See [account state](/guides/production#keep-account-state-up-to-date).
 
+For perpetual positions, the `clearinghouseState` subscription provides account state including `assetPositions`. Compare the previous and current position size (`szi`) for the account, DEX and coin to trigger follow-up logic, such as placing or adjusting SL/TP orders when a position opens or increases. Use a [throttled debounce with a maximum wait](/guides/production#trigger-follow-up-work-from-position-changes) so partial-fill bursts produce fewer API calls without postponing the work indefinitely. An account-state message does not necessarily represent a new fill.
+
 See the [subscription payloads](https://hyperliquid.gitbook.io/hyperliquid-docs/for-developers/api/websocket/subscriptions) for the complete event fields.
 
 ## Disconnect and recover

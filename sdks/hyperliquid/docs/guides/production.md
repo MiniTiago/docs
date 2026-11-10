@@ -49,7 +49,9 @@ Reduce request volume after rate-limit responses and delay retries. Set request 
 
 ## Recover after a disconnect
 
-The SDK restores subscriptions after a disconnect. Use `reconnecting` to mark a possible data gap. After `reconnected`, confirm the subscriptions and combine their snapshots with REST reads for missing state. Account for updates received during recovery before using the affected state for decisions, then continue from WebSocket updates. See [subscription recovery](/guides/websockets#reconnection) and [WebSocket errors](/guides/errors#websocket-requests-and-subscriptions).
+The SDK reconnects and restores cached subscriptions automatically. `reconnecting` signals that connection recovery is starting; mark the affected account state as stale. `reconnected` means the socket has reopened and the SDK has sent its resubscription requests. It does not wait for subscription acknowledgements or recover missed account state.
+
+Use `reconnected` to trigger REST reconciliation of missed orders, fills, balances and positions. Confirm the required subscriptions, combine their snapshots with REST data, and account for updates received during recovery. Then reconcile open orders with the current position before making follow-up changes; do not blindly recreate orders. Resume dependent actions once their required state is current. See [subscription recovery](/guides/websockets#reconnection) and [WebSocket errors](/guides/errors#websocket-requests-and-subscriptions).
 
 ## Logging and monitoring
 
