@@ -57,4 +57,4 @@ Reconnection does not replay missed order events. Reconcile orders with REST aft
 
 Bybit can emit two `Filled` order updates when a fill races with a cancellation. Track cumulative execution by order ID, or use execution records for individual fills.
 
-[WebSockets](/guides/websockets) · [Place and cancel an order](/guides/orders) · [Production guidance](/guides/production)
+[WebSockets](/guides/websockets) · [Order management](/guides/orders) · [Production guidance](/guides/production)

@@ -3,7 +3,7 @@ title: "Bybit market data with JavaScript"
 description: "Read Bybit Spot prices and order-book snapshots with bybit-api."
 ---
 
-# Market data
+# Public market data (REST) {#market-data}
 
 Public prices and order books do not require API keys. These examples use BTCUSDT in the Spot market.
 

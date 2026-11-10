@@ -3,7 +3,7 @@ title: "Bybit SDK authentication"
 description: "Configure Bybit credentials and select the matching environment."
 ---
 
-# Authentication
+# Account access and balances {#authentication}
 
 Public market data needs no credentials. Account queries and trading require an API key with the relevant permissions.
 
@@ -49,7 +49,7 @@ Mainnet, Testnet and demo trading use separate credentials. REST and WebSocket c
 
 ## Place an order
 
-Once account access works, follow [Place and cancel an order](/guides/orders). Start [Private order updates](/guides/private-streams) first, then submit and cancel through REST. Follow lifecycle changes through the stream and use REST status queries when an outcome remains unclear.
+Once account access works, follow [Order management](/guides/orders). Start [Private order updates](/guides/private-streams) first, then submit and cancel through REST. Follow lifecycle changes through the stream and use REST status queries when an outcome remains unclear.
 
 ## Signing and timestamps
 
