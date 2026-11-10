@@ -15,12 +15,16 @@ Network failures can have a different shape, and thrown values need not be `Erro
 
 ## Logs in deployed applications
 
-Keep `KRAKENTRACE` unset for authenticated requests. Before forwarding logs to a shared service, select useful operation, status and exchange-error fields and redact credentials and private account data. `parseExceptions: false` preserves the original transport error, which can include request configuration.
+Before forwarding logs to a shared service, select useful operation, status and exchange-error fields and redact credentials and private account data. `parseExceptions: false` preserves the original transport error, which can include request configuration.
 
 ## Retry decisions
 
 Correct invalid parameters, signatures and permissions before retrying. Apply bounded backoff to transient read failures. If an order submission times out, check matching private execution events. Use REST to recover missing state only if the outcome remains unclear; do not automatically submit again. See [order recovery](/guides/production#resolve-uncertain-order-outcomes).
 
 WebSocket subscription failures arrive on `exception`. Use [subscription responses](/guides/websockets#messages-and-acknowledgements) and stream data for their distinct purposes.
+
+## HTTP diagnostics
+
+If detailed HTTP traces are required, set `KRAKENTRACE=true` before starting the application. Trace output can include authenticated request details and private account data. Redact it before sharing, and unset the variable when troubleshooting is complete.
 
 [Production usage](/guides/production) · [Kraken Spot errors](https://docs.kraken.com/api/docs/guides/spot-errors/)
