@@ -38,6 +38,7 @@ export async function nativeCheck({id,consumer,evidence,env,packageName,packageV
     const dependencies=JSON.parse(await readFile(path.join(root,'compatibility/native-config/dependencies.json')));
     await npm(['install','--ignore-scripts','--save-exact',...Object.entries(dependencies).map(([name,version])=>`${name}@${version}`)],{cwd:consumer,env,timeout:120000,log:path.join(evidence,`${evidenceId}-polyfills-install.log`)});
     await writeFile(path.join(consumer,'siebly-sdk.metro.cjs'),await nativeMetroConfig(id));
+    if(id==='coinbase') await writeFile(path.join(consumer,'coinbase-public-auth.cjs'),await readFile(path.join(root,'compatibility/native-config/coinbase-public-auth.cjs')));
     result.consumerDependencies=dependencies;
   }
   const pkg=JSON.parse(await readFile(path.join(consumer,'package.json')));pkg.main='index.js';
