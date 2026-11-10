@@ -7,6 +7,8 @@ description: "Submit and cancel a PostOnly limit order through REST, and follow 
 
 Use `RestClientV5` to place one BTCUSDT perpetual limit order and cancel any unfilled quantity. Run the private order stream alongside these REST commands to follow its status.
 
+The separate CLI commands make each step explicit. A persistent application can call the same SDK methods within one workflow, keeping the private stream connected and tracking orders in local state. Use scoped REST reads to initialize state or recover gaps and uncertain outcomes, not after every order.
+
 This walkthrough uses Bybit Testnet and test funds to avoid accidental live trades. The same methods work on Mainnet, Bybit's production markets. Remove `testnet` or set it to `false`, leave `demoTrading` disabled and use Mainnet credentials to execute against live markets. To test your system with simulated orders instead, set `demoTrading: true`, keep `testnet: false` and use Bybit Demo Trading credentials.
 
 ## Before you start
@@ -70,7 +72,7 @@ See Bybit's [create-order](https://bybit-exchange.github.io/docs/v5/order/create
 
 A timeout or lost response can happen after Bybit accepts a request. The example does not retry submissions or cancellations automatically.
 
-Check matching private events first. If the outcome is still unclear, the `status` command makes one [`getActiveOrders()`](/api/classes/RestClientV5#getactiveorders) request with the saved `orderId` and the same account:
+Check matching private events first. If the outcome is still unclear, make one [`getActiveOrders()`](/api/classes/RestClientV5#getactiveorders) request with the saved `orderId` and the same account. The example exposes this recovery step through `status`:
 
 ```sh
 node --env-file=.env first-order.ts status

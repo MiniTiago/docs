@@ -39,7 +39,7 @@ Wait for `Private stream authenticated.` and `Subscribed to order.linear.` befor
 
 Each update prints the exchange order ID, symbol, status, cumulative executed quantity and remaining quantity. Match `orderId` to the ID returned by the order example. Stream and subscription errors are logged with their error objects.
 
-The stream emits changes, not an initial snapshot of all orders. Use REST once at startup to load existing state, accounting for events that arrive during that read. Then apply stream updates locally instead of querying REST after each submission or cancellation. A quiet stream can simply mean no orders have changed.
+Bybit's `order.linear` stream emits changes, not an initial snapshot of all orders. Use REST once at startup to load existing state, accounting for events that arrive during that read. Then apply stream updates locally instead of querying REST after each submission or cancellation. A quiet stream can simply mean no orders have changed. See [Account State](https://siebly.io/reference/glossary#accountstate) for the startup, event-driven update and recovery pattern.
 
 This example subscribes only to orders. Subscribe to the execution, position and wallet topics your application needs as well; an order update alone does not provide all account state. See [account state](/guides/production#keep-account-state-up-to-date).
 
