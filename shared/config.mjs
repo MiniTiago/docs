@@ -12,9 +12,9 @@ export default function siteConfig(data, docs) {
       { text: 'Introduction', link: '/' }, { text: 'Quickstart', link: '/getting-started' }, { text: 'Clients', link: '/clients' },
     ] },
     { text: 'Guides', items: [
-      { text: 'Market data', link: '/guides/market-data' },
-      { text: 'WebSocket subscriptions', link: '/guides/websockets' },
-      { text: 'Authentication', link: '/guides/authentication' },
+      { text: 'Public market data (REST)', link: '/guides/market-data' },
+      { text: 'Public streams (WebSocket)', link: '/guides/websockets' },
+      { text: 'Account access and balances', link: '/guides/authentication' },
       ...(sdk.guides || []),
     ] },
     { text: 'Using the SDK', items: [
@@ -22,7 +22,7 @@ export default function siteConfig(data, docs) {
       { text: 'Error handling', link: '/guides/errors' },
       { text: 'Production usage', link: '/guides/production' }, { text: 'Troubleshooting', link: '/guides/troubleshooting' },
     ] },
-    { text: 'Frameworks and runtimes', collapsed: true, items: [
+    { text: 'Frameworks and runtimes', items: [
       { text: 'Node.js / JavaScript', link: '/environments/node' },
       { text: 'Node.js / TypeScript', link: '/environments/typescript' },
       { text: 'React', link: '/environments/react' },
@@ -88,7 +88,7 @@ export default function siteConfig(data, docs) {
       // Framework recipes are alternatives, not consecutive tutorial steps.
       if (page.relativePath.startsWith('environments/')) {
         page.frontmatter.prev = { text: 'Quickstart', link: '/getting-started' };
-        page.frontmatter.next = { text: 'Market data', link: '/guides/market-data' };
+        page.frontmatter.next = { text: 'Public market data (REST)', link: '/guides/market-data' };
       } else if (page.relativePath === 'compatibility.md') {
         page.frontmatter.prev = false;
         page.frontmatter.next = false;
