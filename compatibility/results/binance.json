@@ -25,7 +25,7 @@
           "id": "rest",
           "status": "passed",
           "price": "78630.00000000",
-          "endpoint": "https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT",
+          "operation": "MainClient.getSymbolPriceTicker()",
           "observedAt": "2026-11-04T11:09:51.154Z",
           "elapsedMs": 345
         },
@@ -33,7 +33,7 @@
           "id": "websocket",
           "status": "passed",
           "price": "78630.00000000",
-          "endpoint": "wss://stream.binance.com:9443",
+          "operation": "WebsocketClient.subscribeSpotSymbol24hrTicker()",
           "observedAt": "2026-11-04T11:09:53.105Z",
           "elapsedMs": 1950
         },
@@ -69,7 +69,7 @@
           "id": "rest",
           "status": "passed",
           "price": "78629.99000000",
-          "endpoint": "https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT",
+          "operation": "MainClient.getSymbolPriceTicker()",
           "observedAt": "2026-11-04T11:09:58.234Z",
           "elapsedMs": 285
         },
@@ -77,7 +77,7 @@
           "id": "websocket",
           "status": "passed",
           "price": "78630.00000000",
-          "endpoint": "wss://stream.binance.com:9443",
+          "operation": "WebsocketClient.subscribeSpotSymbol24hrTicker()",
           "observedAt": "2026-11-04T11:10:00.113Z",
           "elapsedMs": 1879
         },
@@ -113,7 +113,7 @@
           "id": "rest",
           "status": "passed",
           "price": "78630.00000000",
-          "endpoint": "https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT",
+          "operation": "MainClient.getSymbolPriceTicker()",
           "observedAt": "2026-11-04T11:10:04.964Z",
           "elapsedMs": 332
         },
@@ -121,7 +121,7 @@
           "id": "websocket",
           "status": "passed",
           "price": "78630.00000000",
-          "endpoint": "wss://stream.binance.com:9443",
+          "operation": "WebsocketClient.subscribeSpotSymbol24hrTicker()",
           "observedAt": "2026-11-04T11:10:07.114Z",
           "elapsedMs": 2149
         },
@@ -191,7 +191,7 @@
           "id": "rest",
           "status": "passed",
           "price": "78624.60000000",
-          "endpoint": "https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT",
+          "operation": "MainClient.getSymbolPriceTicker()",
           "observedAt": "2026-11-04T11:11:00.535Z",
           "elapsedMs": 309
         },
@@ -199,7 +199,7 @@
           "id": "websocket",
           "status": "passed",
           "price": "78610.00000000",
-          "endpoint": "wss://stream.binance.com:9443",
+          "operation": "WebsocketClient.subscribeSpotSymbol24hrTicker()",
           "observedAt": "2026-11-04T11:11:03.109Z",
           "elapsedMs": 2574
         },
@@ -295,7 +295,7 @@
           "id": "rest",
           "status": "passed",
           "price": "78611.32000000",
-          "endpoint": "https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT",
+          "operation": "MainClient.getSymbolPriceTicker()",
           "observedAt": "2026-11-04T11:23:21.951Z",
           "elapsedMs": 633
         },
@@ -303,7 +303,7 @@
           "id": "websocket",
           "status": "passed",
           "price": "78611.32000000",
-          "endpoint": "wss://stream.binance.com:9443",
+          "operation": "WebsocketClient.subscribeSpotSymbol24hrTicker()",
           "observedAt": "2026-11-04T11:23:23.285Z",
           "elapsedMs": 1335
         },
@@ -345,7 +345,7 @@
           "id": "rest",
           "status": "passed",
           "price": "79394.57000000",
-          "endpoint": "https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT",
+          "operation": "MainClient.getSymbolPriceTicker()",
           "observedAt": "2026-11-04T14:48:39.489Z",
           "elapsedMs": 741
         },
@@ -353,7 +353,7 @@
           "id": "websocket",
           "status": "passed",
           "price": "79390.00000000",
-          "endpoint": "wss://stream.binance.com:9443",
+          "operation": "WebsocketClient.subscribeSpotSymbol24hrTicker()",
           "observedAt": "2026-11-04T14:48:41.131Z",
           "elapsedMs": 1642
         },
