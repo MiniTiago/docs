@@ -17,7 +17,9 @@ If the outcome is still unknown and no order ID is available, use realtime order
 
 ## Recover streaming state
 
-The client reconnects and restores subscriptions. Listen for `reconnect`, `reconnected` and `exception`. After a gap, confirm authentication and subscriptions, then use REST to repair affected orders, executions, positions and wallet state. Account for updates received during recovery and continue from the stream.
+The client reconnects and restores subscriptions automatically. Bybit uses `reconnect`, not `reconnecting`, to signal that connection recovery is starting; mark the affected account state as stale. `reconnected` means the socket has reopened and is a useful trigger for REST reconciliation of missed orders, executions, positions and wallet state. Listen for `exception` to diagnose errors.
+
+Authentication and subscription recovery may still be completing when `reconnected` fires. Confirm the required private subscriptions are ready, account for updates received during REST recovery, and reconcile open orders with the current position before making follow-up changes. Do not blindly recreate orders after reconnecting.
 
 Bybit V5 channels have different snapshot and delta semantics. Follow the documentation for each topic instead of treating every update as a complete replacement.
 

@@ -43,6 +43,8 @@ The stream emits changes, not an initial snapshot of all orders. Use REST once a
 
 This example subscribes only to orders. Subscribe to the execution, position and wallet topics your application needs as well; an order update alone does not provide all account state. See [account state](/guides/production#keep-account-state-up-to-date).
 
+For supported derivatives categories, position updates can trigger SL/TP placement or adjustment when a position opens or increases. Compare the previous and current position size, keyed by account, category, symbol and `positionIdx`; a position message alone does not establish a new fill. Use a [throttled debounce with a maximum wait](/guides/production#trigger-follow-up-work-from-position-changes) to combine partial-fill bursts without postponing the follow-up indefinitely.
+
 The subscription uses the category-specific `order.linear` topic. To consume all supported categories, use `order` instead; do not combine it with category-specific order topics in the same subscription request. See Bybit's [private order stream](https://bybit-exchange.github.io/docs/v5/websocket/private/order).
 
 ## Handle disconnects and shutdown
