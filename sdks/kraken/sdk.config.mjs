@@ -46,7 +46,7 @@ export default {
       client: 'SpotClient',
       method: 'submitOrder',
       guide: '/guides/orders',
-      title: 'Validate a Spot order',
+      title: 'Order management',
     },
     {
       client: 'WebsocketClient',
@@ -64,12 +64,16 @@ export default {
   ],
   guides: [
     {
-      text: 'Validate a Spot order',
+      text: 'Order management',
       link: '/guides/orders',
     },
     {
-      text: 'Private account updates',
+      text: 'Private account updates (WebSocket)',
       link: '/guides/private-streams',
+    },
+    {
+      text: 'WebSocket API requests',
+      link: '/guides/websocket-api',
     },
   ],
   referenceExclude: [

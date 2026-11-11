@@ -1,15 +1,17 @@
 ---
-title: "Place and cancel a Bybit Testnet order"
+title: "Bybit order management"
 description: "Submit and cancel a PostOnly limit order through REST, and follow order changes through a private WebSocket stream."
 ---
 
-# Place and cancel a Testnet order
+# Order management {#place-and-cancel-a-testnet-order}
 
 Use `RestClientV5` to place one BTCUSDT perpetual limit order and cancel any unfilled quantity. Run the private order stream alongside these REST commands to follow its status.
 
 The separate CLI commands make each step explicit. A persistent application can call the same SDK methods within one workflow, keeping the private stream connected and tracking orders in local state. Use scoped REST reads to initialize state or recover gaps and uncertain outcomes, not after every order.
 
 This walkthrough uses Bybit Testnet and test funds to avoid accidental live trades. The same methods work on Mainnet, Bybit's production markets. Remove `testnet` or set it to `false`, leave `demoTrading` disabled and use Mainnet credentials to execute against live markets. To test your system with simulated orders instead, set `demoTrading: true`, keep `testnet: false` and use Bybit Demo Trading credentials.
+
+Before placing orders, use the [authenticated account read](/guides/authentication) to check balances and account access.
 
 ## Before you start
 

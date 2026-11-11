@@ -54,7 +54,7 @@ export default {
       "client": "MainClient",
       "method": "submitNewOrder",
       "guide": "/guides/orders",
-      "title": "Place and cancel a Testnet order"
+      "title": "Order management"
     },
     {
       "client": "MainClient",
@@ -99,33 +99,37 @@ export default {
       "client": "USDMClient",
       "method": "submitNewOrder",
       "guide": "/guides/usdm-orders",
-      "title": "Place and manage a futures order"
+      "title": "USD-M futures order management"
     },
     {
       "client": "USDMClient",
       "method": "getOrder",
       "guide": "/guides/usdm-orders",
-      "title": "Place and manage a futures order"
+      "title": "USD-M futures order management"
     },
     {
       "client": "USDMClient",
       "method": "cancelOrder",
       "guide": "/guides/usdm-orders",
-      "title": "Place and manage a futures order"
+      "title": "USD-M futures order management"
     }
   ],
   "guides": [
     {
-      "text": "Place and cancel an order",
+      "text": "Order management",
       "link": "/guides/orders"
     },
     {
-      "text": "USD-M futures orders",
+      "text": "USD-M futures order management",
       "link": "/guides/usdm-orders"
     },
     {
-      "text": "Private order updates",
+      "text": "Private account updates (WebSocket)",
       "link": "/guides/private-streams"
+    },
+    {
+      "text": "WebSocket API requests",
+      "link": "/guides/websocket-api"
     }
   ]
 };

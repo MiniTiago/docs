@@ -3,7 +3,7 @@ title: "Binance SDK authentication"
 description: "Configure Binance credentials and select the matching environment."
 ---
 
-# Authentication
+# Account access and balances {#authentication}
 
 Public market data needs no credentials. Account queries and trading require an API key with the relevant permissions.
 
@@ -49,7 +49,7 @@ Use keys for the selected Binance product and environment. Check key permissions
 
 ## Place an order
 
-Once account access works, follow [Place and cancel an order](/guides/orders). Start [Private order updates](/guides/private-streams) first, then use the order guide to submit and cancel through REST. WebSocket events report the lifecycle changes; REST status queries are available for diagnosis and recovery.
+Once account access works, follow [Order management](/guides/orders). Start [Private order updates](/guides/private-streams) first, then use the order guide to submit and cancel through REST. WebSocket events report the lifecycle changes; REST status queries are available for diagnosis and recovery.
 
 ## Signing and timestamps
 

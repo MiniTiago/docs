@@ -1,9 +1,9 @@
 ---
-title: "Place your first Binance Spot Testnet order"
+title: "Binance order management"
 description: "Place and cancel a Spot Testnet order through REST, and follow its lifecycle through private WebSocket events."
 ---
 
-# Place your first Spot Testnet order
+# Order management {#place-your-first-spot-testnet-order}
 
 Use `MainClient` to place one `LIMIT_MAKER` order and cancel its remaining quantity. Run the private user data stream alongside these REST commands to see the order accepted, filled or cancelled.
 
@@ -12,6 +12,8 @@ The separate CLI commands make each step explicit. A persistent application can 
 `LIMIT_MAKER` is post-only: Binance rejects it if it would immediately match as a taker. An accepted resting order can still fill, including before you cancel it.
 
 This walkthrough uses Spot Testnet and virtual funds to avoid accidental live trades. The same Spot methods work on Mainnet, Binance's production markets. Remove `testnet` or set it to `false`, and use production credentials to execute against live markets.
+
+Before placing orders, use the [authenticated account read](/guides/authentication) to check balances and account access.
 
 ## Set up
 
