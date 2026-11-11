@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 
 export function nativeMetroConfig(id) {
-  const filename = { bybit: 'bybit.metro.cjs', binance: 'metro.cjs', kraken: 'kraken.metro.cjs' }[id];
+  const filename = { bybit: 'bybit.metro.cjs', binance: 'metro.cjs', kraken: 'kraken.metro.cjs', coinbase: 'coinbase.metro.cjs' }[id];
   if (!filename) {
     throw new Error(`No Metro polyfill recipe for ${id}.`);
   }

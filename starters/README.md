@@ -46,6 +46,17 @@ Each folder is a complete project. Open its README for prerequisites and run com
 - [Bun](./kraken/bun/)
 - [Deno](./kraken/deno/)
 
+## Coinbase
+
+- [Node.js / JavaScript](./coinbase/node/)
+- [Node.js / TypeScript](./coinbase/typescript/)
+- [React](./coinbase/react/)
+- [Vite (plain JavaScript)](./coinbase/vite/)
+- [Next.js](./coinbase/next/)
+- [React Native / Expo](./coinbase/expo/)
+- [Bun](./coinbase/bun/)
+- [Deno](./coinbase/deno/)
+
 ## Maintaining these examples
 
 Edit the maintained sources in `shared/environments/`, then run `npm run starters:generate` from the repository root. Run `npm run check:starters` to check without writing files. Regeneration updates known generated files and never deletes extra files or local build output. The check reports unexpected source files and stale folders for review.

@@ -1,4 +1,32 @@
 export const exchanges = {
+  coinbase: {
+    restClient: 'CBAdvancedTradeClient',
+    symbol: 'BTC-USD',
+    continuous: true,
+    cliSubscription: "ws.subscribe({ topic: 'ticker', payload: { product_ids: ['BTC-USD'] } }, 'advTradeMarketData')",
+    request: `const client = new CBAdvancedTradeClient();
+const ticker = await client.getPublicProduct({ product_id: 'BTC-USD' });
+const price = ticker.price;`,
+    event: 'update',
+    update: `if (message.channel !== 'ticker') {
+  console.log('WebSocket update:', message);
+  return;
+}
+
+let price;
+for (const event of message.events ?? []) {
+  for (const ticker of event.tickers ?? []) {
+    if (ticker.product_id === 'BTC-USD') {
+      price = ticker.price;
+    }
+  }
+}
+if (!price) {
+  console.log('WebSocket update:', message);
+}`,
+    websocket: 'new WebsocketClient()',
+    subscription: "Promise.resolve(ws.subscribe({ topic: 'ticker', payload: { product_ids: ['BTC-USD'] } }, 'advTradeMarketData'))",
+  },
   kraken: {
     restClient: 'SpotClient',
     symbol: 'BTC/USD',

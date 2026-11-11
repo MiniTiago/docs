@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url';
 import { readFile } from 'node:fs/promises';
 
 export const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-export const ids = ['hyperliquid', 'bybit', 'binance', 'kraken'];
+export const ids = ['hyperliquid', 'bybit', 'binance', 'kraken', 'coinbase'];
 
 export async function context(id) {
   if (!ids.includes(id)) throw new Error(`Unknown SDK: ${id}. Choose ${ids.join(', ')}.`);
