@@ -16,7 +16,7 @@ export function coinbaseSidebar(sdk, groups) {
     { text: 'All SDK exports', link: '/api/' },
   ];
   const products = {
-    text: 'Other Coinbase products', collapsed: true,
+    text: 'Other Coinbase products',
     items: [
       { text: 'Choose a product', link: '/products' },
       ...sdk.productGroups.map(product => ({ text: product.text, link: `/products/${product.slug}` })),
